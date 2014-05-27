@@ -1,18 +1,18 @@
 //
-//  CKViewController.m
+//  CKLoginViewController.m
 //  ProjectTemple
 //
 //  Created by Mac on 14-5-16.
 //  Copyright (c) 2014年 Mac. All rights reserved.
 //
 
-#import "CKViewController.h"
+#import "CKLoginViewController.h"
 
-@interface CKViewController ()
+@interface CKLoginViewController ()
 
 @end
 
-@implementation CKViewController
+@implementation CKLoginViewController
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {

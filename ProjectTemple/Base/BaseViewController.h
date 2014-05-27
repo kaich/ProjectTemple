@@ -1,5 +1,5 @@
 //
-//  CKViewController.h
+//  BaseViewController.h
 //  ProjectTemple
 //
 //  Created by Mac on 14-5-16.
@@ -8,6 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface CKViewController : UIViewController
+@interface BaseViewController : UIViewController
 
 @end
