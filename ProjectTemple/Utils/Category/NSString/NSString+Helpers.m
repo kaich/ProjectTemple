@@ -150,7 +150,7 @@
 #pragma mark - Boolean Helpers
 
 -(BOOL)isBlank {
-    if([[self stringByStrippingWhitespace] isEqualToString:@""])
+    if([[self stringByStrippingWhitespace] isEqualToString:@""] || self.length==0)
         return YES;
     return NO;
 }

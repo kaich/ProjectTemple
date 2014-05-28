@@ -11,4 +11,4 @@
 #import "UIFactory+Switch.h"
 #import "UIFactory+TableView.h"
 #import "UIFactory+Label.h"
-#import "UIFactory+Line.h" s
+#import "UIFactory+Line.h"

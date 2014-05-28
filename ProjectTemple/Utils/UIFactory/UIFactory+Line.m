@@ -10,14 +10,21 @@
 
 @implementation UIFactory (Line)
 
-+(UILabel*) createLabelWithTitle:(NSString *)title frame:(CGRect)frame
++(UIView*) createLine:(LineStyle )style length:(float)length orgin:(CGPoint)origin color:(UIColor *)color
 {
-    UILabel * label=[[UILabel alloc] initWithFrame:frame];
-    label.text=title;
-    label.font=FONT(15);
-    label.textColor=[UIColor blackColor];
+    UIView * line=nil;
+    if(style==kLSHor)
+    {
+        line =[[UIView alloc] initWithFrame:CGRectMake(origin.x, origin.y, length, 1)];
+    }
+    else
+    {
+        line =[[UIView alloc] initWithFrame:CGRectMake(origin.x, origin.y, 1, length)];
+    }
     
-    return  label;
+    line.backgroundColor=color;
+    
+    return line;
+    
 }
-
 @end

@@ -15,6 +15,7 @@
 		041326131935A025003E46E8 /* UIFactory+Line.m in Sources */ = {isa = PBXBuildFile; fileRef = 041326121935A025003E46E8 /* UIFactory+Line.m */; };
 		041326161935A09B003E46E8 /* NSString+PDRegex.m in Sources */ = {isa = PBXBuildFile; fileRef = 041326151935A09B003E46E8 /* NSString+PDRegex.m */; };
 		0413261E1935D0FD003E46E8 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 0413261D1935D0FD003E46E8 /* Settings.bundle */; };
+		041326211935DCE2003E46E8 /* ViewUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 041326201935DCE2003E46E8 /* ViewUtils.m */; };
 		0430E3CC19357C0C00403629 /* RegExCategories.m in Sources */ = {isa = PBXBuildFile; fileRef = 0430E3CB19357C0C00403629 /* RegExCategories.m */; };
 		0430E3D2193583DD00403629 /* UILabel+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = 0430E3D1193583DD00403629 /* UILabel+Additions.m */; };
 		048EDA1A1925FCC1006B1230 /* CKLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 048EDA191925FCC1006B1230 /* CKLoginViewController.m */; };
@@ -72,6 +73,8 @@
 		041326151935A09B003E46E8 /* NSString+PDRegex.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+PDRegex.m"; sourceTree = "<group>"; };
 		041326171935A0E8003E46E8 /* CKUIFactory.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CKUIFactory.h; sourceTree = "<group>"; };
 		0413261D1935D0FD003E46E8 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
+		0413261F1935DCE2003E46E8 /* ViewUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ViewUtils.h; sourceTree = "<group>"; };
+		041326201935DCE2003E46E8 /* ViewUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ViewUtils.m; sourceTree = "<group>"; };
 		042E767219341EC10047463C /* UserMacro.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UserMacro.h; sourceTree = "<group>"; };
 		0430E3CA19357C0C00403629 /* RegExCategories.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RegExCategories.h; sourceTree = "<group>"; };
 		0430E3CB19357C0C00403629 /* RegExCategories.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RegExCategories.m; sourceTree = "<group>"; };
@@ -412,6 +415,8 @@
 		049FA5101925E30300A1CE5F /* UIView */ = {
 			isa = PBXGroup;
 			children = (
+				0413261F1935DCE2003E46E8 /* ViewUtils.h */,
+				041326201935DCE2003E46E8 /* ViewUtils.m */,
 				049FA5111925E30300A1CE5F /* UIView+Helpers.h */,
 				049FA5121925E30300A1CE5F /* UIView+Helpers.m */,
 				049FA5131925E30300A1CE5F /* UIView+Snapshot.h */,
@@ -631,6 +636,7 @@
 				049FA5231925E9D400A1CE5F /* NSUserDefaults+Helpers.m in Sources */,
 				049FA5241925E9D400A1CE5F /* UIColor+Helper.m in Sources */,
 				0413261019359F91003E46E8 /* UIFactory+Label.m in Sources */,
+				041326211935DCE2003E46E8 /* ViewUtils.m in Sources */,
 				049FA5281925EF3200A1CE5F /* BaseViewController.m in Sources */,
 				048EDA1A1925FCC1006B1230 /* CKLoginViewController.m in Sources */,
 				0413260A19359F26003E46E8 /* UIFactory+Switch.m in Sources */,
