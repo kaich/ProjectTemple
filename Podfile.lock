@@ -29,6 +29,7 @@ PODS:
   - FMDB/common (2.3)
   - FMDB/standard (2.3):
     - FMDB/common
+  - InAppSettingsKit (2.1)
   - LBBlurredImage (0.2.0)
   - LKDBHelper (1.4):
     - FMDB
@@ -53,6 +54,7 @@ PODS:
   - SDWebImage (3.6):
     - SDWebImage/Core
   - SDWebImage/Core (3.6)
+  - SVProgressHUD (1.0)
   - SVPullToRefresh (0.4.1)
   - UIActivityIndicator-for-SDWebImage (1.0.5):
     - SDWebImage (~> 3.2)
@@ -61,6 +63,7 @@ DEPENDENCIES:
   - AFNetworking
   - CocoaLumberjack
   - FMDB
+  - InAppSettingsKit
   - LBBlurredImage
   - LKDBHelper
   - Mantle
@@ -69,23 +72,26 @@ DEPENDENCIES:
   - ReactiveCocoaLayout
   - ReactiveViewModel
   - SDWebImage
+  - SVProgressHUD
   - SVPullToRefresh
   - UIActivityIndicator-for-SDWebImage
 
 SPEC CHECKSUMS:
-  AFNetworking: 01aa7c3aa9a200b94943e54072a4373f14b3d219
-  Archimedes: 1d1093ecde61c160ac046369bf4fe5175789b663
-  CocoaLumberjack: 020378ec400d658923bf5887178394f65f052c90
-  FMDB: 8b6b69b1164e3007d7f4b3b3719e667602ec247e
-  LBBlurredImage: 26bacd10063a6e886de6a374f4727c3cefb22fc2
-  LKDBHelper: ab1741c564f6ac6ff1bd9ef4bd32a14850a25dc4
-  Mantle: 60c03eea4d15a1c8d53821a56c7492cd6d05f553
-  Overcoat: cb0b3f254f347d8a09a8980c3b25a70bb6a28294
-  ReactiveCocoa: dde7b11a14954edf789e7343b2c32e595caabd01
-  ReactiveCocoaLayout: 9e20c9574801c5b146ad11a01e19ca47e2dfb3ff
-  ReactiveViewModel: f636ab3e06b5e69664b69c883fcdb457ab5cb0cb
-  SDWebImage: 7eb273e54ca8a2e506ad9bd5e80c35b2a4d7c95e
-  SVPullToRefresh: 61a0e4bd12bd6f8e3465909810b0fbeb1a28d5f2
-  UIActivityIndicator-for-SDWebImage: 6ab42f95a4066339e2338c3326679a526ce2ef64
+  AFNetworking: ab63e259fe91eef4519b371ef0a4955af0e73e64
+  Archimedes: f2de3a19892908a92c9ad4d23f6776b377f7ed28
+  CocoaLumberjack: 9d198d6e19909b3b113a38c5f06f7bb8eedd0427
+  FMDB: 31ec26773c7f7b7890a6038235a1f2bbd933a7cb
+  InAppSettingsKit: 853cdc9fcc76b87a4694f8d2b930e116463b5a29
+  LBBlurredImage: 30cc42be977bbcece286d26d2d9c08b8be7f05e8
+  LKDBHelper: b337d5cdfba9d0b78e74992e1ca8bdc8b9fc7928
+  Mantle: c67a7e45e14196ed42b2a7cbb98ff6a9920e6b92
+  Overcoat: fe709e4de619dc0465bb84f9ff22eee8db8e2bf8
+  ReactiveCocoa: 2066583826c17dde8e90c41e489f682048cc57c9
+  ReactiveCocoaLayout: 55d636c5c01e4a154173746f2bb9238ac7184f0d
+  ReactiveViewModel: 78387196df2e7535bb2776c41df15dbb17300f8a
+  SDWebImage: c6989652c1cdf27cbdf3f56957e2030f825af5bc
+  SVProgressHUD: 5034c6e22b8c2ca3e09402e48d41ed0340aa1c50
+  SVPullToRefresh: d5161ebc833a38b465364412e5e307ca80bbb190
+  UIActivityIndicator-for-SDWebImage: d9e46f1592d04cfbeda67bb6d7bba5348558697b
 
 COCOAPODS: 0.32.1

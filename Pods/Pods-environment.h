@@ -90,6 +90,12 @@
 #define COCOAPODS_VERSION_MINOR_FMDB_standard 3
 #define COCOAPODS_VERSION_PATCH_FMDB_standard 0
 
+// InAppSettingsKit
+#define COCOAPODS_POD_AVAILABLE_InAppSettingsKit
+#define COCOAPODS_VERSION_MAJOR_InAppSettingsKit 2
+#define COCOAPODS_VERSION_MINOR_InAppSettingsKit 1
+#define COCOAPODS_VERSION_PATCH_InAppSettingsKit 0
+
 // LBBlurredImage
 #define COCOAPODS_POD_AVAILABLE_LBBlurredImage
 #define COCOAPODS_VERSION_MAJOR_LBBlurredImage 0
@@ -167,6 +173,12 @@
 #define COCOAPODS_VERSION_MAJOR_SDWebImage_Core 3
 #define COCOAPODS_VERSION_MINOR_SDWebImage_Core 6
 #define COCOAPODS_VERSION_PATCH_SDWebImage_Core 0
+
+// SVProgressHUD
+#define COCOAPODS_POD_AVAILABLE_SVProgressHUD
+#define COCOAPODS_VERSION_MAJOR_SVProgressHUD 1
+#define COCOAPODS_VERSION_MINOR_SVProgressHUD 0
+#define COCOAPODS_VERSION_PATCH_SVProgressHUD 0
 
 // SVPullToRefresh
 #define COCOAPODS_POD_AVAILABLE_SVPullToRefresh

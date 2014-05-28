@@ -14,7 +14,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "78F24CE1EC5A4D578502082A"
+               BlueprintIdentifier = "5D34E8E2472C4002972055EE"
                BuildableName = "libPods-Archimedes.a"
                BlueprintName = "Pods-Archimedes"
                ReferencedContainer = "container:Pods.xcodeproj">

@@ -14,6 +14,7 @@
 		0413261019359F91003E46E8 /* UIFactory+Label.m in Sources */ = {isa = PBXBuildFile; fileRef = 0413260F19359F91003E46E8 /* UIFactory+Label.m */; };
 		041326131935A025003E46E8 /* UIFactory+Line.m in Sources */ = {isa = PBXBuildFile; fileRef = 041326121935A025003E46E8 /* UIFactory+Line.m */; };
 		041326161935A09B003E46E8 /* NSString+PDRegex.m in Sources */ = {isa = PBXBuildFile; fileRef = 041326151935A09B003E46E8 /* NSString+PDRegex.m */; };
+		0413261E1935D0FD003E46E8 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 0413261D1935D0FD003E46E8 /* Settings.bundle */; };
 		0430E3CC19357C0C00403629 /* RegExCategories.m in Sources */ = {isa = PBXBuildFile; fileRef = 0430E3CB19357C0C00403629 /* RegExCategories.m */; };
 		0430E3D2193583DD00403629 /* UILabel+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = 0430E3D1193583DD00403629 /* UILabel+Additions.m */; };
 		048EDA1A1925FCC1006B1230 /* CKLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 048EDA191925FCC1006B1230 /* CKLoginViewController.m */; };
@@ -70,6 +71,7 @@
 		041326141935A09B003E46E8 /* NSString+PDRegex.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+PDRegex.h"; sourceTree = "<group>"; };
 		041326151935A09B003E46E8 /* NSString+PDRegex.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+PDRegex.m"; sourceTree = "<group>"; };
 		041326171935A0E8003E46E8 /* CKUIFactory.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CKUIFactory.h; sourceTree = "<group>"; };
+		0413261D1935D0FD003E46E8 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		042E767219341EC10047463C /* UserMacro.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UserMacro.h; sourceTree = "<group>"; };
 		0430E3CA19357C0C00403629 /* RegExCategories.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RegExCategories.h; sourceTree = "<group>"; };
 		0430E3CB19357C0C00403629 /* RegExCategories.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RegExCategories.m; sourceTree = "<group>"; };
@@ -150,6 +152,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		041326181935BA72003E46E8 /* Bundle */ = {
+			isa = PBXGroup;
+			children = (
+				0413261D1935D0FD003E46E8 /* Settings.bundle */,
+			);
+			path = Bundle;
+			sourceTree = "<group>";
+		};
 		042E76731934601D0047463C /* UILabel */ = {
 			isa = PBXGroup;
 			children = (
@@ -343,6 +353,7 @@
 		049FA4F91925BC1B00A1CE5F /* Resource */ = {
 			isa = PBXGroup;
 			children = (
+				041326181935BA72003E46E8 /* Bundle */,
 				049FA4FA1925BC1B00A1CE5F /* Image */,
 				049FA4FB1925BC1B00A1CE5F /* Plist */,
 			);
@@ -561,6 +572,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				049FA4D31925AEB200A1CE5F /* Images.xcassets in Resources */,
+				0413261E1935D0FD003E46E8 /* Settings.bundle in Resources */,
 				049FA5021925BEEC00A1CE5F /* Localization.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
