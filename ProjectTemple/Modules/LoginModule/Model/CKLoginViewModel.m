@@ -26,6 +26,7 @@
     }
     
     self.loginCommand=[[RACCommand alloc] initWithEnabled:[self validateLoginInput] signalBlock:^RACSignal *(id input) {
+        
         return [RACSignal empty];
     }];
 

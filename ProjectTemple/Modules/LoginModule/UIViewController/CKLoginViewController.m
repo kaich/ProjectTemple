@@ -11,6 +11,7 @@
 #import "CKLoginViewModel.h"
 #import <Overcoat.h>
 #import "CKAppleItemModel.h"
+#import <InAppSettingsKit/IASKAppSettingsViewController.h>
 
 @interface CKLoginViewController ()
 @property(nonatomic,strong) UITextField * tfUserName;
@@ -62,11 +63,22 @@
     RAC(self.viewModel,password)=self.tfPassword.rac_textSignal;
     self.btnLogin.rac_command=self.viewModel.loginCommand;
     
+
     
-    OVCClient * client=[OVCClient clientWithBaseURL:URL(@"https://itunes.apple.com/search") account:nil];
-    [client GET:@"lookup" parameters:@{@"id" : @"444934666", @"country" : @"cn"} resultClass:[CKAppleItemModel class] resultKeyPath:@"results" completion:^(AFHTTPRequestOperation *operation, id responseObject, NSError *error) {
-        UIAlertView * alert=[[UIAlertView alloc] initWithTitle:@"ceshi" message:responseObject delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
-        [alert show];
+    
+    [[self.viewModel.loginCommand.executionSignals flattenMap:^RACStream *(id value) {
+        return [[value ignoreValues] concat:[RACSignal return:RACUnit.defaultUnit]];
+    }] subscribeNext:^(id x) {
+//        IASKAppSettingsViewController * settingVC=[[IASKAppSettingsViewController alloc] init];
+//        settingVC.showDoneButton=YES;
+//        [self presentViewController:[[UINavigationController alloc] initWithRootViewController:settingVC] animated:YES completion:nil];
+//        
+        
+        OVCClient * client=[OVCClient clientWithBaseURL:URL(@"https://itunes.apple.com/search") account:nil];
+        [client GET:@"/lookup" parameters:@{@"id" : @"444934666", @"country" : @"cn"} resultClass:[CKAppleItemModel class] resultKeyPath:@"results" completion:^(AFHTTPRequestOperation *operation, id responseObject, NSError *error) {
+            UIAlertView * alert=[[UIAlertView alloc] initWithTitle:@"ceshi" message:[NSString stringWithFormat:@"%@",responseObject] delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
+            [alert show];
+        }];
     }];
     
 
