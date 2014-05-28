@@ -7,6 +7,8 @@
 //
 
 #import "CKViewController.h"
+#import "CKLoginViewController.h"
+
 
 @interface CKViewController ()
 
@@ -19,6 +21,8 @@
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         // Custom initialization
+        
+    
     }
     return self;
 }
@@ -27,6 +31,12 @@
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    UIButton * button=[UIButton buttonWithType:UIButtonTypeCustom];
+    button.frame=CGRectMake(100, 100, 50, 50);
+    [button setTitle:@"click" forState:UIControlStateNormal];
+    [button setBackgroundColor:[UIColor blackColor]];
+    [button addTarget:self action:@selector(click) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:button];
 }
 
 - (void)didReceiveMemoryWarning
@@ -45,5 +55,11 @@
     // Pass the selected object to the new view controller.
 }
 */
+
+-(void) click
+{
+    CKLoginViewController * vc=[[CKLoginViewController alloc] init];
+    [self.navigationController presentViewController:vc animated:YES completion:nil];
+}
 
 @end

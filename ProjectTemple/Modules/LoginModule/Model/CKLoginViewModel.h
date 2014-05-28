@@ -7,7 +7,10 @@
 //
 
 #import "RVMViewModel.h"
+#import <RACCommand.h>
 
 @interface CKLoginViewModel : RVMViewModel
-
+@property(nonatomic,strong) NSString * userName;
+@property(nonatomic,strong) NSString * password;
+@property(nonatomic,strong,readonly) RACCommand * loginCommand;
 @end

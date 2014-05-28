@@ -7,6 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <DDTTYLogger.h>
+static const int ddLogLevel = LOG_LEVEL_VERBOSE;
 
 @interface BaseViewController : UIViewController
 

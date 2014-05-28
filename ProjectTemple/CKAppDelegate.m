@@ -7,12 +7,24 @@
 //
 
 #import "CKAppDelegate.h"
+#import "CKViewController.h"
 
 @implementation CKAppDelegate
+@dynamic rootViewController;
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     // Override point for customization after application launch.
+    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+    // Override point for customization after application launch.
+    self.rootViewController =[[CKViewController alloc] init];
+    
+    
+    //cofing log
+    [DDLog addLogger:[DDTTYLogger sharedInstance]];
+    
+
+    [self.window makeKeyAndVisible];
     return YES;
 }
 							
@@ -42,5 +54,26 @@
 {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
 }
+
+
+
+#pragma mark -  daynamic property mothed
+-(UIViewController*) rootViewController
+{
+    return _rootViewController;
+}
+
+-(void) setRootViewController:(UIViewController *)rootViewController
+{
+    _rootViewController=rootViewController;
+    UIViewController * finalRootController=rootViewController;
+    if(![rootViewController isKindOfClass:[UITabBarController class]] && ![rootViewController isKindOfClass:[UINavigationController class]])
+    {
+        finalRootController=[[UINavigationController alloc] initWithRootViewController:_rootViewController];
+    }
+    
+    self.window.rootViewController=finalRootController;
+}
+
 
 @end

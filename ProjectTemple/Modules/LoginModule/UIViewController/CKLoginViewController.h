@@ -8,6 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface CKLoginViewController : UIViewController
+@interface CKLoginViewController : BaseViewController
 
 @end

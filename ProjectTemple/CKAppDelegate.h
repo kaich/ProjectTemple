@@ -7,9 +7,13 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <DDTTYLogger.h>
 
 @interface CKAppDelegate : UIResponder <UIApplicationDelegate>
-
+{
+    UIViewController * _rootViewController;
+}
 @property (strong, nonatomic) UIWindow *window;
 
+@property(nonatomic,strong,readonly) UIViewController * rootViewController;
 @end

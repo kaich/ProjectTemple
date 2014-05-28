@@ -8,6 +8,7 @@
 
 #import "BaseViewController.h"
 
+
 @interface BaseViewController ()
 
 @end
@@ -21,6 +22,13 @@
         // Custom initialization
     }
     return self;
+}
+
+-(void) loadView
+{
+    [super loadView];
+    
+    self.view.backgroundColor=[UIColor whiteColor];
 }
 
 - (void)viewDidLoad
