@@ -12,6 +12,7 @@
 #import <Overcoat.h>
 #import "CKAppleItemModel.h"
 #import <InAppSettingsKit/IASKAppSettingsViewController.h>
+#import <SVProgressHUD.h>
 
 @interface CKLoginViewController ()
 @property(nonatomic,strong) UITextField * tfUserName;
@@ -73,9 +74,11 @@
 //        settingVC.showDoneButton=YES;
 //        [self presentViewController:[[UINavigationController alloc] initWithRootViewController:settingVC] animated:YES completion:nil];
 //        
-        
+        [SVProgressHUD showWithStatus:@"加载中..."];
         OVCClient * client=[OVCClient clientWithBaseURL:URL(@"https://itunes.apple.com/search") account:nil];
         [client GET:@"/lookup" parameters:@{@"id" : @"444934666", @"country" : @"cn"} resultClass:[CKAppleItemModel class] resultKeyPath:@"results" completion:^(AFHTTPRequestOperation *operation, id responseObject, NSError *error) {
+            
+            [SVProgressHUD dismiss];
             UIAlertView * alert=[[UIAlertView alloc] initWithTitle:@"ceshi" message:[NSString stringWithFormat:@"%@",responseObject] delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
             [alert show];
         }];

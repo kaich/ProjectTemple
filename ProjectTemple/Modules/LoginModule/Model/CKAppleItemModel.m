@@ -13,10 +13,10 @@
 
 +(NSDictionary*) JSONKeyPathsByPropertyKey
 {
-    return @{@"trackName": @"appName",
-             @"version": @"appVersion",
-             @"fileSizeBytes": @"appSize",
-             @"price": @"appPrice"
+    return @{@"appName" :@"trackName",
+             @"appVersion" : @"version",
+             @"appSize" : @"fileSizeBytes",
+             @"appPrice" : @"price"
              };
 }
 
