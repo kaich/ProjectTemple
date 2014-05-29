@@ -17,3 +17,5 @@
 #define STRING_FROM_INT(_x_)  [NSString stringWithFormat:@"%d",_x_]
 #define STRING_FROM_FLOAT(_x_)  [NSString stringWithFormat:@"%f",_x_]
 #define STRING_FROM_LONGLONG(_x_)  [NSString stringWithFormat:@"%llu",_x_]
+
+#define STR_FORMAT(_format_,...) [NSString stringWithFormat:FORMAT, ##__VA_ARGS__]

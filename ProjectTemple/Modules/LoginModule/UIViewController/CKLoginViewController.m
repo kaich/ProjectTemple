@@ -14,7 +14,7 @@
 #import <InAppSettingsKit/IASKAppSettingsViewController.h>
 #import <SVProgressHUD.h>
 
-@interface CKLoginViewController ()
+@interface CKLoginViewController ()<IASKSettingsDelegate>
 @property(nonatomic,strong) UITextField * tfUserName;
 @property(nonatomic,strong) UITextField * tfPassword;
 @property(nonatomic,strong) UIButton *  btnLogin;
@@ -68,23 +68,29 @@
     
     
     [[self.viewModel.loginCommand.executionSignals flattenMap:^RACStream *(id value) {
-        return [[value ignoreValues] concat:[RACSignal return:RACUnit.defaultUnit]];
+        return [[value ignoreValues] concat:[RACSignal return:@"1"]];
     }] subscribeNext:^(id x) {
-//        IASKAppSettingsViewController * settingVC=[[IASKAppSettingsViewController alloc] init];
-//        settingVC.showDoneButton=YES;
-//        [self presentViewController:[[UINavigationController alloc] initWithRootViewController:settingVC] animated:YES completion:nil];
-//        
-        [SVProgressHUD showWithStatus:@"加载中..."];
-        OVCClient * client=[OVCClient clientWithBaseURL:URL(@"https://itunes.apple.com/search") account:nil];
-        [client GET:@"/lookup" parameters:@{@"id" : @"444934666", @"country" : @"cn"} resultClass:[CKAppleItemModel class] resultKeyPath:@"results" completion:^(AFHTTPRequestOperation *operation, id responseObject, NSError *error) {
-            
-            [SVProgressHUD dismiss];
-            UIAlertView * alert=[[UIAlertView alloc] initWithTitle:@"ceshi" message:[NSString stringWithFormat:@"%@",responseObject] delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
-            [alert show];
-        }];
+
+        if([x intValue]==1)
+        {
+            [SVProgressHUD showWithStatus:@"加载中..."];
+            OVCClient * client=[OVCClient clientWithBaseURL:URL(@"https://itunes.apple.com") account:nil];
+            [client GET:@"/lookup" parameters:@{@"id" : @"444934666", @"country" : @"cn"} resultClass:[CKAppleItemModel class] resultKeyPath:@"results" completion:^(AFHTTPRequestOperation *operation, id responseObject, NSError *error) {
+                
+                [SVProgressHUD dismiss];
+                UIAlertView * alert=[[UIAlertView alloc] initWithTitle:@"ceshi" message:[NSString stringWithFormat:@"%@",responseObject] delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
+                [alert show];
+            }];
+        }
+        else
+        {
+            IASKAppSettingsViewController * settingVC=[[IASKAppSettingsViewController alloc] init];
+            settingVC.showDoneButton=YES;
+            settingVC.delegate=self;
+            [self presentViewController:[[UINavigationController alloc] initWithRootViewController:settingVC] animated:YES completion:nil];
+        }
     }];
     
-
     
     
 }
@@ -106,5 +112,14 @@
     // Pass the selected object to the new view controller.
 }
 */
+
+
+
+#pragma mark -  IASSeetingViewController delegate 
+- (void)settingsViewControllerDidEnd:(IASKAppSettingsViewController*)sender
+{
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
+
 
 @end

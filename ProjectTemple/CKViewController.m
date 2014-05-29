@@ -8,6 +8,7 @@
 
 #import "CKViewController.h"
 #import "CKLoginViewController.h"
+#import "CKAPPDetailViewController.h"
 
 
 @interface CKViewController ()
@@ -58,7 +59,7 @@
 
 -(void) click
 {
-    CKLoginViewController * vc=[[CKLoginViewController alloc] init];
+    CKAPPDetailViewController * vc=[[CKAPPDetailViewController alloc] init];
     [self.navigationController presentViewController:vc animated:YES completion:nil];
 }
 

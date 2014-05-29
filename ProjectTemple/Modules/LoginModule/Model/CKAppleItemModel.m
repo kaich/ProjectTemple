@@ -16,7 +16,9 @@
     return @{@"appName" :@"trackName",
              @"appVersion" : @"version",
              @"appSize" : @"fileSizeBytes",
-             @"appPrice" : @"price"
+             @"appPrice" : @"price",
+             @"appIcon":@"artworkUrl512",
+             @"appScreenShots":@"screenshotUrls"
              };
 }
 

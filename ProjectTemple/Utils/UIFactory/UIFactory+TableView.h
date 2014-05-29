@@ -21,4 +21,15 @@
  */
 +(UITableView*) createTableViewWithFrame:(CGRect) frame style:(UITableViewStyle) style  delegate:(id<UITableViewDelegate,UITableViewDataSource>) delegate;
 
+
+/**
+ *  创建横向的tableview
+ *
+ *  @param frame    坐标
+ *  @param style    样式
+ *  @param delegate 代理
+ *
+ *  @return 实例
+ */
++(UITableView *) createHorizontalTableViewWithFrame:(CGRect) frame style:(UITableViewStyle) style delegate:(id<UITableViewDelegate,UITableViewDataSource>) delegate;
 @end

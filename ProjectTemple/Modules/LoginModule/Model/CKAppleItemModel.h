@@ -14,6 +14,6 @@
 @property(nonatomic,strong) NSString * appVersion;
 @property(nonatomic,strong) NSString * appPrice;
 @property(nonatomic,strong) NSString * appSize;
-
-
+@property(nonatomic,strong) NSURL * appIcon;
+@property(nonatomic,strong) NSArray * appScreenShots;
 @end

@@ -12,3 +12,4 @@
 #import "UIFactory+TableView.h"
 #import "UIFactory+Label.h"
 #import "UIFactory+Line.h"
+#import "UIFactory+ImageView.h"

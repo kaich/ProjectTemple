@@ -16,6 +16,10 @@
 		041326161935A09B003E46E8 /* NSString+PDRegex.m in Sources */ = {isa = PBXBuildFile; fileRef = 041326151935A09B003E46E8 /* NSString+PDRegex.m */; };
 		0413261E1935D0FD003E46E8 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 0413261D1935D0FD003E46E8 /* Settings.bundle */; };
 		041326211935DCE2003E46E8 /* ViewUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 041326201935DCE2003E46E8 /* ViewUtils.m */; };
+		041588EB1937103700B6D2C4 /* CKAPPDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 041588EA1937103700B6D2C4 /* CKAPPDetailViewController.m */; };
+		041588EE1937140500B6D2C4 /* UIFactory+ImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 041588ED1937140500B6D2C4 /* UIFactory+ImageView.m */; };
+		041588F1193721A100B6D2C4 /* CKDetailViewModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 041588F0193721A100B6D2C4 /* CKDetailViewModel.m */; };
+		041588F51937330C00B6D2C4 /* CKDetailTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 041588F41937330C00B6D2C4 /* CKDetailTableViewCell.m */; };
 		0430E3CC19357C0C00403629 /* RegExCategories.m in Sources */ = {isa = PBXBuildFile; fileRef = 0430E3CB19357C0C00403629 /* RegExCategories.m */; };
 		0430E3D2193583DD00403629 /* UILabel+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = 0430E3D1193583DD00403629 /* UILabel+Additions.m */; };
 		048EDA1A1925FCC1006B1230 /* CKLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 048EDA191925FCC1006B1230 /* CKLoginViewController.m */; };
@@ -75,6 +79,14 @@
 		0413261D1935D0FD003E46E8 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		0413261F1935DCE2003E46E8 /* ViewUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ViewUtils.h; sourceTree = "<group>"; };
 		041326201935DCE2003E46E8 /* ViewUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ViewUtils.m; sourceTree = "<group>"; };
+		041588E91937103700B6D2C4 /* CKAPPDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKAPPDetailViewController.h; sourceTree = "<group>"; };
+		041588EA1937103700B6D2C4 /* CKAPPDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKAPPDetailViewController.m; sourceTree = "<group>"; };
+		041588EC1937140500B6D2C4 /* UIFactory+ImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIFactory+ImageView.h"; sourceTree = "<group>"; };
+		041588ED1937140500B6D2C4 /* UIFactory+ImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIFactory+ImageView.m"; sourceTree = "<group>"; };
+		041588EF193721A100B6D2C4 /* CKDetailViewModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKDetailViewModel.h; sourceTree = "<group>"; };
+		041588F0193721A100B6D2C4 /* CKDetailViewModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKDetailViewModel.m; sourceTree = "<group>"; };
+		041588F31937330C00B6D2C4 /* CKDetailTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKDetailTableViewCell.h; sourceTree = "<group>"; };
+		041588F41937330C00B6D2C4 /* CKDetailTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKDetailTableViewCell.m; sourceTree = "<group>"; };
 		042E767219341EC10047463C /* UserMacro.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UserMacro.h; sourceTree = "<group>"; };
 		0430E3CA19357C0C00403629 /* RegExCategories.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RegExCategories.h; sourceTree = "<group>"; };
 		0430E3CB19357C0C00403629 /* RegExCategories.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RegExCategories.m; sourceTree = "<group>"; };
@@ -163,6 +175,15 @@
 			path = Bundle;
 			sourceTree = "<group>";
 		};
+		041588F2193732FF00B6D2C4 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				041588F31937330C00B6D2C4 /* CKDetailTableViewCell.h */,
+				041588F41937330C00B6D2C4 /* CKDetailTableViewCell.m */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
 		042E76731934601D0047463C /* UILabel */ = {
 			isa = PBXGroup;
 			children = (
@@ -184,9 +205,9 @@
 		048EDA141925FCAC006B1230 /* LoginModule */ = {
 			isa = PBXGroup;
 			children = (
+				041588F2193732FF00B6D2C4 /* View */,
 				048EDA151925FCAC006B1230 /* Model */,
 				048EDA161925FCAC006B1230 /* UIViewController */,
-				048EDA171925FCAC006B1230 /* View */,
 			);
 			path = LoginModule;
 			sourceTree = "<group>";
@@ -198,6 +219,8 @@
 				04D1C0F3192F3B0F00178CDA /* CKLoginViewModel.m */,
 				04CF776919334F0C00DBA6EE /* CKAppleItemModel.h */,
 				04CF776A19334F0D00DBA6EE /* CKAppleItemModel.m */,
+				041588EF193721A100B6D2C4 /* CKDetailViewModel.h */,
+				041588F0193721A100B6D2C4 /* CKDetailViewModel.m */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -207,15 +230,10 @@
 			children = (
 				048EDA181925FCC1006B1230 /* CKLoginViewController.h */,
 				048EDA191925FCC1006B1230 /* CKLoginViewController.m */,
+				041588E91937103700B6D2C4 /* CKAPPDetailViewController.h */,
+				041588EA1937103700B6D2C4 /* CKAPPDetailViewController.m */,
 			);
 			path = UIViewController;
-			sourceTree = "<group>";
-		};
-		048EDA171925FCAC006B1230 /* View */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = View;
 			sourceTree = "<group>";
 		};
 		049FA4AB1925AEB200A1CE5F = {
@@ -482,6 +500,8 @@
 				0413260F19359F91003E46E8 /* UIFactory+Label.m */,
 				041326111935A025003E46E8 /* UIFactory+Line.h */,
 				041326121935A025003E46E8 /* UIFactory+Line.m */,
+				041588EC1937140500B6D2C4 /* UIFactory+ImageView.h */,
+				041588ED1937140500B6D2C4 /* UIFactory+ImageView.m */,
 			);
 			path = UIFactory;
 			sourceTree = "<group>";
@@ -630,9 +650,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				041588F51937330C00B6D2C4 /* CKDetailTableViewCell.m in Sources */,
 				0430E3D2193583DD00403629 /* UILabel+Additions.m in Sources */,
 				0413260419359E79003E46E8 /* UIFactory+TextField.m in Sources */,
 				0430E3CC19357C0C00403629 /* RegExCategories.m in Sources */,
+				041588EB1937103700B6D2C4 /* CKAPPDetailViewController.m in Sources */,
 				049FA5231925E9D400A1CE5F /* NSUserDefaults+Helpers.m in Sources */,
 				049FA5241925E9D400A1CE5F /* UIColor+Helper.m in Sources */,
 				0413261019359F91003E46E8 /* UIFactory+Label.m in Sources */,
@@ -648,9 +670,11 @@
 				049FA5181925E30300A1CE5F /* UIView+Snapshot.m in Sources */,
 				049FA4C81925AEB200A1CE5F /* CKAppDelegate.m in Sources */,
 				041326131935A025003E46E8 /* UIFactory+Line.m in Sources */,
+				041588EE1937140500B6D2C4 /* UIFactory+ImageView.m in Sources */,
 				049FA5221925E9D400A1CE5F /* NSString+Helpers.m in Sources */,
 				049FA4C41925AEB200A1CE5F /* main.m in Sources */,
 				049FA4F11925B9D000A1CE5F /* CKViewController.m in Sources */,
+				041588F1193721A100B6D2C4 /* CKDetailViewModel.m in Sources */,
 				049FA5151925E30300A1CE5F /* NSDate+TimeAgo.m in Sources */,
 				049FA5161925E30300A1CE5F /* NSDate+Utilities.m in Sources */,
 				04CF776B19334F0D00DBA6EE /* CKAppleItemModel.m in Sources */,
