@@ -17,4 +17,7 @@
 @property(nonatomic,strong) NSString * size;
 @property(nonatomic,strong) NSURL * iconUrl;
 @property(nonatomic,strong) NSArray * screenShots;
+
+
+-(id) initWithModel:(CKAppleItemModel * ) theModel;
 @end

@@ -10,7 +10,7 @@
 
 @implementation CKDetailViewModel
 
--(id) init
+-(id) initWithModel:(CKAppleItemModel *)theModel
 {
     
     self = [super init];
@@ -18,6 +18,8 @@
         return nil;
     }
     
+    
+    self.model=theModel;
     RAC(self,name)=RACObserve(self.model, appName);
     RAC(self,size)=RACObserve(self.model, appSize);
     RAC(self,price)=RACObserve(self.model, appPrice);
@@ -28,5 +30,7 @@
     return self;
 
 }
+
+
 
 @end

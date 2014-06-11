@@ -47,34 +47,39 @@
     
     
     self.lblTitle=[UIFactory createLabelWithTitle:@"1111111" frame:CGRectMake(0, 0, SCREEN_WIDTH-40-80, 12)];
-    RCLFrame(self.lblTitle)=@{rcl_top: self.ivIcon.rcl_frameSignal.top,
-                              };
-    [self.view addSubview:self.lblTitle];
-//
-//    self.lblSize=[UIFactory createLabelWithTitle:@"1111111" frame:CGRectZero];
-//    RCLFrame(self.lblSize)=@{rcl_rect: [self.lblTitle.rcl_frameSignal moveDown:self.lblTitle.rcl_frameSignal.height]};
-//    [self.view addSubview:self.lblSize];
-//    
-//    self.lblPrice=[UIFactory createLabelWithTitle:@"1111111" frame:CGRectZero];
-//    RCLFrame(self.lblPrice)=@{rcl_rect: [self.lblSize.rcl_frameSignal moveDown:self.lblSize.rcl_frameSignal.height]};
-//    [self.view addSubview:self.lblSize];
-//    
-//    
-//    self.tbScreenShots=[UIFactory createHorizontalTableViewWithFrame:CGRectMake(0, 100, 0, SCREEN_WIDTH) style:UITableViewStylePlain delegate:self];
-//    RCLFrame(self.tbScreenShots)=@{rcl_top: [RACSignal add:@[self.lblPrice.rcl_frameSignal.bottom,RCLBox(20)]],
-//                                   rcl_bottom: @20,
-//                                   };
-//    self.tbScreenShots.backgroundColor=[UIColor redColor];
-//    [self.view addSubview:self.tbScreenShots];
-//    
-    
-    self.viewModel=[[CKDetailViewModel alloc] init];
-    self.view.backgroundColor=[UIColor greenColor];
 
+    [self.view addSubview:self.lblTitle];
     
-    [RACObserve(self.lblTitle, frame) subscribeNext:^(id x) {
-        NSLog(@"%@",x);
-    }];
+    NSLog(@"%f,%f",self.lblTitle.intrinsicContentSize.width,self.lblTitle.intrinsicContentSize.height);
+    RCLFrame(self.lblTitle)=@{
+                                  rcl_top: self.ivIcon.rcl_frameSignal.top,
+                                  rcl_left : self.ivIcon.rcl_frameSignal.right,
+                                  };
+
+    self.lblSize=[UIFactory createLabelWithTitle:@"1111111" frame:CGRectZero];
+    RCLFrame(self.lblSize)=@{rcl_top : [RACSignal add:@[self.lblTitle.rcl_frameSignal.bottom,RCLBox(20)]],
+                             rcl_left : self.lblTitle.rcl_frameSignal.left
+                             };
+    [self.view addSubview:self.lblSize];
+    
+    self.lblPrice=[UIFactory createLabelWithTitle:@"1111111" frame:CGRectZero];
+    RCLFrame(self.lblPrice)=@{rcl_top : [RACSignal add:@[self.lblSize.rcl_frameSignal.bottom,RCLBox(20)]],
+                              rcl_left : self.lblSize.rcl_frameSignal.left};
+    [self.view addSubview:self.lblSize];
+    
+    
+    self.tbScreenShots=[UIFactory createHorizontalTableViewWithFrame:CGRectMake(0, 100, 0, SCREEN_WIDTH) style:UITableViewStylePlain delegate:self];
+
+    self.tbScreenShots.separatorStyle=UITableViewCellSeparatorStyleSingleLine;
+    [self.view addSubview:self.tbScreenShots];
+    
+    RCLFrame(self.tbScreenShots)=@{rcl_top: [RACSignal add:@[self.lblPrice.rcl_frameSignal.bottom,RCLBox(20)]],
+                                   rcl_left : @20,
+                                   rcl_height: [self.view.rcl_frameSignal.height minus:RCLBox(20)],
+                                   rcl_width : [self.view.rcl_frameSignal.width minus:RCLBox(40)],
+                                   };
+    
+    self.view.backgroundColor=[UIColor greenColor];
     
 }
 
@@ -82,28 +87,30 @@
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    
-    @weakify(self);
-    [RACObserve(self.viewModel, iconUrl) subscribeNext:^(id x) {
-        @strongify(self);
-        
-        [self.ivIcon setImageWithURL:self.viewModel.model.appIcon];
-        
-    }];
-    
-    RAC(self.lblTitle, text)=RACObserve(self.viewModel, name);
-    RAC(self.lblPrice, text)=RACObserve(self.viewModel, price);
-    RAC(self.lblSize, text)=RACObserve(self.viewModel, size);
-    
+
     
     [SVProgressHUD showWithStatus:@"加载中..."];
     OVCClient * client=[OVCClient clientWithBaseURL:URL(@"https://itunes.apple.com") account:nil];
     [client GET:@"/lookup" parameters:@{@"id" : @"444934666", @"country" : @"cn"} resultClass:[CKAppleItemModel class] resultKeyPath:@"results" completion:^(AFHTTPRequestOperation *operation, id responseObject, NSError *error) {
         
-        NSLog(@"%@",responseObject);
+        NSArray * models=(NSArray*) responseObject;
         
         [SVProgressHUD dismiss];
-        self.viewModel.model=responseObject;
+        self.viewModel=[[CKDetailViewModel alloc] initWithModel:[models firstObject]];
+        RAC(self.lblTitle, text)=RACObserve(self.viewModel, name);
+        RAC(self.lblPrice, text)=RACObserve(self.viewModel, price);
+        RAC(self.lblSize, text)=RACObserve(self.viewModel, size);
+        @weakify(self);
+        [RACObserve(self.viewModel, screenShots) subscribeNext:^(id x) {
+            @strongify(self);
+            [self.tbScreenShots reloadData];
+        }];
+        
+        [RACObserve(self.viewModel, iconUrl) subscribeNext:^(id x) {
+            @strongify(self);
+            
+            [self.ivIcon setImageWithURL:self.viewModel.model.appIcon];
+        }];
     }];
 }
 
@@ -147,15 +154,24 @@
     if(!cell)
     {
         cell=[[CKDetailTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
-        cell.transform=CGAffineTransformMakeRotation(M_PI/2);
+        cell.transform=CGAffineTransformMakeRotation(-M_PI/2);
     }
+    
+
     
     NSURL * url=[self.viewModel.screenShots objectAtIndex:indexPath.row];
     [cell.ivScreenShot setImageWithURL:url];
+    cell.ivScreenShot.backgroundColor=[UIColor redColor];
+    
     
     return cell;
 }
 
+
+-(float) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return  320;
+}
 
 
 

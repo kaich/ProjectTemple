@@ -14,6 +14,7 @@
 +(UIImageView *) createImageViewWithFrame:(CGRect)frame imageName:(NSString *)imageName
 {
     UIImageView * imageView=[[UIImageView alloc] initWithFrame:frame];
+    imageView.contentMode=UIViewContentModeScaleAspectFit;
     if(imageName.length>0)
     {
         imageView.image=IMAGE_NAME(imageName);

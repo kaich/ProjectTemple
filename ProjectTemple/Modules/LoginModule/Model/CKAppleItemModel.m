@@ -7,6 +7,7 @@
 //
 
 #import "CKAppleItemModel.h"
+#import <MTLValueTransformer.h>
 
 @implementation CKAppleItemModel
 
@@ -20,6 +21,34 @@
              @"appIcon":@"artworkUrl512",
              @"appScreenShots":@"screenshotUrls"
              };
+}
+
+
++(NSValueTransformer * ) JSONTransformerForKey:(NSString *)key
+{
+     if([key isEqualToString:@"appName"])
+     {
+        return  [MTLValueTransformer transformerWithBlock:^id(id x) {
+             return [NSString stringWithFormat:@"%@",x];
+         }];
+         
+     }
+     else if([key isEqualToString:@"appSize"])
+     {
+         return  [MTLValueTransformer transformerWithBlock:^id(id x) {
+             return [NSString stringWithFormat:@"%@",x];
+         }];
+         
+     }
+     else if([key isEqualToString:@"appPrice"])
+     {
+         return  [MTLValueTransformer transformerWithBlock:^id(id x) {
+             return [NSString stringWithFormat:@"%@",x];
+         }];
+         
+     }
+    
+    return  nil;
 }
 
 @end
