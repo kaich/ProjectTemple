@@ -7,7 +7,6 @@
 //
 
 #import "CKAPPDetailViewController.h"
-#import <ReactiveCocoaLayout.h>
 #import <ReactiveCocoa.h>
 #import "CKDetailViewModel.h"
 #import "RACEXTScope.h"
@@ -46,38 +45,22 @@
     [self.view addSubview:self.ivIcon];
     
     
-    self.lblTitle=[UIFactory createLabelWithTitle:@"1111111" frame:CGRectMake(0, 0, SCREEN_WIDTH-40-80, 12)];
-
+    self.lblTitle=[UIFactory createLabelWithTitle:@"1111111" frame:CGRectMake(30, 20, SCREEN_WIDTH-40-80, 12)];
     [self.view addSubview:self.lblTitle];
-    
-    NSLog(@"%f,%f",self.lblTitle.intrinsicContentSize.width,self.lblTitle.intrinsicContentSize.height);
-    RCLFrame(self.lblTitle)=@{
-                                  rcl_top: self.ivIcon.rcl_frameSignal.top,
-                                  rcl_left : self.ivIcon.rcl_frameSignal.right,
-                                  };
 
-    self.lblSize=[UIFactory createLabelWithTitle:@"1111111" frame:CGRectZero];
-    RCLFrame(self.lblSize)=@{rcl_top : [RACSignal add:@[self.lblTitle.rcl_frameSignal.bottom,RCLBox(20)]],
-                             rcl_left : self.lblTitle.rcl_frameSignal.left
-                             };
+
+    self.lblSize=[UIFactory createLabelWithTitle:@"1111111" frame:CGRectMake(30, 40, SCREEN_WIDTH-40-80, 12)];
     [self.view addSubview:self.lblSize];
     
-    self.lblPrice=[UIFactory createLabelWithTitle:@"1111111" frame:CGRectZero];
-    RCLFrame(self.lblPrice)=@{rcl_top : [RACSignal add:@[self.lblSize.rcl_frameSignal.bottom,RCLBox(20)]],
-                              rcl_left : self.lblSize.rcl_frameSignal.left};
+    self.lblPrice=[UIFactory createLabelWithTitle:@"1111111" frame:CGRectMake(30, 60, SCREEN_WIDTH-40-80, 12)];
     [self.view addSubview:self.lblSize];
     
     
-    self.tbScreenShots=[UIFactory createHorizontalTableViewWithFrame:CGRectMake(0, 100, 0, SCREEN_WIDTH) style:UITableViewStylePlain delegate:self];
-
+    self.tbScreenShots=[UIFactory createHorizontalTableViewWithFrame:CGRectMake(0, 100, self.view.width,self.view.height-100) style:UITableViewStylePlain delegate:self];
     self.tbScreenShots.separatorStyle=UITableViewCellSeparatorStyleSingleLine;
     [self.view addSubview:self.tbScreenShots];
     
-    RCLFrame(self.tbScreenShots)=@{rcl_top: [RACSignal add:@[self.lblPrice.rcl_frameSignal.bottom,RCLBox(20)]],
-                                   rcl_left : @20,
-                                   rcl_height: [self.view.rcl_frameSignal.height minus:RCLBox(20)],
-                                   rcl_width : [self.view.rcl_frameSignal.width minus:RCLBox(40)],
-                                   };
+
     
     self.view.backgroundColor=[UIColor greenColor];
     

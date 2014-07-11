@@ -23,8 +23,8 @@
 
 +(UITableView*) createHorizontalTableViewWithFrame:(CGRect)frame style:(UITableViewStyle)style delegate:(id<UITableViewDelegate,UITableViewDataSource>)delegate
 {
-    float originX=frame.origin.x+frame.size.width-frame.size.height;
-    float originY=frame.origin.y+frame.size.height-frame.size.width;
+    float originX=frame.origin.x+(frame.size.width-frame.size.height)/2;
+    float originY=frame.origin.y+(frame.size.height-frame.size.width)/2;
     
     UITableView* tableview=[[UITableView alloc] initWithFrame:CGRectMake(originX, originY, frame.size.height, frame.size.width) style:style];
     tableview.separatorStyle=UITableViewCellSeparatorStyleNone;

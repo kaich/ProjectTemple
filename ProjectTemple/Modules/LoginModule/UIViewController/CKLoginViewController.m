@@ -7,7 +7,6 @@
 //
 
 #import "CKLoginViewController.h"
-#import <ReactiveCocoaLayout.h>
 #import "CKLoginViewModel.h"
 #import <Overcoat.h>
 #import "CKAppleItemModel.h"
@@ -48,15 +47,12 @@
     [self.view addSubview:self.tfUserName];
     
     self.tfPassword=[UIFactory createTextFieldWithPlaceholder:NSLocalizedString(@"Login_Password", nil) frame:CGRectZero];
-    RCLFrame(self.tfPassword)=@{rcl_rect:[self.tfUserName.rcl_frameSignal moveDown:[RACSignal add:@[self.tfUserName.rcl_frameSignal.height,RCLBox(10)]]]};
+    self.tfPassword.frame=CGRectMake(20, 90, SCREEN_WIDTH -40, 30);
     [self.view addSubview:self.tfPassword];
     
     
     self.btnLogin=[UIFactory createButtonWithTitle:@"登陆" backgroundImageName:nil normalImageName:nil highlightImageName:nil];
-    RCLFrame(self.btnLogin)=@{rcl_top: [RACSignal add:@[self.tfPassword.rcl_frameSignal.bottom,RCLBox(30)]],
-                              rcl_width : self.tfPassword.rcl_frameSignal.width,
-                              rcl_height : @40
-                              };
+    self.tfPassword.frame=CGRectMake(20, 140, SCREEN_WIDTH -40, 40);
     [self.view addSubview:self.btnLogin];
     
     self.viewModel=[[CKLoginViewModel alloc] init];
