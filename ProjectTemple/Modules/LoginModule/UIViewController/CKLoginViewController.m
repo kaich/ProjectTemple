@@ -60,7 +60,6 @@
     RAC(self.viewModel,password)=self.tfPassword.rac_textSignal;
     self.btnLogin.rac_command=self.viewModel.loginCommand;
     
-
     
     
     [[self.viewModel.loginCommand.executionSignals flattenMap:^RACStream *(id value) {
