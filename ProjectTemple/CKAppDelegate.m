@@ -7,7 +7,7 @@
 //
 
 #import "CKAppDelegate.h"
-#import "CKLoginViewController.h"
+#import "CKAPPDetailViewController.h"
 
 @implementation CKAppDelegate
 @dynamic rootViewController;
@@ -17,7 +17,7 @@
     // Override point for customization after application launch.
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     // Override point for customization after application launch.
-    self.rootViewController =[[CKLoginViewController alloc] init];
+    self.rootViewController =[[CKAPPDetailViewController alloc] init];
     
     
     //cofing log

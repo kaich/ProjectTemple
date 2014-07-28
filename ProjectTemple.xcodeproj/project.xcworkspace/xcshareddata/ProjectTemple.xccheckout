@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>1741F552-04EB-4F64-AF59-E189079B49E5</string>
+	<key>IDESourceControlProjectName</key>
+	<string>ProjectTemple</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>1BF65F35-1BCC-49E1-9443-D53C13411BFB</key>
+		<string>https://bitbucket.org/chengkai1853/project-temple-demo.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>ProjectTemple.xcodeproj/project.xcworkspace</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>1BF65F35-1BCC-49E1-9443-D53C13411BFB</key>
+		<string>../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>https://bitbucket.org/chengkai1853/project-temple-demo.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>110</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>1BF65F35-1BCC-49E1-9443-D53C13411BFB</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>1BF65F35-1BCC-49E1-9443-D53C13411BFB</string>
+			<key>IDESourceControlWCCName</key>
+			<string>ProjectTemple</string>
+		</dict>
+	</array>
+</dict>
+</plist>

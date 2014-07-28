@@ -71,18 +71,16 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
 
-    
+    //this method use is not very right. To work right way ....
     [SVProgressHUD showWithStatus:@"加载中..."];
     OVCClient * client=[OVCClient clientWithBaseURL:URL(@"https://itunes.apple.com") account:nil];
     [client GET:@"/lookup" parameters:@{@"id" : @"444934666", @"country" : @"cn"} resultClass:[CKAppleItemModel class] resultKeyPath:@"results" completion:^(AFHTTPRequestOperation *operation, id responseObject, NSError *error) {
         
         NSArray * models=(NSArray*) responseObject;
-        
-        [SVProgressHUD dismiss];
         self.viewModel=[[CKDetailViewModel alloc] initWithModel:[models firstObject]];
-        RAC(self.lblTitle, text)=RACObserve(self.viewModel, name);
-        RAC(self.lblPrice, text)=RACObserve(self.viewModel, price);
-        RAC(self.lblSize, text)=RACObserve(self.viewModel, size);
+        self.lblTitle.text=self.viewModel.name;
+        self.lblPrice.text=self.viewModel.price;
+        self.lblSize.text=self.viewModel.size;
         @weakify(self);
         [RACObserve(self.viewModel, screenShots) subscribeNext:^(id x) {
             @strongify(self);
@@ -94,6 +92,8 @@
             
             [self.ivIcon setImageWithURL:self.viewModel.model.appIcon];
         }];
+        [SVProgressHUD dismiss];
+        
     }];
 }
 

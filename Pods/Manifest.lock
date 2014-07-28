@@ -35,6 +35,7 @@ PODS:
   - Mantle (1.5):
     - Mantle/extobjc
   - Mantle/extobjc (1.5)
+  - MYBlurIntroductionView (1.0.3)
   - Nimbus (1.2.0):
     - Nimbus/AttributedLabel
     - Nimbus/Badge
@@ -115,6 +116,7 @@ DEPENDENCIES:
   - LBBlurredImage
   - LKDBHelper
   - Mantle
+  - MYBlurIntroductionView
   - Nimbus
   - Overcoat
   - ReactiveCocoa
@@ -132,6 +134,7 @@ SPEC CHECKSUMS:
   LBBlurredImage: 30cc42be977bbcece286d26d2d9c08b8be7f05e8
   LKDBHelper: b337d5cdfba9d0b78e74992e1ca8bdc8b9fc7928
   Mantle: c67a7e45e14196ed42b2a7cbb98ff6a9920e6b92
+  MYBlurIntroductionView: 6caf60805eaa555538aba9e2615820fd6f07cd23
   Nimbus: 14fd6f034c5f53d3dccef6cfd5763959497289a9
   Overcoat: fe709e4de619dc0465bb84f9ff22eee8db8e2bf8
   ReactiveCocoa: 2066583826c17dde8e90c41e489f682048cc57c9
