@@ -14,9 +14,6 @@ typedef void(^PTRequestFailedBlock)(NSError * error);
 
 @interface PTHTTPRequestManager : NSObject
 
-@property(nonatomic,copy) PTRequestCompleteBlock completionBlock;
-@property(nonatomic,copy) PTRequestFailedBlock   failureBlock;
-
 
 /**
  *  get request
@@ -24,7 +21,7 @@ typedef void(^PTRequestFailedBlock)(NSError * error);
  *  @param URLString  path
  *  @param parameters params
  */
-- (void)GET:(NSString *)URLString parameters:(NSDictionary *)parameters;
+- (void)GET:(NSString *)URLString parameters:(NSDictionary *)parameters completion:(PTRequestCompleteBlock) completeBlock failure:(PTRequestFailedBlock) failureBlock;
 
 /**
  *  head request  only request Head
@@ -32,7 +29,7 @@ typedef void(^PTRequestFailedBlock)(NSError * error);
  *  @param URLString  path
  *  @param parameters params
  */
-- (void)HEAD:(NSString *)URLString parameters:(NSDictionary *)parameters;
+- (void)HEAD:(NSString *)URLString parameters:(NSDictionary *)parameters completion:(PTRequestCompleteBlock) completeBlock failure:(PTRequestFailedBlock) failureBlock;
 
 /**
  *  post request
@@ -40,7 +37,7 @@ typedef void(^PTRequestFailedBlock)(NSError * error);
  *  @param URLString  path
  *  @param parameters params
  */
-- (void)POST:(NSString *)URLString parameters:(NSDictionary *)parameters;
+- (void)POST:(NSString *)URLString parameters:(NSDictionary *)parameters completion:(PTRequestCompleteBlock) completeBlock failure:(PTRequestFailedBlock) failureBlock;
 
 /**
  *  post request
@@ -49,7 +46,7 @@ typedef void(^PTRequestFailedBlock)(NSError * error);
  *  @param parameters params
  *  @param block      A block that takes a single argument and appends data to the HTTP body. The block argument is an object adopting the `AFMultipartFormData` protocol.
  */
-- (void)POST:(NSString *)URLString parameters:(NSDictionary *)parameters constructingBodyWithBlock:(void (^)(id <AFMultipartFormData> formData))block;
+- (void)POST:(NSString *)URLString parameters:(NSDictionary *)parameters constructingBodyWithBlock:(void (^)(id <AFMultipartFormData> formData))block completion:(PTRequestCompleteBlock) completeBlock failure:(PTRequestFailedBlock) failureBlock;
 
 /**
  *  PUT request
@@ -57,7 +54,7 @@ typedef void(^PTRequestFailedBlock)(NSError * error);
  *  @param URLString  path
  *  @param parameters params
  */
-- (void)PUT:(NSString *)URLString parameters:(NSDictionary *)parameters;
+- (void)PUT:(NSString *)URLString parameters:(NSDictionary *)parameters completion:(PTRequestCompleteBlock) completeBlock failure:(PTRequestFailedBlock) failureBlock;
 
 /**
  *  PATCH request
@@ -65,7 +62,7 @@ typedef void(^PTRequestFailedBlock)(NSError * error);
  *  @param URLString  path
  *  @param parameters params
  */
-- (void)PATCH:(NSString *)URLString parameters:(NSDictionary *)parameters;
+- (void)PATCH:(NSString *)URLString parameters:(NSDictionary *)parameters completion:(PTRequestCompleteBlock) completeBlock failure:(PTRequestFailedBlock) failureBlock;
 
 /**
  *  DELETE request
@@ -73,7 +70,7 @@ typedef void(^PTRequestFailedBlock)(NSError * error);
  *  @param URLString  path
  *  @param parameters params
  */
-- (void)DELETE:(NSString *)URLString parameters:(NSDictionary *)parameters;
+- (void)DELETE:(NSString *)URLString parameters:(NSDictionary *)parameters completion:(PTRequestCompleteBlock) completeBlock failure:(PTRequestFailedBlock) failureBlock;
 
 /**
  *  cancel last request

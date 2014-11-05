@@ -27,18 +27,15 @@
 
 #pragma mark - request method
 
--(void) GET:(NSString *)URLString parameters:(NSDictionary *)parameters
+-(void) GET:(NSString *)URLString parameters:(NSDictionary *)parameters completion:(PTRequestCompleteBlock)completeBlock failure:(PTRequestFailedBlock)failureBlock
 {
     [self.requestManager GET:URLString parameters:parameters completion:^(id response, NSError *error) {
-        if(error)
-        {
-            self.failureBlock(error);
+        if (error) {
+            failureBlock(error);
         }
         else
         {
-            
-            NSArray * results=response.result;
-            self.completionBlock(response.)
+            NSArray * results=
         }
     }]
 }
