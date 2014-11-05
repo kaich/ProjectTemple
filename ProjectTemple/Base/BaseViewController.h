@@ -11,5 +11,18 @@
 static const int ddLogLevel = LOG_LEVEL_VERBOSE;
 
 @interface BaseViewController : UIViewController
+{
+    UIView * _networkView;
+}
+
+/**
+ *  show NetWorkStatus view
+ *
+ *  @param parentView
+ */
+-(void) showNetWorkStatusViewInView:(UIView*) parentView;
+-(void) dismissNetWorkStatusView;
+
+
 
 @end

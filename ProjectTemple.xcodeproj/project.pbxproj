@@ -22,6 +22,9 @@
 		041588F51937330C00B6D2C4 /* CKDetailTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 041588F41937330C00B6D2C4 /* CKDetailTableViewCell.m */; };
 		0430E3CC19357C0C00403629 /* RegExCategories.m in Sources */ = {isa = PBXBuildFile; fileRef = 0430E3CB19357C0C00403629 /* RegExCategories.m */; };
 		0430E3D2193583DD00403629 /* UILabel+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = 0430E3D1193583DD00403629 /* UILabel+Additions.m */; };
+		0433F4B01A09BCB300CBECBF /* BaseTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0433F4AF1A09BCB300CBECBF /* BaseTableViewController.m */; };
+		0433F4B51A09F44D00CBECBF /* Common.m in Sources */ = {isa = PBXBuildFile; fileRef = 0433F4B41A09F44D00CBECBF /* Common.m */; };
+		0433F4B81A09FB2E00CBECBF /* UIFactory+NetWorkStatusView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0433F4B71A09FB2E00CBECBF /* UIFactory+NetWorkStatusView.m */; };
 		048EDA1A1925FCC1006B1230 /* CKLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 048EDA191925FCC1006B1230 /* CKLoginViewController.m */; };
 		049FA4B81925AEB200A1CE5F /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 049FA4B71925AEB200A1CE5F /* Foundation.framework */; };
 		049FA4BA1925AEB200A1CE5F /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 049FA4B91925AEB200A1CE5F /* CoreGraphics.framework */; };
@@ -92,6 +95,12 @@
 		0430E3CB19357C0C00403629 /* RegExCategories.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RegExCategories.m; sourceTree = "<group>"; };
 		0430E3D0193583DD00403629 /* UILabel+Additions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UILabel+Additions.h"; sourceTree = "<group>"; };
 		0430E3D1193583DD00403629 /* UILabel+Additions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UILabel+Additions.m"; sourceTree = "<group>"; };
+		0433F4AE1A09BCB300CBECBF /* BaseTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BaseTableViewController.h; sourceTree = "<group>"; };
+		0433F4AF1A09BCB300CBECBF /* BaseTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BaseTableViewController.m; sourceTree = "<group>"; };
+		0433F4B31A09F44D00CBECBF /* Common.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Common.h; sourceTree = "<group>"; };
+		0433F4B41A09F44D00CBECBF /* Common.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Common.m; sourceTree = "<group>"; };
+		0433F4B61A09FB2E00CBECBF /* UIFactory+NetWorkStatusView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIFactory+NetWorkStatusView.h"; sourceTree = "<group>"; };
+		0433F4B71A09FB2E00CBECBF /* UIFactory+NetWorkStatusView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIFactory+NetWorkStatusView.m"; sourceTree = "<group>"; };
 		048EDA181925FCC1006B1230 /* CKLoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKLoginViewController.h; sourceTree = "<group>"; };
 		048EDA191925FCC1006B1230 /* CKLoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKLoginViewController.m; sourceTree = "<group>"; };
 		049FA4B41925AEB200A1CE5F /* ProjectTemple.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ProjectTemple.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -202,6 +211,22 @@
 			path = NSRegularExpression;
 			sourceTree = "<group>";
 		};
+		0433F4B11A09D11200CBECBF /* Common */ = {
+			isa = PBXGroup;
+			children = (
+				0433F4B31A09F44D00CBECBF /* Common.h */,
+				0433F4B41A09F44D00CBECBF /* Common.m */,
+			);
+			path = Common;
+			sourceTree = "<group>";
+		};
+		0433F4B21A09D12D00CBECBF /* OtherFile */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = OtherFile;
+			sourceTree = "<group>";
+		};
 		048EDA141925FCAC006B1230 /* LoginModule */ = {
 			isa = PBXGroup;
 			children = (
@@ -271,6 +296,7 @@
 		049FA4BD1925AEB200A1CE5F /* ProjectTemple */ = {
 			isa = PBXGroup;
 			children = (
+				0433F4B11A09D11200CBECBF /* Common */,
 				049FA5251925EEFF00A1CE5F /* Base */,
 				049FA4F21925BC1B00A1CE5F /* Config */,
 				049FA4F31925BC1B00A1CE5F /* CustomView */,
@@ -374,6 +400,7 @@
 		049FA4F91925BC1B00A1CE5F /* Resource */ = {
 			isa = PBXGroup;
 			children = (
+				0433F4B21A09D12D00CBECBF /* OtherFile */,
 				041326181935BA72003E46E8 /* Bundle */,
 				049FA4FA1925BC1B00A1CE5F /* Image */,
 				049FA4FB1925BC1B00A1CE5F /* Plist */,
@@ -478,6 +505,8 @@
 			children = (
 				049FA5261925EF3200A1CE5F /* BaseViewController.h */,
 				049FA5271925EF3200A1CE5F /* BaseViewController.m */,
+				0433F4AE1A09BCB300CBECBF /* BaseTableViewController.h */,
+				0433F4AF1A09BCB300CBECBF /* BaseTableViewController.m */,
 			);
 			path = Base;
 			sourceTree = "<group>";
@@ -502,6 +531,8 @@
 				041326121935A025003E46E8 /* UIFactory+Line.m */,
 				041588EC1937140500B6D2C4 /* UIFactory+ImageView.h */,
 				041588ED1937140500B6D2C4 /* UIFactory+ImageView.m */,
+				0433F4B61A09FB2E00CBECBF /* UIFactory+NetWorkStatusView.h */,
+				0433F4B71A09FB2E00CBECBF /* UIFactory+NetWorkStatusView.m */,
 			);
 			path = UIFactory;
 			sourceTree = "<group>";
@@ -652,8 +683,10 @@
 			files = (
 				041588F51937330C00B6D2C4 /* CKDetailTableViewCell.m in Sources */,
 				0430E3D2193583DD00403629 /* UILabel+Additions.m in Sources */,
+				0433F4B81A09FB2E00CBECBF /* UIFactory+NetWorkStatusView.m in Sources */,
 				0413260419359E79003E46E8 /* UIFactory+TextField.m in Sources */,
 				0430E3CC19357C0C00403629 /* RegExCategories.m in Sources */,
+				0433F4B01A09BCB300CBECBF /* BaseTableViewController.m in Sources */,
 				041588EB1937103700B6D2C4 /* CKAPPDetailViewController.m in Sources */,
 				049FA5231925E9D400A1CE5F /* NSUserDefaults+Helpers.m in Sources */,
 				049FA5241925E9D400A1CE5F /* UIColor+Helper.m in Sources */,
@@ -673,6 +706,7 @@
 				041588EE1937140500B6D2C4 /* UIFactory+ImageView.m in Sources */,
 				049FA5221925E9D400A1CE5F /* NSString+Helpers.m in Sources */,
 				049FA4C41925AEB200A1CE5F /* main.m in Sources */,
+				0433F4B51A09F44D00CBECBF /* Common.m in Sources */,
 				049FA4F11925B9D000A1CE5F /* CKViewController.m in Sources */,
 				041588F1193721A100B6D2C4 /* CKDetailViewModel.m in Sources */,
 				049FA5151925E30300A1CE5F /* NSDate+TimeAgo.m in Sources */,

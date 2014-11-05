@@ -18,6 +18,7 @@
 #import "UIFactory.h"
 #import "Macro.h"
 #import "UserMacro.h"
+#import "Common.h"
 #import "NSString+PDRegex.h"
 #import "RegExCategories.h"
 #import "UILabel+Additions.h"

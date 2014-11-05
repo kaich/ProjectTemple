@@ -7,6 +7,7 @@
 //
 
 
+#define COMMON  [Common sharedInstance]
 
 #define URL(_x_) [NSURL URLWithString:_x_]
 #define APP_DELEGATE  [UIApplication sharedApplication].delegate

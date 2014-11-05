@@ -13,3 +13,4 @@
 #import "UIFactory+Label.h"
 #import "UIFactory+Line.h"
 #import "UIFactory+ImageView.h"
+#import "UIFactory+NetWorkStatusView.h"

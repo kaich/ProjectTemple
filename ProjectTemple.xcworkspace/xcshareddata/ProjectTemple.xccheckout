@@ -12,22 +12,34 @@
 	<dict>
 		<key>AF4C833F-40A9-4731-AC49-9A91387F43F6</key>
 		<string>https://bitbucket.org/chengkai1853/project-temple-demo.git</string>
+		<key>C47DAA4D1A9825AC73F0376616733FA7CF28FC97</key>
+		<string>https://bitbucket.org/chengkai1853/project-temple-demo.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
 	<string>ProjectTemple.xcworkspace</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
 		<key>AF4C833F-40A9-4731-AC49-9A91387F43F6</key>
+		<string>../../ProjectTemple</string>
+		<key>C47DAA4D1A9825AC73F0376616733FA7CF28FC97</key>
 		<string>..</string>
 	</dict>
 	<key>IDESourceControlProjectURL</key>
 	<string>https://bitbucket.org/chengkai1853/project-temple-demo.git</string>
 	<key>IDESourceControlProjectVersion</key>
-	<integer>110</integer>
+	<integer>111</integer>
 	<key>IDESourceControlProjectWCCIdentifier</key>
-	<string>AF4C833F-40A9-4731-AC49-9A91387F43F6</string>
+	<string>C47DAA4D1A9825AC73F0376616733FA7CF28FC97</string>
 	<key>IDESourceControlProjectWCConfigurations</key>
 	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>C47DAA4D1A9825AC73F0376616733FA7CF28FC97</string>
+			<key>IDESourceControlWCCName</key>
+			<string>project-temple-demo</string>
+		</dict>
 		<dict>
 			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
 			<string>public.vcs.git</string>
