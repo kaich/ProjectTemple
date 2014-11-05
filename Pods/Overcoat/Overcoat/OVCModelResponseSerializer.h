@@ -22,31 +22,41 @@
 
 #import <AFNetworking/AFNetworking.h>
 
+@class OVCURLMatcher;
+@class NSManagedObjectContext;
+
 /**
- AFJSONResponseSerializer subclass that validates and transforms a JSON response into a model object or an array of model objects.
+ AFJSONResponseSerializer subclass that validates and transforms a JSON response into a
+ `OVCResponse` object.
  */
 @interface OVCModelResponseSerializer : AFJSONResponseSerializer
 
 /**
- MTLModel subclass in which the response (or part of the response) will be transformed.
+ Matches URLs in HTTP responses with model classes.
  */
-@property (nonatomic) Class modelClass;
+@property (strong, nonatomic, readonly) OVCURLMatcher *URLMatcher;
 
 /**
- Key path in the JSON response that contains the data to be transformed.
+ The managed object context used to insert model objects.
  */
-@property (copy, nonatomic) NSString *responseKeyPath;
+@property (strong, nonatomic, readonly) NSManagedObjectContext *managedObjectContext;
 
 /**
- Creates and returns a model serializer with the specified model class and response key path.
+ The class used to create responses. Must be `OVCResponse` or a subclass.
  */
-+ (instancetype)serializerWithModelClass:(Class)modelClass responseKeyPath:(NSString *)responseKeyPath;
+@property (nonatomic, readonly) Class responseClass;
 
 /**
- Creates and returns a model serializer with the specified JSON reading options, model class and response object key path.
+ The model class for server error responses.
  */
-+ (instancetype)serializerWithReadingOptions:(NSJSONReadingOptions)readingOptions
-                                  modelClass:(Class)modelClass
-                             responseKeyPath:(NSString *)responseKeyPath;
+@property (nonatomic, readonly) Class errorModelClass;
+
+/**
+ Creates and returns model serializer.
+ */
++ (instancetype)serializerWithURLMatcher:(OVCURLMatcher *)URLMatcher
+                    managedObjectContext:(NSManagedObjectContext *)managedObjectContext
+                           responseClass:(Class)responseClass
+                         errorModelClass:(Class)errorModelClass;
 
 @end

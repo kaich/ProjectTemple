@@ -6,90 +6,172 @@
 //  Copyright (c) 2012年 linggan. All rights reserved.
 //
 
-
 #import "LKDBHelper.h"
 
-#define checkClassIsInvalid(modelClass)if([LKDBUtils checkStringIsEmpty:[modelClass getTableName]]){\
-LKErrorLog(@"model class name %@ table name is invalid!",NSStringFromClass(modelClass));\
-return NO;}
+#define checkClassIsInvalid(modelClass)\
+if([LKDBUtils checkStringIsEmpty:[modelClass getTableName]])\
+{\
+    LKErrorLog(@"model class name %@ table name is invalid!",NSStringFromClass(modelClass));\
+    return NO;\
+}
 
-#define checkModelIsInvalid(model)if(model == nil){LKErrorLog(@"model is nil");return NO;}checkClassIsInvalid(model.class)
+#define checkModelIsInvalid(model)\
+if(model == nil)\
+{\
+    LKErrorLog(@"model is nil");\
+    return NO;\
+}\
+if([model.class getModelInfos].count == 0)\
+{\
+    LKErrorLog(@"class: %@  property count is 0!!",NSStringFromClass(model.class));\
+    return NO;\
+}\
+NSString* _model_tableName = model.db_tableName?:[model.class getTableName];\
+if(_model_tableName.length == 0)\
+{\
+    LKErrorLog(@"model class name %@ table name is invalid!",NSStringFromClass(model.class));\
+    return NO;\
+}\
+
+@interface NSObject(LKTabelStructure_Private)
+-(void)setDb_inserting:(BOOL)db_inserting;
+@end
+
+@interface LKDBWeakObject : NSObject
+@property(LKDBWeak,nonatomic)LKDBHelper* obj;
+@end
 
 @interface LKDBHelper()
-@property(unsafe_unretained,nonatomic)FMDatabase* usingdb;
+
+@property(strong,nonatomic)NSMutableArray* createdTableNames;
+
+@property(LKDBWeak,nonatomic)FMDatabase* usingdb;
 @property(strong,nonatomic)FMDatabaseQueue* bindingQueue;
 @property(copy,nonatomic)NSString* dbPath;
 
 @property(strong,nonatomic)NSRecursiveLock* threadLock;
-@property(strong,nonatomic)LKTableManager* tableManager;
 @end
 
 @implementation LKDBHelper
-
-#pragma mark- deprecated
-+(LKDBHelper *)sharedDBHelper
-{return [LKDBHelper getUsingLKDBHelper];}
-#pragma mark-
-
--(instancetype)initWithDBName:(NSString *)dbname
++(NSMutableArray*)dbHelperSingleArray
 {
-    self = [super init];
-    if (self) {
-        self.threadLock = [[NSRecursiveLock alloc]init];
-        [self setDBName:dbname];
-    }
-    return self;
+    static __strong NSMutableArray* dbArray;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        dbArray = [NSMutableArray array];
+    });
+    return dbArray;
 }
--(instancetype)initWithDBPath:(NSString *)filePath
++(LKDBHelper*)dbHelperWithPath:(NSString*)dbFilePath save:(LKDBHelper*)helper
 {
-    self = [super init];
-    if (self) {
-        self.threadLock = [[NSRecursiveLock alloc]init];
-        [self setDBPath:filePath];
+    NSMutableArray* dbArray = [self dbHelperSingleArray];
+    
+    if(helper)
+    {
+        LKDBWeakObject* weakObj = [LKDBWeakObject new];
+        weakObj.obj = helper;
+        [dbArray addObject:weakObj];
     }
-    return self;
+    else if(dbFilePath)
+    {
+        for (int i=0; i<dbArray.count;)
+        {
+            LKDBWeakObject* weakObj = [dbArray objectAtIndex:i];
+            if(weakObj.obj == nil)
+            {
+                [dbArray removeObject:weakObj];
+                continue;
+            }
+            else if([weakObj.obj.dbPath isEqualToString:dbFilePath])
+            {
+                return weakObj.obj;
+            }
+            i++;
+        }
+    }
+    return nil;
 }
 - (instancetype)init
 {
     return [self initWithDBName:@"LKDB"];
 }
-
--(void)setDBName:(NSString *)fileName
+-(instancetype)initWithDBName:(NSString *)dbname
 {
-    NSString* dbname = nil;
-    if([fileName hasSuffix:@".db"] == NO){
-        dbname = [NSString stringWithFormat:@"%@.db",fileName];
+    return [self initWithDBPath:[LKDBHelper getDBPathWithDBName:dbname]];
+}
+-(instancetype)initWithDBPath:(NSString *)filePath
+{
+    if([LKDBUtils checkStringIsEmpty:filePath])
+    {
+        self = nil;
+        return self;
     }
-    else{
-        dbname = fileName;
+    LKDBHelper* helper = [LKDBHelper dbHelperWithPath:filePath save:nil];
+    if(helper)
+    {
+        self = helper;
+    }
+    else
+    {
+        self = [super init];
+        if (self)
+        {
+            self.threadLock = [[NSRecursiveLock alloc]init];
+            self.createdTableNames = [NSMutableArray array];
+            
+            [self setDBPath:filePath];
+            [LKDBHelper dbHelperWithPath:nil save:self];
+        }
+    }
+    return self;
+}
+
+#pragma mark- init FMDB
++(NSString*)getDBPathWithDBName:(NSString*)dbName
+{
+    NSString* fileName = nil;
+    if([dbName hasSuffix:@".db"] == NO) {
+        fileName = [NSString stringWithFormat:@"%@.db",dbName];
+    }
+    else {
+        fileName = dbName;
     }
     
-    NSString* filePath = [LKDBUtils getPathForDocuments:dbname inDir:@"db"];
-    [self setDBPath:filePath];
+    NSString* filePath = [LKDBUtils getPathForDocuments:fileName inDir:@"db"];
+    return filePath;
+}
+-(void)setDBName:(NSString *)dbName
+{
+    [self setDBPath:[LKDBHelper getDBPathWithDBName:dbName]];
 }
 
 -(void)setDBPath:(NSString *)filePath
 {
-    if(self.bindingQueue && [self.dbPath isEqualToString:[filePath lowercaseString]])
+    if(self.bindingQueue && [self.dbPath isEqualToString:filePath])
     {
         return;
     }
     
+    //创建数据库目录
     NSRange lastComponent = [filePath rangeOfString:@"/" options:NSBackwardsSearch];
-    if(lastComponent.length > 0){
+    if(lastComponent.length > 0)
+    {
         NSString* dirPath = [filePath substringToIndex:lastComponent.location];
         BOOL isDir = NO;
         BOOL isCreated = [[NSFileManager defaultManager] fileExistsAtPath:dirPath isDirectory:&isDir];
-        if ( isCreated == NO || isDir == NO ) {
+        if ( isCreated == NO || isDir == NO )
+        {
             NSError* error = nil;
             BOOL success = [[NSFileManager defaultManager] createDirectoryAtPath:dirPath withIntermediateDirectories:YES attributes:nil error:&error];
             if(success == NO)
+            {
                 NSLog(@"create dir error: %@",error.debugDescription);
+            }
         }
     }
     self.dbPath = filePath;
     [self.bindingQueue close];
-    self.bindingQueue = [[FMDatabaseQueue alloc]initWithPath:self.dbPath];
+    self.bindingQueue = [[FMDatabaseQueue alloc]initWithPath:filePath];
     
 #ifdef DEBUG
     //debug 模式下  打印错误日志
@@ -97,7 +179,6 @@ return NO;}
         db.logsErrors = YES;
     }];
 #endif
-    self.tableManager = [[LKTableManager alloc]initWithLKDBHelper:self];
 }
 
 #pragma mark- core
@@ -110,6 +191,10 @@ return NO;}
     }
     else
     {
+        if(_bindingQueue == nil)
+        {
+            _bindingQueue = [[FMDatabaseQueue alloc]initWithPath:_dbPath];
+        }
         [_bindingQueue inDatabase:^(FMDatabase *db) {
             self.usingdb = db;
             block(db);
@@ -243,7 +328,9 @@ return NO;}
                 if(pvalue)
                 {
                     if(pwhere.length>0)
+                    {
                         [pwhere appendString:@"and"];
+                    }
                     
                     if(addPValues)
                     {
@@ -260,14 +347,22 @@ return NO;}
     }
     return pwhere;
 }
+
 #pragma mark- dealloc
 -(void)dealloc
 {
+    NSArray* array = [LKDBHelper dbHelperSingleArray];
+    for (LKDBWeakObject* weakObject in array) {
+        if([weakObject.obj isEqual:self])
+        {
+            weakObject.obj = nil;
+        }
+    }
+    
     [self.bindingQueue close];
     self.usingdb = nil;
     self.bindingQueue = nil;
     self.dbPath = nil;
-    self.tableManager = nil;
     self.threadLock = nil;
 }
 @end
@@ -288,8 +383,6 @@ return NO;}
             [db executeUpdate:dropTable];
         }
     }];
-    
-    [self.tableManager clearTableInfos];
 }
 -(BOOL)dropTableWithClass:(Class)modelClass
 {
@@ -299,101 +392,104 @@ return NO;}
     NSString* dropTable = [NSString stringWithFormat:@"drop table %@",tableName];
     
     BOOL isDrop = [self executeSQL:dropTable arguments:nil];
-    
-    if(isDrop)
-        [_tableManager setTableName:tableName version:0];
-    
     return isDrop;
 }
--(void)fixSqlColumnsWithClass:(Class)clazz
+-(void)fixSqlColumnsWithClass:(Class)clazz tableName:(NSString*)tableName
 {
-    NSString* tableName = [clazz getTableName];
-    LKModelInfos* infos = [clazz getModelInfos];
     [self executeDB:^(FMDatabase *db) {
+        
+        LKModelInfos* infos = [clazz getModelInfos];
+        
         NSString* select = [NSString stringWithFormat:@"select * from %@ limit 0",tableName];
         FMResultSet* set = [db executeQuery:select];
         NSArray*  columnArray = set.columnNameToIndexMap.allKeys;
         [set close];
-        BOOL hasTableChanged = NO;
-        for (int i=0; i<infos.count; i++) {
-            LKDBProperty* p = [infos objectWithIndex:i];
-            if([p.sqlColumnName.lowercaseString isEqualToString:@"rowid"])
-                continue;
-            
-            if([columnArray indexOfObject:p.sqlColumnName.lowercaseString] == NSNotFound)
+        
+        NSMutableArray* alterAddColumns = [NSMutableArray array];
+        for (int i=0; i<infos.count; i++)
+        {
+            LKDBProperty* property = [infos objectWithIndex:i];
+            if([property.sqlColumnName.lowercaseString isEqualToString:@"rowid"])
             {
-                if([clazz getAutoUpdateSqlColumn])
+                continue;
+            }
+            
+            ///数据库中不存在 需要alter add
+            if([columnArray containsObject:property.sqlColumnName.lowercaseString] == NO)
+            {
+                NSMutableString* addColumePars = [NSMutableString stringWithFormat:@"%@ %@",property.sqlColumnName,property.sqlColumnType];
+                [clazz columnAttributeWithProperty:property];
+                
+                if(property.length>0 && [property.sqlColumnType isEqualToString:LKSQL_Type_Text])
+                    [addColumePars appendFormat:@"(%d)",property.length];
+                
+                if(property.isNotNull)
+                    [addColumePars appendFormat:@" %@",LKSQL_Attribute_NotNull];
+                
+                if(property.checkValue)
+                    [addColumePars appendFormat:@" %@(%@)",LKSQL_Attribute_Check,property.checkValue];
+                
+                if(property.defaultValue)
+                    [addColumePars appendFormat:@" %@ %@",LKSQL_Attribute_Default,property.defaultValue];
+                
+                NSString* alertSQL = [NSString stringWithFormat:@"alter table %@ add column %@",tableName,addColumePars];
+                NSString* initColumnValue = [NSString stringWithFormat:@"update %@ set %@=%@",tableName,property.sqlColumnName,[property.sqlColumnType isEqualToString:LKSQL_Type_Text]?@"''":@"0"];
+                
+                BOOL success = [db executeUpdate:alertSQL];
+                if(success)
                 {
-                    [clazz tableUpdateAddColumnWithName:p.sqlColumnName sqliteType:p.sqlColumnType];
-                    hasTableChanged = YES;
-                }
-                else
-                {
-                    [clazz removePropertyWithColumnName:p.sqlColumnName];
+                    [db executeUpdate:initColumnValue];
+                    [alterAddColumns addObject:property];
                 }
             }
         }
-        if (hasTableChanged) {
-            [clazz tableDidCreatedOrUpdated];
+        
+        if(alterAddColumns.count > 0)
+        {
+            [clazz dbDidAlterTable:self tableName:tableName addColumns:alterAddColumns];
         }
     }];
 }
--(BOOL)createTableWithModelClass:(Class)modelClass
+-(BOOL)_createTableWithModelClass:(Class)modelClass tableName:(NSString*)tableName
 {
     checkClassIsInvalid(modelClass);
-    NSString* tableName = [modelClass getTableName];
-    
-    int oldVersion = [_tableManager versionWithName:tableName];
-    int newVersion = [modelClass getTableVersion];
-    
-    if(oldVersion>0 && oldVersion != newVersion)
+    if([self getTableCreatedWithTableName:tableName])
     {
-        [self fixSqlColumnsWithClass:modelClass];
-        LKTableUpdateType userOperation = [modelClass tableUpdateForOldVersion:oldVersion newVersion:newVersion];
-        switch (userOperation) {
-            case LKTableUpdateTypeDeleteOld:
-            {
-                [self dropTableWithClass:modelClass];
-            }
-                break;
-                
-            case LKTableUpdateTypeDefault:
-                return NO;
-                
-            case LKTableUpdateTypeCustom:
-                [_tableManager setTableName:tableName version:newVersion];
-                return YES;
-        }
-    }
-    else if(oldVersion == newVersion)
-    {
-        if([self getTableCreatedWithClass:modelClass])
+        //已创建表 就跳过
+        if([_createdTableNames containsObject:tableName] == NO)
         {
-            //已创建表 就跳过
-            [self fixSqlColumnsWithClass:modelClass];
-            return YES;
+            [_createdTableNames addObject:tableName];
         }
+        [self fixSqlColumnsWithClass:modelClass tableName:tableName];
+        return YES;
+    }
+
+    LKModelInfos* infos = [modelClass getModelInfos];
+    if(infos.count == 0)
+    {
+        LKErrorLog(@"Class: %@ 0属性 不需要创建表",NSStringFromClass(modelClass));
+        return NO;
     }
     
-    LKModelInfos* infos = [modelClass getModelInfos];
     NSArray* primaryKeys = infos.primaryKeys;
-    BOOL isAutoinc = NO;
-    if(primaryKeys.count == 1 && [[primaryKeys lastObject] isEqual:@"rowid"])
-    {
-        isAutoinc = YES;
-    }
+    NSString* rowidAliasName = [modelClass db_rowidAliasName];
+    
     NSMutableString* table_pars = [NSMutableString string];
-    for (int i=0; i<infos.count; i++) {
-        
+    for (int i=0; i<infos.count; i++)
+    {
         if(i > 0)
+        {
             [table_pars appendString:@","];
+        }
         
         LKDBProperty* property =  [infos objectWithIndex:i];
         [modelClass columnAttributeWithProperty:property];
         
         NSString* columnType = property.sqlColumnType;
         if([columnType isEqualToString:LKSQL_Type_Double])
+        {
             columnType = LKSQL_Type_Text;
+        }
         
         [table_pars appendFormat:@"%@ %@",property.sqlColumnName,columnType];
         
@@ -420,16 +516,18 @@ return NO;}
         {
             [table_pars appendFormat:@" %@ %@",LKSQL_Attribute_Default,property.defaultValue];
         }
-        if(isAutoinc)
+        if(rowidAliasName.length > 0)
         {
-            if([property.sqlColumnName isEqualToString:@"rowid"])
+            if([property.sqlColumnName isEqualToString:rowidAliasName])
             {
                 [table_pars appendString:@" primary key autoincrement"];
             }
         }
     }
     NSMutableString* pksb = [NSMutableString string];
-    if(isAutoinc == NO)
+
+    ///联合主键
+    if(rowidAliasName.length == 0)
     {
         if(primaryKeys.count>0)
         {
@@ -437,8 +535,9 @@ return NO;}
             for (int i=0; i<primaryKeys.count; i++) {
                 NSString* pk = [primaryKeys objectAtIndex:i];
                 
-                if(pksb.length>0)
+                if(pksb.length>0){
                     [pksb appendString:@","];
+                }
                 
                 [pksb appendString:pk];
             }
@@ -455,17 +554,21 @@ return NO;}
     
     if(isCreated)
     {
-        [_tableManager setTableName:tableName version:newVersion];
-        [modelClass tableDidCreatedOrUpdated];
+        [_createdTableNames addObject:tableName];
+        [modelClass dbDidCreateTable:self tableName:tableName];
     }
     
     return isCreated;
 }
 -(BOOL)getTableCreatedWithClass:(Class)modelClass
 {
+    return [self getTableCreatedWithTableName:[modelClass getTableName]];
+}
+-(BOOL)getTableCreatedWithTableName:(NSString *)tableName
+{
     __block BOOL isTableCreated = NO;
     [self executeDB:^(FMDatabase *db) {
-        FMResultSet* set = [db executeQuery:@"select count(name) from sqlite_master where type='table' and name=?",[modelClass getTableName]];
+        FMResultSet* set = [db executeQuery:@"select count(name) from sqlite_master where type='table' and name=?",tableName];
         [set next];
         if([set intForColumnIndex:0]>0)
         {
@@ -538,7 +641,9 @@ return NO;}
     NSMutableArray* array = [self searchBase:modelClass columns:nil where:where orderBy:orderBy offset:0 count:1];
     
     if(array.count>0)
+    {
         return [array objectAtIndex:0];
+    }
     
     return nil;
 }
@@ -556,24 +661,26 @@ return NO;}
 {
     NSString* columnsString = nil;
     NSUInteger columnCount = 0;
-    if([columns isKindOfClass:[NSArray class]] && [columns count]>0){
-        
+    if([columns isKindOfClass:[NSArray class]] && [columns count]>0)
+    {
+        columnCount = [columns count];
         columnsString = [columns componentsJoinedByString:@","];
-        columnsString = [NSString stringWithFormat:@"rowid,%@",columnsString];
-        
-    }else if([LKDBUtils checkStringIsEmpty:columns]==NO){
-        
+    }
+    else if([LKDBUtils checkStringIsEmpty:columns]==NO)
+    {
         columnsString = columns;
         NSArray* array = [columns componentsSeparatedByString:@","];
         
         columnCount = array.count;
-        if(columnCount>1)
-        {
-            columnsString = [NSString stringWithFormat:@"rowid,%@",columnsString];
-        }
     }
     
-    if(columnCount==0){
+    if(columnCount > 1)
+    {
+        columnsString = [NSString stringWithFormat:@"rowid,%@",columnsString];
+    }
+    
+    if(columnCount==0)
+    {
         columnsString = @"rowid,*";
     }
     
@@ -582,9 +689,11 @@ return NO;}
     
     [self sqlString:query AddOder:orderBy offset:offset count:count];
     
+    NSString* db_tableName = [modelClass getTableName];
     //replace @t to model table name
-    NSString* replaceTableName = [NSString stringWithFormat:@" %@ ",[modelClass getTableName]];
-    if([query hasSuffix:@" @t"]){
+    NSString* replaceTableName = [NSString stringWithFormat:@" %@ ",db_tableName];
+    if([query hasSuffix:@" @t"])
+    {
         [query appendString:@" "];
     }
     [query replaceOccurrencesOfString:@" @t " withString:replaceTableName options:NSCaseInsensitiveSearch range:NSMakeRange(0, query.length)];
@@ -607,7 +716,7 @@ return NO;}
         }
         else
         {
-            results = [self executeResult:set Class:modelClass];
+            results = [self executeResult:set Class:modelClass tableName:db_tableName];
         }
         
         [set close];
@@ -617,16 +726,17 @@ return NO;}
 -(NSMutableArray *)searchWithSQL:(NSString *)sql toClass:(Class)modelClass
 {
     //replace @t to model table name
-    NSString* tableName = [NSString stringWithFormat:@" %@ ",[modelClass getTableName]];
+    NSString* replaceString = [NSString stringWithFormat:@" %@ ",[modelClass getTableName]];
     if([sql hasSuffix:@" @t"]){
         sql = [sql stringByAppendingString:@" "];
     }
-    NSString* executeSQL = [sql stringByReplacingOccurrencesOfString:@" @t " withString:tableName options:NSCaseInsensitiveSearch range:NSMakeRange(0, sql.length)];
+    sql = [sql stringByReplacingOccurrencesOfString:@" @t " withString:replaceString];
+    sql = [sql stringByReplacingOccurrencesOfString:@" from " withString:@",rowid from "];
     
     __block NSMutableArray* results = nil;
     [self executeDB:^(FMDatabase *db) {
-        FMResultSet* set = [db executeQuery:executeSQL];
-        results = [self executeResult:set Class:modelClass];
+        FMResultSet* set = [db executeQuery:sql];
+        results = [self executeResult:set Class:modelClass tableName:nil];
         [set close];
     }];
     return results;
@@ -656,15 +766,26 @@ return NO;}
         {
             [array addObject:string];
         }
+        else
+        {
+            NSData* data = [set dataForColumnIndex:0];
+            if(data)
+            {
+                [array addObject:data];
+            }
+        }
     }
     return array;
 }
-- (NSMutableArray *)executeResult:(FMResultSet *)set Class:(Class)modelClass
+- (NSMutableArray *)executeResult:(FMResultSet *)set Class:(Class)modelClass tableName:(NSString*)tableName
 {
     NSMutableArray* array = [NSMutableArray arrayWithCapacity:0];
     LKModelInfos* infos = [modelClass getModelInfos];
     int columnCount = [set columnCount];
-    while ([set next]) {
+    
+    ///当主键是int类型时 会替换掉rowid
+    NSString* rowidAliasName = [modelClass db_rowidAliasName];
+    while ([set next]){
         
         NSObject* bindingModel = [[modelClass alloc]init];
         
@@ -673,24 +794,39 @@ return NO;}
             NSString* sqlName = [set columnNameForIndex:i];
             LKDBProperty* property = [infos objectWithSqlColumnName:sqlName];
             
-            BOOL isUserCalculate = [property.type isEqualToString:LKSQL_Mapping_UserCalculate];
-            if([[sqlName lowercaseString] isEqualToString:@"rowid"] && isUserCalculate==NO)
+            BOOL isRowid = [[sqlName lowercaseString] isEqualToString:@"rowid"];
+            if (isRowid == NO && property == nil)
+            {
+                continue;
+            }
+            
+            if (isRowid && (property == nil || [property.sqlColumnType isEqualToString:LKSQL_Type_Int]))
             {
                 bindingModel.rowid = [set intForColumnIndex:i];
             }
             else
             {
-                NSString* sqlValue = [set stringForColumnIndex:i];
+                BOOL isUserCalculate = [property.type isEqualToString:LKSQL_Mapping_UserCalculate];
                 if(property.propertyName && isUserCalculate == NO)
                 {
+                    NSString* sqlValue = [set stringForColumnIndex:i];
                     [bindingModel modelSetValue:property value:sqlValue];
+                    
+                    if([rowidAliasName isEqualToString:sqlName])
+                    {
+                        bindingModel.rowid = [set intForColumnIndex:i];
+                    }
                 }
                 else
                 {
-                    [bindingModel userSetValueForModel:property value:sqlValue];
+                    NSData* sqlData = [set dataForColumnIndex:i];
+                    NSString* sqlValue = [[NSString alloc] initWithData:sqlData encoding:NSUTF8StringEncoding];
+                    [bindingModel userSetValueForModel:property value:sqlValue?:sqlData];
                 }
             }
         }
+        bindingModel.db_tableName = tableName;
+        [modelClass dbDidSeleted:bindingModel];
         [array addObject:bindingModel];
     }
     return array;
@@ -743,6 +879,15 @@ return NO;}
         LKErrorLog(@"your cancel %@ insert",model);
         return NO;
     }
+
+    [model setDb_inserting:YES];
+    
+    NSString* db_tableName = model.db_tableName?:[modelClass getTableName];
+    
+    if([_createdTableNames containsObject:db_tableName] == NO)
+    {
+        [self _createTableWithModelClass:modelClass tableName:db_tableName];
+    }
     
     //--
     LKModelInfos* infos = [modelClass getModelInfos];
@@ -754,16 +899,20 @@ return NO;}
     
     LKDBProperty* primaryProperty = [model singlePrimaryKeyProperty];
     
-    for (int i=0; i<infos.count; i++) {
-        
+    for (int i=0; i<infos.count; i++)
+    {
         LKDBProperty* property = [infos objectWithIndex:i];
         if([LKDBUtils checkStringIsEmpty:property.sqlColumnName])
+        {
             continue;
+        }
         
         if([property isEqual:primaryProperty])
         {
-            if([model singlePrimaryKeyValueIsEmpty])
+            if([property.sqlColumnType isEqualToString:LKSQL_Type_Int] && [model singlePrimaryKeyValueIsEmpty])
+            {
                 continue;
+            }
         }
         
         if(insertKey.length>0)
@@ -781,7 +930,7 @@ return NO;}
     }
     
     //拼接insertSQL 语句  采用 replace 插入
-    NSString* insertSQL = [NSString stringWithFormat:@"replace into %@(%@) values(%@)",[modelClass getTableName],insertKey,insertValuesString];
+    NSString* insertSQL = [NSString stringWithFormat:@"replace into %@(%@) values(%@)",db_tableName,insertKey,insertValuesString];
     
     __block BOOL execute = NO;
     __block sqlite_int64 lastInsertRowId = 0;
@@ -792,8 +941,13 @@ return NO;}
     }];
     
     model.rowid = (int)lastInsertRowId;
+    
+    [model setDb_inserting:NO];
+    
     if(execute == NO)
+    {
         LKErrorLog(@"database insert fail %@, sql:%@",NSStringFromClass(modelClass),insertSQL);
+    }
     
     //callback
     [modelClass dbDidInserted:model result:execute];
@@ -819,11 +973,12 @@ return NO;}
     Class modelClass = model.class;
     
     //callback
-    if([modelClass dbWillUpdate:model]==NO)
+    if([modelClass dbWillUpdate:model] == NO)
     {
         LKErrorLog(@"you cancel %@ update.",model);
         return NO;
     }
+    NSString* db_tableName = model.db_tableName?:[modelClass getTableName];
     
     LKModelInfos* infos = [modelClass getModelInfos];
     
@@ -843,7 +998,7 @@ return NO;}
         [updateValues addObject:value];
     }
     
-    NSMutableString* updateSQL = [NSMutableString stringWithFormat:@"update %@ set %@ where ",[modelClass getTableName],updateKey];
+    NSMutableString* updateSQL = [NSMutableString stringWithFormat:@"update %@ set %@ where ",db_tableName,updateKey];
     
     //添加where 语句
     if([where isKindOfClass:[NSString class]] && [LKDBUtils checkStringIsEmpty:where]== NO)
@@ -925,8 +1080,9 @@ return NO;}
         LKErrorLog(@"you cancel %@ delete",model);
         return NO;
     }
+    NSString* db_tableName = model.db_tableName?:[modelClass getTableName];
     
-    NSMutableString*  deleteSQL =[NSMutableString stringWithFormat:@"delete from %@ where ",[modelClass getTableName]];
+    NSMutableString*  deleteSQL = [NSMutableString stringWithFormat:@"delete from %@ where ",db_tableName];
     NSMutableArray* parsArray = [NSMutableArray array];
     if(model.rowid > 0)
     {
@@ -943,8 +1099,10 @@ return NO;}
         [deleteSQL appendString:pwhere];
     }
     
-    if(parsArray.count==0)
+    if(parsArray.count == 0)
+    {
         parsArray = nil;
+    }
     
     BOOL execute = [self executeSQL:deleteSQL arguments:parsArray];
     
@@ -1085,4 +1243,21 @@ return NO;}
 }
 @end
 
+@implementation LKDBHelper(Deprecated_Nonfunctional)
++(LKDBHelper *)sharedDBHelper
+{
+    return [LKDBHelper getUsingLKDBHelper];
+}
+-(BOOL)createTableWithModelClass:(Class)modelClass
+{
+    return [self _createTableWithModelClass:modelClass tableName:[modelClass getTableName]];
+}
++(LKDBHelper*)getUsingLKDBHelper
+{
+    return [[LKDBHelper alloc]init];
+}
+@end
 
+@implementation LKDBWeakObject
+
+@end

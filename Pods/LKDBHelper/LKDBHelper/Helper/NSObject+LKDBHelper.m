@@ -8,14 +8,15 @@
 
 #import "NSObject+LKDBHelper.h"
 
+@implementation NSObject (LKDBHelper_Delegate)
 
-@implementation NSObject(LKDBHelper)
++(void)dbDidCreateTable:(LKDBHelper *)helper tableName:(NSString*)tableName{}
++(void)dbDidAlterTable:(LKDBHelper*)helper tableName:(NSString*)tableName addColumns:(NSArray*)columns{}
 
-+(void)dbDidCreateTable:(LKDBHelper *)helper{}
-
-+(void)dbDidDeleted:(NSObject *)entity result:(BOOL)result{}
 +(void)dbDidInserted:(NSObject *)entity result:(BOOL)result{}
++(void)dbDidDeleted:(NSObject *)entity result:(BOOL)result{}
 +(void)dbDidUpdated:(NSObject *)entity result:(BOOL)result{}
++(void)dbDidSeleted:(NSObject *)entity{}
 
 +(BOOL)dbWillDelete:(NSObject *)entity{
     return YES;
@@ -26,6 +27,9 @@
 +(BOOL)dbWillUpdate:(NSObject *)entity{
     return YES;
 }
+@end
+
+@implementation NSObject(LKDBHelper)
 
 #pragma mark - simplify synchronous function
 +(BOOL)checkModelClass:(NSObject*)model
@@ -36,8 +40,26 @@
     NSLog(@"%@ can not use %@",NSStringFromClass(self),NSStringFromClass(model.class));
     return NO;
 }
-
-+(int)rowCountWithWhere:(id)where{
++(int)rowCountWithWhereFormat:(id)where, ...
+{
+    if ([where isKindOfClass:[NSString class]])
+    {
+        va_list list;
+        va_start(list, where);
+        where = [[NSString alloc]initWithFormat:where arguments:list];
+        va_end(list);
+    }
+    return [[self getUsingLKDBHelper] rowCount:self where:where];
+}
++(int)rowCountWithWhere:(id)where, ...
+{
+    if ([where isKindOfClass:[NSString class]])
+    {
+        va_list list;
+        va_start(list, where);
+        where = [[NSString alloc]initWithFormat:where arguments:list];
+        va_end(list);
+    }
     return [[self getUsingLKDBHelper] rowCount:self where:where];
 }
 +(NSMutableArray *)searchColumn:(id)columns where:(id)where orderBy:(NSString *)orderBy offset:(int)offset count:(int)count
@@ -68,25 +90,49 @@
     }
     return NO;
 }
-+(BOOL)updateToDB:(NSObject *)model where:(id)where{
++(BOOL)updateToDB:(NSObject *)model where:(id)where,...
+{
     if([self checkModelClass:model])
     {
+        if ([where isKindOfClass:[NSString class]])
+        {
+            va_list list;
+            va_start(list, where);
+            where = [[NSString alloc]initWithFormat:where arguments:list];
+            va_end(list);
+        }
         return [[self getUsingLKDBHelper] updateToDB:model where:where];
     }
     return NO;
 }
-+(BOOL)updateToDBWithSet:(NSString *)sets where:(id)where
++(BOOL)updateToDBWithSet:(NSString *)sets where:(id)where,...
 {
+    if ([where isKindOfClass:[NSString class]])
+    {
+        va_list list;
+        va_start(list, where);
+        where = [[NSString alloc]initWithFormat:where arguments:list];
+        va_end(list);
+    }
     return [[self getUsingLKDBHelper] updateToDB:self set:sets where:where];
 }
-+(BOOL)deleteToDB:(NSObject*)model{
++(BOOL)deleteToDB:(NSObject*)model
+{
     if([self checkModelClass:model])
     {
         return [[self getUsingLKDBHelper] deleteToDB:model];
     }
     return NO;
 }
-+(BOOL)deleteWithWhere:(id)where{
++(BOOL)deleteWithWhere:(id)where,...
+{
+    if ([where isKindOfClass:[NSString class]])
+    {
+        va_list list;
+        va_start(list, where);
+        where = [[NSString alloc]initWithFormat:where arguments:list];
+        va_end(list);
+    }
     return [[self getUsingLKDBHelper] deleteWithClass:self where:where];
 }
 +(BOOL)isExistsWithModel:(NSObject *)model

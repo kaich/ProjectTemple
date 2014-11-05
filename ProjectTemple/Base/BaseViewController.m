@@ -53,7 +53,7 @@
    {
        _networkView= [UIFactory createNetWorkStatusViewWithNetWorkStatus:COMMON.networkStatus];
    }
-   
+    _networkView.center=parentView.center;
    [parentView addSubview:_networkView];
 }
 
