@@ -8,9 +8,10 @@
 
 #import <Foundation/Foundation.h>
 #import <AFNetworking.h>
+#import "PTError.h"
 
 typedef void(^PTRequestCompleteBlock)(NSArray * results);
-typedef void(^PTRequestFailedBlock)(NSError * error);
+typedef void(^PTRequestFailedBlock)(PTError * error);
 
 @interface PTHTTPRequestManager : NSObject
 
@@ -21,7 +22,7 @@ typedef void(^PTRequestFailedBlock)(NSError * error);
  *  @param URLString  path
  *  @param parameters params
  */
-- (void)GET:(NSString *)URLString parameters:(NSDictionary *)parameters completion:(PTRequestCompleteBlock) completeBlock failure:(PTRequestFailedBlock) failureBlock;
+- (AFHTTPRequestOperation *)GET:(NSString *)URLString parameters:(NSDictionary *)parameters completion:(PTRequestCompleteBlock) completeBlock failure:(PTRequestFailedBlock) failureBlock;
 
 /**
  *  head request  only request Head
@@ -29,7 +30,7 @@ typedef void(^PTRequestFailedBlock)(NSError * error);
  *  @param URLString  path
  *  @param parameters params
  */
-- (void)HEAD:(NSString *)URLString parameters:(NSDictionary *)parameters completion:(PTRequestCompleteBlock) completeBlock failure:(PTRequestFailedBlock) failureBlock;
+- (AFHTTPRequestOperation *)HEAD:(NSString *)URLString parameters:(NSDictionary *)parameters completion:(PTRequestCompleteBlock) completeBlock failure:(PTRequestFailedBlock) failureBlock;
 
 /**
  *  post request
@@ -37,7 +38,7 @@ typedef void(^PTRequestFailedBlock)(NSError * error);
  *  @param URLString  path
  *  @param parameters params
  */
-- (void)POST:(NSString *)URLString parameters:(NSDictionary *)parameters completion:(PTRequestCompleteBlock) completeBlock failure:(PTRequestFailedBlock) failureBlock;
+- (AFHTTPRequestOperation *)POST:(NSString *)URLString parameters:(NSDictionary *)parameters completion:(PTRequestCompleteBlock) completeBlock failure:(PTRequestFailedBlock) failureBlock;
 
 /**
  *  post request
@@ -46,7 +47,7 @@ typedef void(^PTRequestFailedBlock)(NSError * error);
  *  @param parameters params
  *  @param block      A block that takes a single argument and appends data to the HTTP body. The block argument is an object adopting the `AFMultipartFormData` protocol.
  */
-- (void)POST:(NSString *)URLString parameters:(NSDictionary *)parameters constructingBodyWithBlock:(void (^)(id <AFMultipartFormData> formData))block completion:(PTRequestCompleteBlock) completeBlock failure:(PTRequestFailedBlock) failureBlock;
+- (AFHTTPRequestOperation *)POST:(NSString *)URLString parameters:(NSDictionary *)parameters constructingBodyWithBlock:(void (^)(id <AFMultipartFormData> formData))block completion:(PTRequestCompleteBlock) completeBlock failure:(PTRequestFailedBlock) failureBlock;
 
 /**
  *  PUT request
@@ -54,7 +55,7 @@ typedef void(^PTRequestFailedBlock)(NSError * error);
  *  @param URLString  path
  *  @param parameters params
  */
-- (void)PUT:(NSString *)URLString parameters:(NSDictionary *)parameters completion:(PTRequestCompleteBlock) completeBlock failure:(PTRequestFailedBlock) failureBlock;
+- (AFHTTPRequestOperation *)PUT:(NSString *)URLString parameters:(NSDictionary *)parameters completion:(PTRequestCompleteBlock) completeBlock failure:(PTRequestFailedBlock) failureBlock;
 
 /**
  *  PATCH request
@@ -62,7 +63,7 @@ typedef void(^PTRequestFailedBlock)(NSError * error);
  *  @param URLString  path
  *  @param parameters params
  */
-- (void)PATCH:(NSString *)URLString parameters:(NSDictionary *)parameters completion:(PTRequestCompleteBlock) completeBlock failure:(PTRequestFailedBlock) failureBlock;
+- (AFHTTPRequestOperation *)PATCH:(NSString *)URLString parameters:(NSDictionary *)parameters completion:(PTRequestCompleteBlock) completeBlock failure:(PTRequestFailedBlock) failureBlock;
 
 /**
  *  DELETE request
@@ -70,23 +71,18 @@ typedef void(^PTRequestFailedBlock)(NSError * error);
  *  @param URLString  path
  *  @param parameters params
  */
-- (void)DELETE:(NSString *)URLString parameters:(NSDictionary *)parameters completion:(PTRequestCompleteBlock) completeBlock failure:(PTRequestFailedBlock) failureBlock;
-
-/**
- *  cancel last request
- */
--(void) cancelLastRequest;
-
-/**
- *  only retain  count of request last, others all be canceld
- *
- *  @param count
- */
--(void) cancelAllBeforeLastCount:(NSInteger) count;
+- (AFHTTPRequestOperation *)DELETE:(NSString *)URLString parameters:(NSDictionary *)parameters completion:(PTRequestCompleteBlock) completeBlock failure:(PTRequestFailedBlock) failureBlock;
 
 /**
  *  cancel all request
  */
 -(void) cancelAll;
+
+/**
+ *  set current request time out interval .  the time out interval only effect current request;
+ *
+ *  @param interval
+ */
+-(void) setCurrentRequestTimeoutInterval:(NSTimeInterval) interval;
 
 @end

@@ -30,7 +30,7 @@
 
 
 //-----------------------------------SERVER_URL-----------------------------------------
-#define BaseHomeURL  @""
+static NSString *BASE_HOME_URL =  @""
 
 //-----------------------------------NOTIFICATION---------------------------------------
 
@@ -41,6 +41,15 @@
 
 
 //-----------------------------------SETTING--------------------------------------------
+
+//
+//  Request
+//
+const static float  TIME_OUT_INTERVAL                   = 15;
+
+const static NSString *REQUEST_TIME_OUT_MESSAGE         =  @"";
+const static NSString *REQUEST_NO_NETWORK_MESSAGE       =  @"";
+const static NSString *REQUEST_UNKNOW_ERROR_MESSAGE     =  @""
 
 
 

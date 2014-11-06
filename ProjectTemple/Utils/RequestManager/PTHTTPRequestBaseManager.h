@@ -7,6 +7,8 @@
 //
 
 #import "OVCHTTPRequestOperationManager.h"
+#import "PTError.h"
+#import <OVCResponse.h>
 
 @interface PTHTTPRequestBaseManager : OVCHTTPRequestOperationManager
 
