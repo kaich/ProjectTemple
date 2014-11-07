@@ -27,6 +27,7 @@
 		0433F4B81A09FB2E00CBECBF /* UIFactory+NetWorkStatusView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0433F4B71A09FB2E00CBECBF /* UIFactory+NetWorkStatusView.m */; };
 		0433F4BC1A0A170000CBECBF /* PTHTTPRequestManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 0433F4BB1A0A170000CBECBF /* PTHTTPRequestManager.m */; };
 		048EDA1A1925FCC1006B1230 /* CKLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 048EDA191925FCC1006B1230 /* CKLoginViewController.m */; };
+		0496967F1A0CD250005497B9 /* UIViewController+Base.m in Sources */ = {isa = PBXBuildFile; fileRef = 0496967E1A0CD250005497B9 /* UIViewController+Base.m */; };
 		049FA4B81925AEB200A1CE5F /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 049FA4B71925AEB200A1CE5F /* Foundation.framework */; };
 		049FA4BA1925AEB200A1CE5F /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 049FA4B91925AEB200A1CE5F /* CoreGraphics.framework */; };
 		049FA4BC1925AEB200A1CE5F /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 049FA4BB1925AEB200A1CE5F /* UIKit.framework */; };
@@ -108,6 +109,9 @@
 		0433F4BB1A0A170000CBECBF /* PTHTTPRequestManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PTHTTPRequestManager.m; sourceTree = "<group>"; };
 		048EDA181925FCC1006B1230 /* CKLoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKLoginViewController.h; sourceTree = "<group>"; };
 		048EDA191925FCC1006B1230 /* CKLoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKLoginViewController.m; sourceTree = "<group>"; };
+		0496967C1A0CB358005497B9 /* BaseViewControllerProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BaseViewControllerProtocol.h; sourceTree = "<group>"; };
+		0496967D1A0CD250005497B9 /* UIViewController+Base.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+Base.h"; sourceTree = "<group>"; };
+		0496967E1A0CD250005497B9 /* UIViewController+Base.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+Base.m"; sourceTree = "<group>"; };
 		049FA4B41925AEB200A1CE5F /* ProjectTemple.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ProjectTemple.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		049FA4B71925AEB200A1CE5F /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		049FA4B91925AEB200A1CE5F /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -527,6 +531,9 @@
 		049FA5251925EEFF00A1CE5F /* Base */ = {
 			isa = PBXGroup;
 			children = (
+				0496967C1A0CB358005497B9 /* BaseViewControllerProtocol.h */,
+				0496967D1A0CD250005497B9 /* UIViewController+Base.h */,
+				0496967E1A0CD250005497B9 /* UIViewController+Base.m */,
 				049FA5261925EF3200A1CE5F /* BaseViewController.h */,
 				049FA5271925EF3200A1CE5F /* BaseViewController.m */,
 				0433F4AE1A09BCB300CBECBF /* BaseTableViewController.h */,
@@ -715,6 +722,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				041588F51937330C00B6D2C4 /* CKDetailTableViewCell.m in Sources */,
+				0496967F1A0CD250005497B9 /* UIViewController+Base.m in Sources */,
 				0430E3D2193583DD00403629 /* UILabel+Additions.m in Sources */,
 				0433F4B81A09FB2E00CBECBF /* UIFactory+NetWorkStatusView.m in Sources */,
 				0413260419359E79003E46E8 /* UIFactory+TextField.m in Sources */,

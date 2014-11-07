@@ -22,15 +22,13 @@
 #define STR_FORMAT(_format_,...) [NSString stringWithFormat:FORMAT, ##__VA_ARGS__]
 
 
-//var and string
-#define STRING_FROM_PROPERTY(_property_)        (self._property_, @#_property_)
-#define PROPERTY_SET_VALUE(_property_,_value_)  (([self valueForKeyPath:_property_])==(_value_) ?:[self setValue:(_value_) forKeyPath:_property_])
+//property and string
+#define STRING_FROM_VAR(_var_)          (@#_var_)
 
-//config
-CONFIG_SET(_config_item_,_config_dic_)         
+#define STRING_FROM_TARGET_PROPERTY(_target_,_property_)                (_target_._property_,STRING_FROM_VAR(_property_))
+#define PROPERTY_SET_TARGET_VALUE(_target_,_property_str_,_value_)      (([_target_ valueForKeyPath:_property_str_])==(_value_) ?:[_target_ setValue:(_value_) forKeyPath:_property_str_])
 
-#define APPLY_CONFIG_ITEM_IN_DIC(_dic_)         \
-                                                for (NSString * __emKey in config.allKeys) { \
-                                                NSString * __value=[config objectForKey:__emKey]; \
-                                                PROPERTY_SET_VALUE(__emKey, __value); \
-                                                }
+#define STRING_FROM_PROPERTY(_property_)                                STRING_FROM_TARGET_PROPERTY(self,_property_)
+#define PROPERTY_SET_VALUE(_property_str_,_value_)                      PROPERTY_SET_TARGET_VALUE(self,_property_str_,_value_)
+
+

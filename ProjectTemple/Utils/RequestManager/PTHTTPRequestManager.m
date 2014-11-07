@@ -11,7 +11,7 @@
 
 
 @interface PTHTTPRequestBaseManager ()
--(NSDictionary *) globalConfig;
+-(void) globalConfig;
 @end
 
 @interface PTHTTPRequestManager ()
@@ -54,7 +54,7 @@
 -(void) restoreState
 {
     // restore time out interval
-    CONFIG_SET(self.requestManager.requestSerializer.timeoutInterval, in)
+    self.requestManager.requestSerializer.timeoutInterval=TIME_OUT_INTERVAL;
 }
 
 
@@ -66,6 +66,8 @@
         [self handleCompletionWithResponse:response error:error completeBlock:completeBlock failureBlock:failureBlock];
     }];
     
+    [self restoreState];
+    
     return requestOperation;
 }
 
@@ -75,6 +77,8 @@
     AFHTTPRequestOperation * requestOperation=[self.requestManager HEAD:URLString parameters:parameters completion:^(OVCResponse *response, NSError *error) {
         [self handleCompletionWithResponse:response error:error completeBlock:completeBlock failureBlock:failureBlock];
     }];
+    
+    [self restoreState];
     
     return requestOperation;
 }
@@ -86,6 +90,8 @@
         [self handleCompletionWithResponse:response error:error completeBlock:completeBlock failureBlock:failureBlock];
     }];
     
+    [self restoreState];
+    
     return requestOperation;
 }
 
@@ -94,6 +100,8 @@
     AFHTTPRequestOperation * requestOperation=[self.requestManager POST:URLString parameters:parameters constructingBodyWithBlock:block completion:^(OVCResponse *response, NSError *error) {
         [self handleCompletionWithResponse:response error:error completeBlock:completeBlock failureBlock:failureBlock];
     }];
+    
+    [self restoreState];
     
     return requestOperation;
 }
@@ -104,6 +112,8 @@
         [self handleCompletionWithResponse:response error:error completeBlock:completeBlock failureBlock:failureBlock];
     }];
     
+    [self restoreState];
+    
     return requestOperation;
 }
 
@@ -113,6 +123,8 @@
         [self handleCompletionWithResponse:response error:error completeBlock:completeBlock failureBlock:failureBlock];
     }];
     
+    [self restoreState];
+    
     return requestOperation;
 }
 
@@ -121,6 +133,8 @@
     AFHTTPRequestOperation * requestOperation=[self.requestManager DELETE:URLString parameters:parameters completion:^(OVCResponse *response, NSError *error) {
        [self handleCompletionWithResponse:response error:error completeBlock:completeBlock failureBlock:failureBlock];
     }];
+    
+    [self restoreState];
     
     return requestOperation;
 }

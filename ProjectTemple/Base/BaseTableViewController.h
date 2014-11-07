@@ -9,5 +9,5 @@
 #import <UIKit/UIKit.h>
 
 @interface BaseTableViewController : BaseViewController
-
+@property(nonatomic,strong) UITableView * tableView;
 @end

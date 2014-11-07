@@ -8,6 +8,7 @@
 
 #import "PTHTTPRequestBaseManager.h"
 #import <Overcoat.h>
+#import <ReactiveCocoa.h>
 
 @implementation PTHTTPRequestBaseManager
 
@@ -29,17 +30,9 @@
 }
 
 
--(NSDictionary *) globalConfig
+-(void) globalConfig
 {
-    NSDictionary * config = @{
-                                STRING_FROM_PROPERTY(TIME_OUT_INTERVAL) :  STRING_FROM_PROPERTY(requestSerializer.timeoutInterval)
-                             };
-    
-    APPLY_CONFIG_ITEM_IN_DIC(config);
-    
-    config
-    
-    return config;
+    self.requestSerializer.timeoutInterval=TIME_OUT_INTERVAL;
 }
 
 @end

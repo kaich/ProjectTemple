@@ -24,6 +24,7 @@
 #import "UILabel+Additions.h"
 #import "CKUIFactory.h"
 #import "ViewUtils.h"
+#import "ConfigProtocol.h"
 #import <ReactiveCocoa.h>
 
 
