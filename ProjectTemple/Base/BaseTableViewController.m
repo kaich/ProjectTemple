@@ -86,7 +86,7 @@
         [self.requestManager GET:urlPath parameters:parameters completion:^(NSArray *results) {
             
         } failure:^(PTError *error) {
-            
+            [self showNetWorkStatusViewInView:self.tableView];
         }];
     }
     else
