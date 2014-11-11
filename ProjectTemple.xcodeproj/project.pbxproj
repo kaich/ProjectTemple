@@ -50,6 +50,8 @@
 		049FA5241925E9D400A1CE5F /* UIColor+Helper.m in Sources */ = {isa = PBXBuildFile; fileRef = 049FA5211925E9D400A1CE5F /* UIColor+Helper.m */; };
 		049FA5281925EF3200A1CE5F /* BaseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 049FA5271925EF3200A1CE5F /* BaseViewController.m */; };
 		049FA5301925F23400A1CE5F /* UIFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = 049FA52F1925F23400A1CE5F /* UIFactory.m */; };
+		04CAC8211A10603200CDDF4E /* BaseTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 04CAC8201A10603200CDDF4E /* BaseTableViewCell.m */; };
+		04CAC8241A10613700CDDF4E /* BaseEntity.m in Sources */ = {isa = PBXBuildFile; fileRef = 04CAC8231A10613700CDDF4E /* BaseEntity.m */; };
 		04CF776B19334F0D00DBA6EE /* CKAppleItemModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 04CF776A19334F0D00DBA6EE /* CKAppleItemModel.m */; };
 		04D1C0F4192F3B0F00178CDA /* CKLoginViewModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 04D1C0F3192F3B0F00178CDA /* CKLoginViewModel.m */; };
 		04D320B21A0B10AC0055EA65 /* PTError.m in Sources */ = {isa = PBXBuildFile; fileRef = 04D320B11A0B10AC0055EA65 /* PTError.m */; };
@@ -152,6 +154,10 @@
 		049FA52E1925F23400A1CE5F /* UIFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIFactory.h; sourceTree = "<group>"; };
 		049FA52F1925F23400A1CE5F /* UIFactory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIFactory.m; sourceTree = "<group>"; };
 		049FA5321925F2A100A1CE5F /* Macro.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Macro.h; sourceTree = "<group>"; };
+		04CAC81F1A10603200CDDF4E /* BaseTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BaseTableViewCell.h; sourceTree = "<group>"; };
+		04CAC8201A10603200CDDF4E /* BaseTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BaseTableViewCell.m; sourceTree = "<group>"; };
+		04CAC8221A10613700CDDF4E /* BaseEntity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BaseEntity.h; sourceTree = "<group>"; };
+		04CAC8231A10613700CDDF4E /* BaseEntity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BaseEntity.m; sourceTree = "<group>"; };
 		04CF776919334F0C00DBA6EE /* CKAppleItemModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKAppleItemModel.h; sourceTree = "<group>"; };
 		04CF776A19334F0D00DBA6EE /* CKAppleItemModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKAppleItemModel.m; sourceTree = "<group>"; };
 		04D1C0F2192F3B0F00178CDA /* CKLoginViewModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKLoginViewModel.h; sourceTree = "<group>"; };
@@ -538,6 +544,10 @@
 				049FA5271925EF3200A1CE5F /* BaseViewController.m */,
 				0433F4AE1A09BCB300CBECBF /* BaseTableViewController.h */,
 				0433F4AF1A09BCB300CBECBF /* BaseTableViewController.m */,
+				04CAC81F1A10603200CDDF4E /* BaseTableViewCell.h */,
+				04CAC8201A10603200CDDF4E /* BaseTableViewCell.m */,
+				04CAC8221A10613700CDDF4E /* BaseEntity.h */,
+				04CAC8231A10613700CDDF4E /* BaseEntity.m */,
 			);
 			path = Base;
 			sourceTree = "<group>";
@@ -728,6 +738,7 @@
 				0413260419359E79003E46E8 /* UIFactory+TextField.m in Sources */,
 				0430E3CC19357C0C00403629 /* RegExCategories.m in Sources */,
 				0433F4B01A09BCB300CBECBF /* BaseTableViewController.m in Sources */,
+				04CAC8241A10613700CDDF4E /* BaseEntity.m in Sources */,
 				041588EB1937103700B6D2C4 /* CKAPPDetailViewController.m in Sources */,
 				049FA5231925E9D400A1CE5F /* NSUserDefaults+Helpers.m in Sources */,
 				049FA5241925E9D400A1CE5F /* UIColor+Helper.m in Sources */,
@@ -749,6 +760,7 @@
 				041588EE1937140500B6D2C4 /* UIFactory+ImageView.m in Sources */,
 				049FA5221925E9D400A1CE5F /* NSString+Helpers.m in Sources */,
 				049FA4C41925AEB200A1CE5F /* main.m in Sources */,
+				04CAC8211A10603200CDDF4E /* BaseTableViewCell.m in Sources */,
 				04E628601A0A3D7200C2C99C /* PTHTTPRequestBaseManager.m in Sources */,
 				0433F4B51A09F44D00CBECBF /* Common.m in Sources */,
 				049FA4F11925B9D000A1CE5F /* CKViewController.m in Sources */,

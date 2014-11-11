@@ -14,22 +14,22 @@
 //这些方法只是提供模板，具体调用在相应的类里面酌情调用。
 
 /**
- *  seem to loadview method , create your views,
+ *  seem to loadview method , create your views(创建视图）
  */
 -(void) loadInitialViews;
 
 /**
- *  config subview layout,frame .
+ *  config subview layout,frame(配置布局）
  */
 -(void) configSubViewLayout;
 
 /**
- *  run on viewDidLoad method, config  data;
+ *  run on viewDidLoad method, config  data(配置数据）
  */
--(void) configData
+-(void) configData;
 
 /**
- *  send request to get data
+ *  send request to get data(请求数据)
  */
 -(void) requestDataSource;
 

@@ -12,4 +12,13 @@
 @interface UIViewController (Base)
 
 
+/**
+ *  show NetWorkStatus view
+ *
+ *  @param parentView
+ */
+-(void) showNetWorkStatusViewInView:(UIView*) parentView;
+-(void) dismissNetWorkStatusView;
+
+
 @end

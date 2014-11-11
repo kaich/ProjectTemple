@@ -24,14 +24,14 @@
 #import "UILabel+Additions.h"
 #import "CKUIFactory.h"
 #import "ViewUtils.h"
-#import "ConfigProtocol.h"
+#import <Nimbus/NimbusCore.h>
 #import <ReactiveCocoa.h>
 
 
 
 
 //-----------------------------------SERVER_URL-----------------------------------------
-static NSString *BASE_HOME_URL =  @"";
+#define   BASE_HOME_URL                      @""
 
 
 //-----------------------------------NOTIFICATION---------------------------------------
@@ -47,11 +47,13 @@ static NSString *BASE_HOME_URL =  @"";
 //
 //  Request
 //
-static const float  TIME_OUT_INTERVAL                   = 15;
+#define   PAGE_START_INDEX                    0
+#define   COUNT_PER_PAGE                      20
+#define   TIME_OUT_INTERVAL                   15
 
-static const NSString *REQUEST_TIME_OUT_MESSAGE         =  @"";
-static const NSString *REQUEST_NO_NETWORK_MESSAGE       =  @"";
-static const NSString *REQUEST_UNKNOW_ERROR_MESSAGE     =  @"";
+#define   REQUEST_TIME_OUT_MESSAGE            @""
+#define   REQUEST_NO_NETWORK_MESSAGE          @""
+#define   REQUEST_UNKNOW_ERROR_MESSAGE        @""
 
 
 

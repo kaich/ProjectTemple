@@ -132,7 +132,7 @@ _model.delegate = (id)[NICellFactory class];
  * @param tableView The table view within which the cell exists.
  * @param indexPath The location of the cell in the table view.
  * @param model The backing model being used by the table view.
- * @returns The height of the cell mapped to the object at indexPath, if it implements
+ * @returns The height of the cell mapped to the object at indexPath,/Users/mac/Desktop/PTGen/ptgenerator/ModelGenerator/lib/ModelGenerator/MethodGenerator.rb if it implements
  *               heightForObject:atIndexPath:tableView:; otherwise, returns tableView.rowHeight.
  */
 + (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath model:(NITableViewModel *)model;

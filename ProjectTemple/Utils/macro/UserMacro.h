@@ -32,3 +32,5 @@
 #define PROPERTY_SET_VALUE(_property_str_,_value_)                      PROPERTY_SET_TARGET_VALUE(self,_property_str_,_value_)
 
 
+//throw exception
+#define THROW_EXCEPTION(_name_,_content_)                     @throw [NSException exceptionWithName:_name_ reason:_content_ userInfo:nil]

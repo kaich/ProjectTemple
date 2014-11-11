@@ -10,21 +10,17 @@
 #import <DDTTYLogger.h>
 #import "BaseViewControllerProtocol.h"
 #import "UIViewController+Base.h"
+#import <Nimbus/NimbusModels.h>
+#import "PTHTTPRequestManager.h"
+
 
 static const int ddLogLevel = LOG_LEVEL_VERBOSE;
 
-@interface BaseViewController : UIViewController
+@interface BaseViewController : UIViewController<BaseViewControllerProtocol>
 {
     UIView * _networkView;
 }
 
-/**
- *  show NetWorkStatus view
- *
- *  @param parentView
- */
--(void) showNetWorkStatusViewInView:(UIView*) parentView;
--(void) dismissNetWorkStatusView;
 
 
 
