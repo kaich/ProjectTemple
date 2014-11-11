@@ -45,21 +45,6 @@
 }
 
 
-#pragma mark - NetWorkStatusView Method
 
--(void) showNetWorkStatusViewInView:(UIView*) parentView
-{
-    if(!_networkView)
-    {
-        _networkView= [UIFactory createNetWorkStatusViewWithNetWorkStatus:COMMON.networkStatus];
-    }
-    _networkView.center=parentView.center;
-    [parentView addSubview:_networkView];
-}
-
--(void) dismissNetWorkStatusView
-{
-    [_networkView removeFromSuperview];
-}
 
 @end

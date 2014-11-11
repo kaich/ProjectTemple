@@ -84,6 +84,7 @@
     if(urlPath)
     {
         [self.requestManager GET:urlPath parameters:parameters completion:^(NSArray *results) {
+            [self configResponseDataSource:results];
             
         } failure:^(PTError *error) {
             [self showNetWorkStatusViewInView:self.tableView];
@@ -100,11 +101,18 @@
 {
     if(self.pageIndex==PAGE_START_INDEX)
     {
+        if(results.count==0)
+        {
+#warning 显示网络状态界面
+        }
+        
         [self clearTableModelData];
     }
     
     [self.tableModel addObjectsFromArray:results];
     [self.tableModel updateSectionIndex];
+    
+    
 }
 
 

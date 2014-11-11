@@ -17,9 +17,6 @@
 static const int ddLogLevel = LOG_LEVEL_VERBOSE;
 
 @interface BaseViewController : UIViewController<BaseViewControllerProtocol>
-{
-    UIView * _networkView;
-}
 
 
 

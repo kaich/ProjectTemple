@@ -56,6 +56,8 @@
 		04D1C0F4192F3B0F00178CDA /* CKLoginViewModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 04D1C0F3192F3B0F00178CDA /* CKLoginViewModel.m */; };
 		04D320B21A0B10AC0055EA65 /* PTError.m in Sources */ = {isa = PBXBuildFile; fileRef = 04D320B11A0B10AC0055EA65 /* PTError.m */; };
 		04E628601A0A3D7200C2C99C /* PTHTTPRequestBaseManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 04E6285F1A0A3D7200C2C99C /* PTHTTPRequestBaseManager.m */; };
+		405879A01A12714600426095 /* UIView+Base.m in Sources */ = {isa = PBXBuildFile; fileRef = 4058799F1A12714600426095 /* UIView+Base.m */; };
+		405879A31A12784D00426095 /* UITableView+Base.m in Sources */ = {isa = PBXBuildFile; fileRef = 405879A21A12784D00426095 /* UITableView+Base.m */; };
 		F3B6CF1BC9A84705A71DBE4F /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0EA1BBAD392E4D00AE104A83 /* libPods.a */; };
 /* End PBXBuildFile section */
 
@@ -168,6 +170,10 @@
 		04E6285F1A0A3D7200C2C99C /* PTHTTPRequestBaseManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PTHTTPRequestBaseManager.m; sourceTree = "<group>"; };
 		0EA1BBAD392E4D00AE104A83 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		31D8AFB2D9B9C10F020BF81F /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
+		4058799E1A12714600426095 /* UIView+Base.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+Base.h"; sourceTree = "<group>"; };
+		4058799F1A12714600426095 /* UIView+Base.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+Base.m"; sourceTree = "<group>"; };
+		405879A11A12784D00426095 /* UITableView+Base.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UITableView+Base.h"; sourceTree = "<group>"; };
+		405879A21A12784D00426095 /* UITableView+Base.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UITableView+Base.m"; sourceTree = "<group>"; };
 		605736A8BEFAA35A3C9DE287 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -538,6 +544,10 @@
 			isa = PBXGroup;
 			children = (
 				0496967C1A0CB358005497B9 /* BaseViewControllerProtocol.h */,
+				4058799E1A12714600426095 /* UIView+Base.h */,
+				4058799F1A12714600426095 /* UIView+Base.m */,
+				405879A11A12784D00426095 /* UITableView+Base.h */,
+				405879A21A12784D00426095 /* UITableView+Base.m */,
 				0496967D1A0CD250005497B9 /* UIViewController+Base.h */,
 				0496967E1A0CD250005497B9 /* UIViewController+Base.m */,
 				049FA5261925EF3200A1CE5F /* BaseViewController.h */,
@@ -746,6 +756,7 @@
 				0413261019359F91003E46E8 /* UIFactory+Label.m in Sources */,
 				041326211935DCE2003E46E8 /* ViewUtils.m in Sources */,
 				04D320B21A0B10AC0055EA65 /* PTError.m in Sources */,
+				405879A01A12714600426095 /* UIView+Base.m in Sources */,
 				049FA5281925EF3200A1CE5F /* BaseViewController.m in Sources */,
 				048EDA1A1925FCC1006B1230 /* CKLoginViewController.m in Sources */,
 				0413260A19359F26003E46E8 /* UIFactory+Switch.m in Sources */,
@@ -758,6 +769,7 @@
 				049FA4C81925AEB200A1CE5F /* CKAppDelegate.m in Sources */,
 				041326131935A025003E46E8 /* UIFactory+Line.m in Sources */,
 				041588EE1937140500B6D2C4 /* UIFactory+ImageView.m in Sources */,
+				405879A31A12784D00426095 /* UITableView+Base.m in Sources */,
 				049FA5221925E9D400A1CE5F /* NSString+Helpers.m in Sources */,
 				049FA4C41925AEB200A1CE5F /* main.m in Sources */,
 				04CAC8211A10603200CDDF4E /* BaseTableViewCell.m in Sources */,
