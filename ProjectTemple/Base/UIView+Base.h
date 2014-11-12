@@ -12,7 +12,7 @@
 //网络状态
 @property(nonatomic,strong) UIView * networkView;
 
--(void) showNetWorkStatusViewInView;
+-(void) showStatusViewWithType:(StatusNotificationViewType  ) type;
 -(void) dismissNetWorkStatusView;
 
 

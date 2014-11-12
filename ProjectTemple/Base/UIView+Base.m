@@ -27,12 +27,18 @@ static NSString * NetWorkView ;
 
 #pragma mark - NetWorkStatusView Method
 
--(void) showNetWorkStatusViewInView
+-(void) showStatusViewWithType:(StatusNotificationViewType ) type
 {
     if(!self.networkView)
     {
-        self.networkView= [UIFactory createNetWorkStatusViewWithNetWorkStatus:COMMON.networkStatus];
+        if(COMMON.networkStatus==PTNetworkReachabilityStatusNotReachable)
+        {
+            type=kSNNoNetwork;
+        }
+        
+        self.networkView= [UIFactory createStatusNotificationViewWithType:type];
     }
+    self.networkView.frame=self.bounds;
     self.networkView.center=self.center;
     [self addSubview:self.networkView];
 }

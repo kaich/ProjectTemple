@@ -24,7 +24,7 @@
 		0430E3D2193583DD00403629 /* UILabel+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = 0430E3D1193583DD00403629 /* UILabel+Additions.m */; };
 		0433F4B01A09BCB300CBECBF /* BaseTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0433F4AF1A09BCB300CBECBF /* BaseTableViewController.m */; };
 		0433F4B51A09F44D00CBECBF /* Common.m in Sources */ = {isa = PBXBuildFile; fileRef = 0433F4B41A09F44D00CBECBF /* Common.m */; };
-		0433F4B81A09FB2E00CBECBF /* UIFactory+NetWorkStatusView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0433F4B71A09FB2E00CBECBF /* UIFactory+NetWorkStatusView.m */; };
+		0433F4B81A09FB2E00CBECBF /* UIFactory+StatusNotificationView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0433F4B71A09FB2E00CBECBF /* UIFactory+StatusNotificationView.m */; };
 		0433F4BC1A0A170000CBECBF /* PTHTTPRequestManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 0433F4BB1A0A170000CBECBF /* PTHTTPRequestManager.m */; };
 		048EDA1A1925FCC1006B1230 /* CKLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 048EDA191925FCC1006B1230 /* CKLoginViewController.m */; };
 		0496967F1A0CD250005497B9 /* UIViewController+Base.m in Sources */ = {isa = PBXBuildFile; fileRef = 0496967E1A0CD250005497B9 /* UIViewController+Base.m */; };
@@ -53,6 +53,9 @@
 		04CAC8211A10603200CDDF4E /* BaseTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 04CAC8201A10603200CDDF4E /* BaseTableViewCell.m */; };
 		04CAC8241A10613700CDDF4E /* BaseEntity.m in Sources */ = {isa = PBXBuildFile; fileRef = 04CAC8231A10613700CDDF4E /* BaseEntity.m */; };
 		04CF776B19334F0D00DBA6EE /* CKAppleItemModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 04CF776A19334F0D00DBA6EE /* CKAppleItemModel.m */; };
+		04CF92231A12F6CF00071079 /* InfiniteView.m in Sources */ = {isa = PBXBuildFile; fileRef = 04CF92221A12F6CF00071079 /* InfiniteView.m */; };
+		04CF92261A12FD0700071079 /* UIFactory+InfiniteView.m in Sources */ = {isa = PBXBuildFile; fileRef = 04CF92251A12FD0700071079 /* UIFactory+InfiniteView.m */; };
+		04CF92291A130B1300071079 /* StatusNotificationView.m in Sources */ = {isa = PBXBuildFile; fileRef = 04CF92281A130B1300071079 /* StatusNotificationView.m */; };
 		04D1C0F4192F3B0F00178CDA /* CKLoginViewModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 04D1C0F3192F3B0F00178CDA /* CKLoginViewModel.m */; };
 		04D320B21A0B10AC0055EA65 /* PTError.m in Sources */ = {isa = PBXBuildFile; fileRef = 04D320B11A0B10AC0055EA65 /* PTError.m */; };
 		04E628601A0A3D7200C2C99C /* PTHTTPRequestBaseManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 04E6285F1A0A3D7200C2C99C /* PTHTTPRequestBaseManager.m */; };
@@ -107,8 +110,8 @@
 		0433F4AF1A09BCB300CBECBF /* BaseTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BaseTableViewController.m; sourceTree = "<group>"; };
 		0433F4B31A09F44D00CBECBF /* Common.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Common.h; sourceTree = "<group>"; };
 		0433F4B41A09F44D00CBECBF /* Common.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Common.m; sourceTree = "<group>"; };
-		0433F4B61A09FB2E00CBECBF /* UIFactory+NetWorkStatusView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIFactory+NetWorkStatusView.h"; sourceTree = "<group>"; };
-		0433F4B71A09FB2E00CBECBF /* UIFactory+NetWorkStatusView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIFactory+NetWorkStatusView.m"; sourceTree = "<group>"; };
+		0433F4B61A09FB2E00CBECBF /* UIFactory+StatusNotificationView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIFactory+StatusNotificationView.h"; sourceTree = "<group>"; };
+		0433F4B71A09FB2E00CBECBF /* UIFactory+StatusNotificationView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIFactory+StatusNotificationView.m"; sourceTree = "<group>"; };
 		0433F4BA1A0A170000CBECBF /* PTHTTPRequestManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PTHTTPRequestManager.h; sourceTree = "<group>"; };
 		0433F4BB1A0A170000CBECBF /* PTHTTPRequestManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PTHTTPRequestManager.m; sourceTree = "<group>"; };
 		048EDA181925FCC1006B1230 /* CKLoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKLoginViewController.h; sourceTree = "<group>"; };
@@ -162,6 +165,13 @@
 		04CAC8231A10613700CDDF4E /* BaseEntity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BaseEntity.m; sourceTree = "<group>"; };
 		04CF776919334F0C00DBA6EE /* CKAppleItemModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKAppleItemModel.h; sourceTree = "<group>"; };
 		04CF776A19334F0D00DBA6EE /* CKAppleItemModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKAppleItemModel.m; sourceTree = "<group>"; };
+		04CF92201A12E88800071079 /* Base.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Base.h; sourceTree = "<group>"; };
+		04CF92211A12F6CF00071079 /* InfiniteView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InfiniteView.h; sourceTree = "<group>"; };
+		04CF92221A12F6CF00071079 /* InfiniteView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InfiniteView.m; sourceTree = "<group>"; };
+		04CF92241A12FD0700071079 /* UIFactory+InfiniteView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIFactory+InfiniteView.h"; sourceTree = "<group>"; };
+		04CF92251A12FD0700071079 /* UIFactory+InfiniteView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIFactory+InfiniteView.m"; sourceTree = "<group>"; };
+		04CF92271A130B1300071079 /* StatusNotificationView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StatusNotificationView.h; sourceTree = "<group>"; };
+		04CF92281A130B1300071079 /* StatusNotificationView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StatusNotificationView.m; sourceTree = "<group>"; };
 		04D1C0F2192F3B0F00178CDA /* CKLoginViewModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKLoginViewModel.h; sourceTree = "<group>"; };
 		04D1C0F3192F3B0F00178CDA /* CKLoginViewModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKLoginViewModel.m; sourceTree = "<group>"; };
 		04D320B01A0B10AC0055EA65 /* PTError.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PTError.h; sourceTree = "<group>"; };
@@ -392,6 +402,10 @@
 		049FA4F31925BC1B00A1CE5F /* CustomView */ = {
 			isa = PBXGroup;
 			children = (
+				04CF92211A12F6CF00071079 /* InfiniteView.h */,
+				04CF92221A12F6CF00071079 /* InfiniteView.m */,
+				04CF92271A130B1300071079 /* StatusNotificationView.h */,
+				04CF92281A130B1300071079 /* StatusNotificationView.m */,
 			);
 			path = CustomView;
 			sourceTree = "<group>";
@@ -464,9 +478,9 @@
 		049FA4FC1925BC1B00A1CE5F /* Utils */ = {
 			isa = PBXGroup;
 			children = (
+				049FA52D1925F23400A1CE5F /* UIFactory */,
 				0433F4B91A0A16D100CBECBF /* RequestManager */,
 				049FA5311925F2A100A1CE5F /* Macro */,
-				049FA52D1925F23400A1CE5F /* UIFactory */,
 				049FA5091925E30300A1CE5F /* Category */,
 			);
 			path = Utils;
@@ -543,6 +557,7 @@
 		049FA5251925EEFF00A1CE5F /* Base */ = {
 			isa = PBXGroup;
 			children = (
+				04CF92201A12E88800071079 /* Base.h */,
 				0496967C1A0CB358005497B9 /* BaseViewControllerProtocol.h */,
 				4058799E1A12714600426095 /* UIView+Base.h */,
 				4058799F1A12714600426095 /* UIView+Base.m */,
@@ -582,8 +597,10 @@
 				041326121935A025003E46E8 /* UIFactory+Line.m */,
 				041588EC1937140500B6D2C4 /* UIFactory+ImageView.h */,
 				041588ED1937140500B6D2C4 /* UIFactory+ImageView.m */,
-				0433F4B61A09FB2E00CBECBF /* UIFactory+NetWorkStatusView.h */,
-				0433F4B71A09FB2E00CBECBF /* UIFactory+NetWorkStatusView.m */,
+				0433F4B61A09FB2E00CBECBF /* UIFactory+StatusNotificationView.h */,
+				0433F4B71A09FB2E00CBECBF /* UIFactory+StatusNotificationView.m */,
+				04CF92241A12FD0700071079 /* UIFactory+InfiniteView.h */,
+				04CF92251A12FD0700071079 /* UIFactory+InfiniteView.m */,
 			);
 			path = UIFactory;
 			sourceTree = "<group>";
@@ -744,7 +761,7 @@
 				041588F51937330C00B6D2C4 /* CKDetailTableViewCell.m in Sources */,
 				0496967F1A0CD250005497B9 /* UIViewController+Base.m in Sources */,
 				0430E3D2193583DD00403629 /* UILabel+Additions.m in Sources */,
-				0433F4B81A09FB2E00CBECBF /* UIFactory+NetWorkStatusView.m in Sources */,
+				0433F4B81A09FB2E00CBECBF /* UIFactory+StatusNotificationView.m in Sources */,
 				0413260419359E79003E46E8 /* UIFactory+TextField.m in Sources */,
 				0430E3CC19357C0C00403629 /* RegExCategories.m in Sources */,
 				0433F4B01A09BCB300CBECBF /* BaseTableViewController.m in Sources */,
@@ -774,6 +791,7 @@
 				049FA4C41925AEB200A1CE5F /* main.m in Sources */,
 				04CAC8211A10603200CDDF4E /* BaseTableViewCell.m in Sources */,
 				04E628601A0A3D7200C2C99C /* PTHTTPRequestBaseManager.m in Sources */,
+				04CF92261A12FD0700071079 /* UIFactory+InfiniteView.m in Sources */,
 				0433F4B51A09F44D00CBECBF /* Common.m in Sources */,
 				049FA4F11925B9D000A1CE5F /* CKViewController.m in Sources */,
 				041588F1193721A100B6D2C4 /* CKDetailViewModel.m in Sources */,
@@ -781,6 +799,8 @@
 				049FA5161925E30300A1CE5F /* NSDate+Utilities.m in Sources */,
 				04CF776B19334F0D00DBA6EE /* CKAppleItemModel.m in Sources */,
 				041326161935A09B003E46E8 /* NSString+PDRegex.m in Sources */,
+				04CF92291A130B1300071079 /* StatusNotificationView.m in Sources */,
+				04CF92231A12F6CF00071079 /* InfiniteView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

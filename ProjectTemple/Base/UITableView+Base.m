@@ -13,9 +13,11 @@
 
 - (void)insertRowAtBottom:(NSInteger) count
 {
-    
     @synchronized(self)
     {
+        if(count==0)
+            return ;
+        
         __weak typeof(self)weakSelf = self;
         
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {

@@ -87,7 +87,7 @@
             [self configResponseDataSource:results];
             
         } failure:^(PTError *error) {
-            [self showNetWorkStatusViewInView:self.tableView];
+            [self.tableView showStatusViewWithType:kSNNoNetwork];
         }];
     }
     else
@@ -103,16 +103,33 @@
     {
         if(results.count==0)
         {
-#warning 显示网络状态界面
+            if(COMMON.networkStatus==PTNetworkReachabilityStatusNotReachable)
+            {
+                [self.tableView showStatusViewWithType:kSNNoNetwork];
+            }
+            else
+            {
+                [self.tableView showStatusViewWithType:kSNNoData];
+            }
         }
         
         [self clearTableModelData];
+    }
+    else
+    {
+        if(results.count==0)
+        {
+            InfiniteView * infiniteView=[UIFactory createInfiniteViewWithState:kIVSNoData];
+            [self.tableView.infiniteScrollingView setCustomView:infiniteView forState:SVInfiniteScrollingStateAll];
+            self.tableView.showsInfiniteScrolling=NO;
+        }
+        
     }
     
     [self.tableModel addObjectsFromArray:results];
     [self.tableModel updateSectionIndex];
     
-    
+    [self.tableView insertRowAtBottom:results.count];
 }
 
 
