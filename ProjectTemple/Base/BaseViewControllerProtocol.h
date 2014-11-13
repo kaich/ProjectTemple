@@ -7,11 +7,23 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "PTHTTPRequestManager.h"
 
 @protocol BaseViewControllerProtocol <NSObject>
 
 @optional
-//这些方法只是提供模板，具体调用在相应的类里面酌情调用。
+
+//请求
+@property(nonatomic,strong) PTHTTPRequestManager * requestManager;
+
+//--------------重载一下方法获得正确的配置(@overide)------------------
+
+//判断是否要创建Request manager
+-(BOOL) isNeedHTTPRequestManager;
+
+
+
+//---------------这些方法只是提供模板，具体调用在相应的类里面酌情调用----------------
 
 /**
  *  seem to loadview method , create your views(创建视图）

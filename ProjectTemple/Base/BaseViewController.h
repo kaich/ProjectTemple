@@ -17,7 +17,8 @@
 static const int ddLogLevel = LOG_LEVEL_VERBOSE;
 
 @interface BaseViewController : UIViewController<BaseViewControllerProtocol>
-
+//请求
+@property(nonatomic,strong) PTHTTPRequestManager * requestManager;
 
 
 

@@ -118,7 +118,8 @@
 - (UIView *)viewWithTag:(NSInteger)tag ofClass:(Class)viewClass
 {
     return [self viewMatchingPredicate:[NSPredicate predicateWithBlock:^BOOL(id evaluatedObject, __unused NSDictionary *bindings) {
-        return [evaluatedObject tag] == tag && [evaluatedObject isKindOfClass:viewClass];
+        UIView * evaluatedView =evaluatedObject;
+        return [evaluatedView tag] == tag && [evaluatedObject isKindOfClass:viewClass];
     }]];
 }
 
@@ -155,14 +156,16 @@
 - (NSArray *)viewsWithTag:(NSInteger)tag
 {
     return [self viewsMatchingPredicate:[NSPredicate predicateWithBlock:^BOOL(id evaluatedObject, __unused id bindings) {
-        return [evaluatedObject tag] == tag;
+        UIView * evaluatedView =evaluatedObject;
+        return [evaluatedView tag] == tag;
     }]];
 }
 
 - (NSArray *)viewsWithTag:(NSInteger)tag ofClass:(Class)viewClass
 {
     return [self viewsMatchingPredicate:[NSPredicate predicateWithBlock:^BOOL(id evaluatedObject, __unused id bindings) {
-        return [evaluatedObject tag] == tag && [evaluatedObject isKindOfClass:viewClass];
+        UIView * evaluatedView =evaluatedObject;
+        return [evaluatedView tag] == tag && [evaluatedView isKindOfClass:viewClass];
     }]];
 }
 

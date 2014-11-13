@@ -7,6 +7,7 @@
 //
 
 #import "MTLModel.h"
+#import "Common.h"
 
 @interface PTError : MTLModel
 //network status

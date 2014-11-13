@@ -36,6 +36,8 @@
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    
+    [self createHTTPRequestManager];
 }
 
 - (void)didReceiveMemoryWarning
@@ -44,5 +46,20 @@
     // Dispose of any resources that can be recreated.
 }
 
+
+#pragma mark - Custom Method
+
+-(BOOL) isNeedHTTPRequestManager
+{
+    return NO;
+}
+
+-(void) createHTTPRequestManager
+{
+    if([self isNeedHTTPRequestManager])
+    {
+        self.requestManager=[[PTHTTPRequestManager alloc] init];
+    }
+}
 
 @end

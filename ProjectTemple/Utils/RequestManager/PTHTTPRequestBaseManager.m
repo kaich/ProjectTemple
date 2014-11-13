@@ -9,12 +9,13 @@
 #import "PTHTTPRequestBaseManager.h"
 #import <Overcoat.h>
 #import <ReactiveCocoa.h>
+#import "PTResponse.h"
 
 @implementation PTHTTPRequestBaseManager
 
 +(Class) responseClass
 {
-    return [OVCResponse class];
+    return [PTResponse class];
 }
 
 +(Class) errorModelClass
@@ -25,7 +26,7 @@
 + (NSDictionary *)modelClassesByResourcePath {
 #warning 等待实现
     return @{
-             
+             @"lookup":  NSClassFromString(@"CKAppleItemModel")
              };
 }
 

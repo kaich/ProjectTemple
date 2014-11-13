@@ -73,10 +73,8 @@
 
     //this method use is not very right. To work right way ....
     [SVProgressHUD showWithStatus:@"加载中..."];
-    OVCClient * client=[OVCClient clientWithBaseURL:URL(@"https://itunes.apple.com") account:nil];
-    [client GET:@"/lookup" parameters:@{@"id" : @"444934666", @"country" : @"cn"} resultClass:[CKAppleItemModel class] resultKeyPath:@"results" completion:^(AFHTTPRequestOperation *operation, id responseObject, NSError *error) {
-        
-        NSArray * models=(NSArray*) responseObject;
+    [self.requestManager GET:@"/lookup" parameters:@{@"id" : @"444934666", @"country" : @"cn"} completion:^(NSArray *results) {
+        NSArray * models=results;
         self.viewModel=[[CKDetailViewModel alloc] initWithModel:[models firstObject]];
         self.lblTitle.text=self.viewModel.name;
         self.lblPrice.text=self.viewModel.price;
@@ -90,11 +88,14 @@
         [RACObserve(self.viewModel, iconUrl) subscribeNext:^(id x) {
             @strongify(self);
             
-            [self.ivIcon setImageWithURL:self.viewModel.model.appIcon];
+            [self.ivIcon sd_setImageWithURL:self.viewModel.model.appIcon];
         }];
         [SVProgressHUD dismiss];
-        
+
+    } failure:^(PTError *error) {
+        [SVProgressHUD dismiss];
     }];
+
 }
 
 - (void)didReceiveMemoryWarning
@@ -156,7 +157,11 @@
     return  320;
 }
 
-
+#pragma mark - Overide Method 
+-(BOOL) isNeedHTTPRequestManager
+{
+    return YES;
+}
 
 
 @end

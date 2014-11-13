@@ -10,6 +10,6 @@
 #import "PTError.h"
 #import <OVCResponse.h>
 
-@interface PTHTTPRequestBaseManager : OVCHTTPRequestOperationManager<ConfigProtocol>
+@interface PTHTTPRequestBaseManager : OVCHTTPRequestOperationManager
 
 @end
