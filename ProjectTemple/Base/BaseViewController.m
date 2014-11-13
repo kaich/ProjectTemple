@@ -10,10 +10,14 @@
 
 
 @interface BaseViewController ()
-
+{
+    PTHTTPRequestManager * _requestManager;
+    CWStatusBarNotification * _statusbarNotification;
+}
 @end
 
 @implementation BaseViewController
+@dynamic requestManager;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -37,7 +41,6 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
-    [self createHTTPRequestManager];
 }
 
 - (void)didReceiveMemoryWarning
@@ -49,17 +52,32 @@
 
 #pragma mark - Custom Method
 
--(BOOL) isNeedHTTPRequestManager
+//HTTP request
+-(PTHTTPRequestManager*) requestManager
 {
-    return NO;
+    if(!_requestManager)
+    {
+        _requestManager=[[PTHTTPRequestManager alloc] init];
+    }
+    
+    return  _requestManager;
 }
 
--(void) createHTTPRequestManager
+//Show Status bar notification
+-(CWStatusBarNotification *) statusbarNotification
 {
-    if([self isNeedHTTPRequestManager])
+    if(!_statusbarNotification)
     {
-        self.requestManager=[[PTHTTPRequestManager alloc] init];
+        _statusbarNotification=[UIFactory createStatusBarNotification];
     }
+    
+    return _statusbarNotification;
+}
+
+
+-(void) showNetworkIssuStatusBarNotification
+{
+    [self.statusbarNotification displayNotificationWithMessage:@"网络状态异常，请检查网络连接！" forDuration:3];
 }
 
 @end

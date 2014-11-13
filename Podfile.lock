@@ -28,6 +28,7 @@ PODS:
     - CocoaLumberjack/Core
   - CocoaLumberjack/Extensions (2.0.0-beta4):
     - CocoaLumberjack/Default
+  - CWStatusBarNotification (2.2.2)
   - FMDB (2.4):
     - FMDB/standard
   - FMDB/common (2.4)
@@ -155,6 +156,7 @@ PODS:
 DEPENDENCIES:
   - AFNetworking
   - CocoaLumberjack
+  - CWStatusBarNotification
   - FMDB
   - InAppSettingsKit
   - LBBlurredImage
@@ -174,6 +176,7 @@ DEPENDENCIES:
 SPEC CHECKSUMS:
   AFNetworking: 0aabc6fae66d6e5d039eeb21c315843c7aae51ab
   CocoaLumberjack: 24153b24b17d853d7182b22b128971fb98e8cb18
+  CWStatusBarNotification: 7e43716355830c26124eae9b91c4434dfa2a6a73
   FMDB: 0b2fa25e5264ef177973c0cb8c02c711107979aa
   InAppSettingsKit: 1d23ffbc68f628fb5d6fce0c2eed46ac6b4f3ce7
   LBBlurredImage: 30cc42be977bbcece286d26d2d9c08b8be7f05e8

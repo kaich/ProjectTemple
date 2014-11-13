@@ -14,7 +14,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "B088AF828F112A55ECFC9DC0"
+               BlueprintIdentifier = "EF00A79D04CED658F07FCF2B"
                BuildableName = "libPods-MYBlurIntroductionView.a"
                BlueprintName = "Pods-MYBlurIntroductionView"
                ReferencedContainer = "container:Pods.xcodeproj">

@@ -48,6 +48,12 @@
 #define COCOAPODS_VERSION_MINOR_AFNetworking_UIKit 4
 #define COCOAPODS_VERSION_PATCH_AFNetworking_UIKit 1
 
+// CWStatusBarNotification
+#define COCOAPODS_POD_AVAILABLE_CWStatusBarNotification
+#define COCOAPODS_VERSION_MAJOR_CWStatusBarNotification 2
+#define COCOAPODS_VERSION_MINOR_CWStatusBarNotification 2
+#define COCOAPODS_VERSION_PATCH_CWStatusBarNotification 2
+
 // CocoaLumberjack
 #define COCOAPODS_POD_AVAILABLE_CocoaLumberjack
 #define COCOAPODS_VERSION_MAJOR_CocoaLumberjack 2

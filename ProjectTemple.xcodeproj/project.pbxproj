@@ -53,6 +53,7 @@
 		04CAC8211A10603200CDDF4E /* BaseTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 04CAC8201A10603200CDDF4E /* BaseTableViewCell.m */; };
 		04CAC8241A10613700CDDF4E /* BaseEntity.m in Sources */ = {isa = PBXBuildFile; fileRef = 04CAC8231A10613700CDDF4E /* BaseEntity.m */; };
 		04CF435F1A147BFD008BD337 /* PTResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 04CF435E1A147BFD008BD337 /* PTResponse.m */; };
+		04CF43621A14B602008BD337 /* UIFactory+StatusbarNotification.m in Sources */ = {isa = PBXBuildFile; fileRef = 04CF43611A14B602008BD337 /* UIFactory+StatusbarNotification.m */; };
 		04CF776B19334F0D00DBA6EE /* CKAppleItemModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 04CF776A19334F0D00DBA6EE /* CKAppleItemModel.m */; };
 		04CF92231A12F6CF00071079 /* InfiniteView.m in Sources */ = {isa = PBXBuildFile; fileRef = 04CF92221A12F6CF00071079 /* InfiniteView.m */; };
 		04CF92261A12FD0700071079 /* UIFactory+InfiniteView.m in Sources */ = {isa = PBXBuildFile; fileRef = 04CF92251A12FD0700071079 /* UIFactory+InfiniteView.m */; };
@@ -166,6 +167,8 @@
 		04CAC8231A10613700CDDF4E /* BaseEntity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BaseEntity.m; sourceTree = "<group>"; };
 		04CF435D1A147BFD008BD337 /* PTResponse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PTResponse.h; sourceTree = "<group>"; };
 		04CF435E1A147BFD008BD337 /* PTResponse.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PTResponse.m; sourceTree = "<group>"; };
+		04CF43601A14B602008BD337 /* UIFactory+StatusbarNotification.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIFactory+StatusbarNotification.h"; sourceTree = "<group>"; };
+		04CF43611A14B602008BD337 /* UIFactory+StatusbarNotification.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIFactory+StatusbarNotification.m"; sourceTree = "<group>"; };
 		04CF776919334F0C00DBA6EE /* CKAppleItemModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKAppleItemModel.h; sourceTree = "<group>"; };
 		04CF776A19334F0D00DBA6EE /* CKAppleItemModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKAppleItemModel.m; sourceTree = "<group>"; };
 		04CF92201A12E88800071079 /* Base.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Base.h; sourceTree = "<group>"; };
@@ -606,6 +609,8 @@
 				0433F4B71A09FB2E00CBECBF /* UIFactory+StatusNotificationView.m */,
 				04CF92241A12FD0700071079 /* UIFactory+InfiniteView.h */,
 				04CF92251A12FD0700071079 /* UIFactory+InfiniteView.m */,
+				04CF43601A14B602008BD337 /* UIFactory+StatusbarNotification.h */,
+				04CF43611A14B602008BD337 /* UIFactory+StatusbarNotification.m */,
 			);
 			path = UIFactory;
 			sourceTree = "<group>";
@@ -799,6 +804,7 @@
 				04CF92261A12FD0700071079 /* UIFactory+InfiniteView.m in Sources */,
 				04CF435F1A147BFD008BD337 /* PTResponse.m in Sources */,
 				0433F4B51A09F44D00CBECBF /* Common.m in Sources */,
+				04CF43621A14B602008BD337 /* UIFactory+StatusbarNotification.m in Sources */,
 				049FA4F11925B9D000A1CE5F /* CKViewController.m in Sources */,
 				041588F1193721A100B6D2C4 /* CKDetailViewModel.m in Sources */,
 				049FA5151925E30300A1CE5F /* NSDate+TimeAgo.m in Sources */,
@@ -928,11 +934,14 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CODE_SIGN_IDENTITY = "iPhone Developer: peng Alan (S59QHJ2LKT)";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "ProjectTemple/ProjectTemple-Prefix.pch";
 				INFOPLIST_FILE = "ProjectTemple/ProjectTemple-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "b022996b-6d75-45ae-81f5-7f17c0ae1c52";
 				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};
@@ -944,11 +953,14 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CODE_SIGN_IDENTITY = "iPhone Developer: peng Alan (S59QHJ2LKT)";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "ProjectTemple/ProjectTemple-Prefix.pch";
 				INFOPLIST_FILE = "ProjectTemple/ProjectTemple-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "b022996b-6d75-45ae-81f5-7f17c0ae1c52";
 				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};

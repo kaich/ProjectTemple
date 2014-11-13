@@ -11,15 +11,17 @@
 #import "BaseViewControllerProtocol.h"
 #import "UIViewController+Base.h"
 #import <Nimbus/NimbusModels.h>
-#import "PTHTTPRequestManager.h"
 
 
 static const int ddLogLevel = LOG_LEVEL_VERBOSE;
 
 @interface BaseViewController : UIViewController<BaseViewControllerProtocol>
 //请求
-@property(nonatomic,strong) PTHTTPRequestManager * requestManager;
+@property(nonatomic,strong,readonly) PTHTTPRequestManager * requestManager;
 
+//状态栏通知
+@property(nonatomic,strong,readonly) CWStatusBarNotification * statusbarNotification;
 
+-(void) showNetworkIssuStatusBarNotification;
 
 @end

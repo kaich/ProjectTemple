@@ -8,13 +8,18 @@
 
 #import <Foundation/Foundation.h>
 #import "PTHTTPRequestManager.h"
+#import "UIFactory+StatusbarNotification.h"
+
 
 @protocol BaseViewControllerProtocol <NSObject>
 
 @optional
 
 //请求
-@property(nonatomic,strong) PTHTTPRequestManager * requestManager;
+@property(nonatomic,strong,readonly) PTHTTPRequestManager * requestManager;
+//状态栏
+@property(nonatomic,strong,readonly) CWStatusBarNotification * statusbarNotification;
+
 
 //--------------重载一下方法获得正确的配置(@overide)------------------
 

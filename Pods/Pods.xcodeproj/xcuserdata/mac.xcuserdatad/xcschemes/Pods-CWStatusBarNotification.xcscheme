@@ -14,9 +14,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "B860A24E8E48D51B20314142"
-               BuildableName = "libPods-UIActivityIndicator-for-SDWebImage.a"
-               BlueprintName = "Pods-UIActivityIndicator-for-SDWebImage"
+               BlueprintIdentifier = "5F14DBA612A02F65431F9662"
+               BuildableName = "libPods-CWStatusBarNotification.a"
+               BlueprintName = "Pods-CWStatusBarNotification"
                ReferencedContainer = "container:Pods.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
