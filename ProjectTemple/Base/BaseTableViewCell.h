@@ -10,4 +10,8 @@
 
 @interface BaseTableViewCell : UITableViewCell<NICell>
 
+//-------------Overide Method-------------
++(BOOL) isVerticalTableViewCell;
+
+
 @end

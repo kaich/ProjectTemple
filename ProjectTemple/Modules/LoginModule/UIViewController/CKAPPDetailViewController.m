@@ -94,6 +94,7 @@
 
     } failure:^(PTError *error) {
         [SVProgressHUD dismiss];
+        [self showNetworkIssuStatusBarNotification];
     }];
 
 }
@@ -144,7 +145,7 @@
 
     
     NSURL * url=[self.viewModel.screenShots objectAtIndex:indexPath.row];
-    [cell.ivScreenShot setImageWithURL:url];
+    [cell.ivScreenShot sd_setImageWithURL:url];
     cell.ivScreenShot.backgroundColor=[UIColor redColor];
     
     
@@ -152,9 +153,9 @@
 }
 
 
--(float) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+-(CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return  320;
+    return  self.view.width;
 }
 
 #pragma mark - Overide Method 

@@ -33,7 +33,6 @@
     //initialize property
     self.pageIndex =0;
     self.countPerPage=COUNT_PER_PAGE;
-    self.requestManager=[[PTHTTPRequestManager alloc] init];
     
     [self configData];
     
@@ -48,17 +47,28 @@
 #pragma mark - Config UI
 -(void) loadInitialViews
 {
-    self.tableView=[UIFactory createTableViewWithFrame:self.view.bounds style:UITableViewStylePlain delegate:nil];
+    BOOL isVertical= [self isVerticalTableView];
+    
+    if(isVertical)
+    {
+        self.tableView=[UIFactory createTableViewWithFrame:self.view.bounds style:UITableViewStylePlain delegate:nil];
+    }
+    else
+    {
+        self.tableView=[UIFactory createHorizontalTableViewWithFrame:self.view.bounds style:UITableViewStylePlain delegate:nil];
+    }
     
     //上拉、下拉 功能
     __weak typeof (self) weakSelf  = self;
     
     [self.tableView addPullToRefreshWithActionHandler:^{
         weakSelf.pageIndex =PAGE_START_INDEX;
+        [weakSelf requestDataSource];
     }];
     
     [self.tableView addInfiniteScrollingWithActionHandler:^{
         weakSelf.pageIndex ++;
+       [weakSelf requestDataSource];
     }];
     
 }
@@ -87,7 +97,14 @@
             [self configResponseDataSource:results];
             
         } failure:^(PTError *error) {
-            [self.tableView showStatusViewWithType:kSNNoNetwork];
+            if([self.tableView numberOfRowsInSection:0])
+            {
+                [self.tableView showStatusViewWithType:kSNNoNetwork];
+            }
+          
+            [self showNetworkIssuStatusBarNotification];
+            
+            
         }];
     }
     else
@@ -103,14 +120,7 @@
     {
         if(results.count==0)
         {
-            if(COMMON.networkStatus==PTNetworkReachabilityStatusNotReachable)
-            {
-                [self.tableView showStatusViewWithType:kSNNoNetwork];
-            }
-            else
-            {
-                [self.tableView showStatusViewWithType:kSNNoData];
-            }
+            [self.tableView showStatusViewWithType:kSNNoData];
         }
         
         [self clearTableModelData];
@@ -148,6 +158,11 @@
 -(void) clearTableModelData
 {
      [self.tableModel removeSectionAtIndex:0];
+}
+
+-(BOOL) isVerticalTableView
+{
+    return YES;
 }
 
 @end

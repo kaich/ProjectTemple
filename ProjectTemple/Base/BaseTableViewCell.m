@@ -10,6 +10,21 @@
 
 @implementation BaseTableViewCell
 
+-(instancetype) initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
+{
+    self =[super initWithStyle:style reuseIdentifier:reuseIdentifier];
+    
+    if(self)
+    {
+        if(![[self class] isVerticalTableViewCell])
+        {
+            self.transform=CGAffineTransformMakeRotation(-M_PI/2);
+        }
+    }
+    
+    return self;
+}
+
 - (void)awakeFromNib {
     // Initialization code
 }
@@ -25,7 +40,7 @@
 
 - (BOOL)shouldUpdateCellWithObject:(id)object
 {
-    
+    THROW_EXCEPTION(@"invoke error", @"you must overide shouldUpdateCellWithObject method");
     return  YES;
 }
 
@@ -41,5 +56,12 @@
     
     return 44;
 }
+
+//-------------Overide Method-------------
++(BOOL) isVerticalTableViewCell
+{
+    return YES;
+}
+
 
 @end

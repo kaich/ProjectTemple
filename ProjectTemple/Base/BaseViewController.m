@@ -63,6 +63,8 @@
     return  _requestManager;
 }
 
+
+
 //Show Status bar notification
 -(CWStatusBarNotification *) statusbarNotification
 {
@@ -79,5 +81,6 @@
 {
     [self.statusbarNotification displayNotificationWithMessage:@"网络状态异常，请检查网络连接！" forDuration:3];
 }
+
 
 @end
