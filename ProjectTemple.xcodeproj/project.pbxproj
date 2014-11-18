@@ -59,7 +59,6 @@
 		04CF92261A12FD0700071079 /* UIFactory+InfiniteView.m in Sources */ = {isa = PBXBuildFile; fileRef = 04CF92251A12FD0700071079 /* UIFactory+InfiniteView.m */; };
 		04CF92291A130B1300071079 /* StatusNotificationView.m in Sources */ = {isa = PBXBuildFile; fileRef = 04CF92281A130B1300071079 /* StatusNotificationView.m */; };
 		04D1C0F4192F3B0F00178CDA /* CKLoginViewModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 04D1C0F3192F3B0F00178CDA /* CKLoginViewModel.m */; };
-		04D320B21A0B10AC0055EA65 /* PTError.m in Sources */ = {isa = PBXBuildFile; fileRef = 04D320B11A0B10AC0055EA65 /* PTError.m */; };
 		04E628601A0A3D7200C2C99C /* PTHTTPRequestBaseManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 04E6285F1A0A3D7200C2C99C /* PTHTTPRequestBaseManager.m */; };
 		405879A01A12714600426095 /* UIView+Base.m in Sources */ = {isa = PBXBuildFile; fileRef = 4058799F1A12714600426095 /* UIView+Base.m */; };
 		405879A31A12784D00426095 /* UITableView+Base.m in Sources */ = {isa = PBXBuildFile; fileRef = 405879A21A12784D00426095 /* UITableView+Base.m */; };
@@ -180,8 +179,6 @@
 		04CF92281A130B1300071079 /* StatusNotificationView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StatusNotificationView.m; sourceTree = "<group>"; };
 		04D1C0F2192F3B0F00178CDA /* CKLoginViewModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKLoginViewModel.h; sourceTree = "<group>"; };
 		04D1C0F3192F3B0F00178CDA /* CKLoginViewModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKLoginViewModel.m; sourceTree = "<group>"; };
-		04D320B01A0B10AC0055EA65 /* PTError.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PTError.h; sourceTree = "<group>"; };
-		04D320B11A0B10AC0055EA65 /* PTError.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PTError.m; sourceTree = "<group>"; };
 		04E6285E1A0A3D7200C2C99C /* PTHTTPRequestBaseManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PTHTTPRequestBaseManager.h; sourceTree = "<group>"; };
 		04E6285F1A0A3D7200C2C99C /* PTHTTPRequestBaseManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PTHTTPRequestBaseManager.m; sourceTree = "<group>"; };
 		0EA1BBAD392E4D00AE104A83 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -278,8 +275,6 @@
 				0433F4BB1A0A170000CBECBF /* PTHTTPRequestManager.m */,
 				04CF435D1A147BFD008BD337 /* PTResponse.h */,
 				04CF435E1A147BFD008BD337 /* PTResponse.m */,
-				04D320B01A0B10AC0055EA65 /* PTError.h */,
-				04D320B11A0B10AC0055EA65 /* PTError.m */,
 			);
 			path = RequestManager;
 			sourceTree = "<group>";
@@ -782,7 +777,6 @@
 				0433F4BC1A0A170000CBECBF /* PTHTTPRequestManager.m in Sources */,
 				0413261019359F91003E46E8 /* UIFactory+Label.m in Sources */,
 				041326211935DCE2003E46E8 /* ViewUtils.m in Sources */,
-				04D320B21A0B10AC0055EA65 /* PTError.m in Sources */,
 				405879A01A12714600426095 /* UIView+Base.m in Sources */,
 				049FA5281925EF3200A1CE5F /* BaseViewController.m in Sources */,
 				048EDA1A1925FCC1006B1230 /* CKLoginViewController.m in Sources */,

@@ -93,10 +93,10 @@
     
     if(urlPath)
     {
-        [self.requestManager GET:urlPath parameters:parameters completion:^(NSArray *results) {
-            [self configResponseDataSource:results];
+        [self.requestManager GET:urlPath parameters:parameters completion:^(PTResponse *response) {
+            [self configResponseDataSource:response.result];
             
-        } failure:^(PTError *error) {
+        } failure:^(NSError *error) {
             if([self.tableView numberOfRowsInSection:0])
             {
                 [self.tableView showStatusViewWithType:kSNNoNetwork];

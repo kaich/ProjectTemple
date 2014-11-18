@@ -13,7 +13,7 @@
 #import <UIImageView+WebCache.h>
 #import "CKDetailTableViewCell.h"
 #import <SVProgressHUD.h>
-#import <Overcoat.h>
+
 
 @interface CKAPPDetailViewController ()<UITableViewDataSource,UITableViewDelegate>
 @property(nonatomic,strong) UIImageView * ivIcon;
@@ -73,8 +73,16 @@
 
     //this method use is not very right. To work right way ....
     [SVProgressHUD showWithStatus:@"加载中..."];
-    [self.requestManager GET:@"/lookup" parameters:@{@"id" : @"444934666", @"country" : @"cn"} completion:^(NSArray *results) {
-        NSArray * models=results;
+    
+    [[[self.requestManager rac_GET:@"/lookup" parameters:@{@"id" : @"444934666", @"country" : @"cn"}] catch:^RACSignal *(NSError *error) {
+        
+        [SVProgressHUD dismiss];
+        [self showNetworkIssuStatusBarNotification];
+        
+        return [RACSignal empty];
+    }] subscribeNext:^(PTResponse * response) {
+        
+        NSArray * models=response.result;
         self.viewModel=[[CKDetailViewModel alloc] initWithModel:[models firstObject]];
         self.lblTitle.text=self.viewModel.name;
         self.lblPrice.text=self.viewModel.price;
@@ -92,9 +100,6 @@
         }];
         [SVProgressHUD dismiss];
 
-    } failure:^(PTError *error) {
-        [SVProgressHUD dismiss];
-        [self showNetworkIssuStatusBarNotification];
     }];
 
 }

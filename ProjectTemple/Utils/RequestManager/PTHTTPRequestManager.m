@@ -14,20 +14,23 @@
 -(void) globalConfig;
 @end
 
-@interface PTHTTPRequestManager ()
-@property(nonatomic,strong) PTHTTPRequestBaseManager *  requestManager;
-@end
 
 @implementation PTHTTPRequestManager
 
 - (instancetype)init
 {
-    self = [super init];
+    self = [super  initWithBaseURL:URL(BASE_HOME_URL)];
     if (self) {
-        self.requestManager=[[PTHTTPRequestBaseManager alloc] initWithBaseURL:URL(BASE_HOME_URL)];
+        
         [self configEffect];
     }
     return self;
+}
+
++(instancetype) requestManager
+{
+    PTHTTPRequestManager * mgr =[[[self class] alloc] init];
+    return mgr;
 }
 
 
@@ -35,26 +38,24 @@
 -(void) handleCompletionWithResponse:(OVCResponse*) response  error:(NSError*) error  completeBlock:(PTRequestCompleteBlock) completeBlock   failureBlock:(PTRequestFailedBlock) failureBlock
 {
     if (error) {
-        PTError * error =[PTError networkError];
         failureBlock(error);
     }
     else
     {
-        NSArray * results=response.result;
-        completeBlock(results);
+        completeBlock((PTResponse *)response);
     }
 }
 
 
 -(void) configEffect
 {
-    [self.requestManager globalConfig];
+    [self globalConfig];
 }
 
 -(void) restoreState
 {
     // restore time out interval
-    self.requestManager.requestSerializer.timeoutInterval=TIME_OUT_INTERVAL;
+    self.requestSerializer.timeoutInterval=TIME_OUT_INTERVAL;
 }
 
 
@@ -62,7 +63,7 @@
 
 -(AFHTTPRequestOperation *) GET:(NSString *)URLString parameters:(NSDictionary *)parameters completion:(PTRequestCompleteBlock)completeBlock failure:(PTRequestFailedBlock)failureBlock
 {
-    AFHTTPRequestOperation * requestOperation= [self.requestManager GET:URLString parameters:parameters completion:^(OVCResponse *response, NSError *error) {
+    AFHTTPRequestOperation * requestOperation= [self GET:URLString parameters:parameters completion:^(OVCResponse *response, NSError *error) {
         [self handleCompletionWithResponse:response error:error completeBlock:completeBlock failureBlock:failureBlock];
     }];
     
@@ -74,7 +75,7 @@
 
 -(AFHTTPRequestOperation *) HEAD:(NSString *)URLString parameters:(NSDictionary *)parameters completion:(PTRequestCompleteBlock)completeBlock failure:(PTRequestFailedBlock)failureBlock
 {
-    AFHTTPRequestOperation * requestOperation=[self.requestManager HEAD:URLString parameters:parameters completion:^(OVCResponse *response, NSError *error) {
+    AFHTTPRequestOperation * requestOperation=[self HEAD:URLString parameters:parameters completion:^(OVCResponse *response, NSError *error) {
         [self handleCompletionWithResponse:response error:error completeBlock:completeBlock failureBlock:failureBlock];
     }];
     
@@ -86,7 +87,7 @@
 
 -(AFHTTPRequestOperation *) POST:(NSString *)URLString parameters:(NSDictionary *)parameters completion:(PTRequestCompleteBlock)completeBlock failure:(PTRequestFailedBlock)failureBlock
 {
-    AFHTTPRequestOperation * requestOperation=[self.requestManager POST:URLString parameters:parameters completion:^(OVCResponse *response, NSError *error) {
+    AFHTTPRequestOperation * requestOperation=[self POST:URLString parameters:parameters completion:^(OVCResponse *response, NSError *error) {
         [self handleCompletionWithResponse:response error:error completeBlock:completeBlock failureBlock:failureBlock];
     }];
     
@@ -97,7 +98,7 @@
 
 -(AFHTTPRequestOperation *) POST:(NSString *)URLString parameters:(NSDictionary *)parameters constructingBodyWithBlock:(void (^)(id<AFMultipartFormData>))block completion:(PTRequestCompleteBlock)completeBlock failure:(PTRequestFailedBlock)failureBlock
 {
-    AFHTTPRequestOperation * requestOperation=[self.requestManager POST:URLString parameters:parameters constructingBodyWithBlock:block completion:^(OVCResponse *response, NSError *error) {
+    AFHTTPRequestOperation * requestOperation=[self POST:URLString parameters:parameters constructingBodyWithBlock:block completion:^(OVCResponse *response, NSError *error) {
         [self handleCompletionWithResponse:response error:error completeBlock:completeBlock failureBlock:failureBlock];
     }];
     
@@ -108,7 +109,7 @@
 
 -(AFHTTPRequestOperation *) PUT:(NSString *)URLString parameters:(NSDictionary *)parameters completion:(PTRequestCompleteBlock)completeBlock failure:(PTRequestFailedBlock)failureBlock
 {
-    AFHTTPRequestOperation * requestOperation=[self.requestManager PUT:URLString parameters:parameters completion:^(OVCResponse *response, NSError *error) {
+    AFHTTPRequestOperation * requestOperation=[self PUT:URLString parameters:parameters completion:^(OVCResponse *response, NSError *error) {
         [self handleCompletionWithResponse:response error:error completeBlock:completeBlock failureBlock:failureBlock];
     }];
     
@@ -119,7 +120,7 @@
 
 -(AFHTTPRequestOperation *) PATCH:(NSString *)URLString parameters:(NSDictionary *)parameters completion:(PTRequestCompleteBlock)completeBlock failure:(PTRequestFailedBlock)failureBlock
 {
-    AFHTTPRequestOperation * requestOperation=[self.requestManager PATCH:URLString parameters:parameters completion:^(OVCResponse *response, NSError *error) {
+    AFHTTPRequestOperation * requestOperation=[self PATCH:URLString parameters:parameters completion:^(OVCResponse *response, NSError *error) {
         [self handleCompletionWithResponse:response error:error completeBlock:completeBlock failureBlock:failureBlock];
     }];
     
@@ -130,7 +131,7 @@
 
 -(AFHTTPRequestOperation *) DELETE:(NSString *)URLString parameters:(NSDictionary *)parameters completion:(PTRequestCompleteBlock)completeBlock failure:(PTRequestFailedBlock)failureBlock
 {
-    AFHTTPRequestOperation * requestOperation=[self.requestManager DELETE:URLString parameters:parameters completion:^(OVCResponse *response, NSError *error) {
+    AFHTTPRequestOperation * requestOperation=[self DELETE:URLString parameters:parameters completion:^(OVCResponse *response, NSError *error) {
        [self handleCompletionWithResponse:response error:error completeBlock:completeBlock failureBlock:failureBlock];
     }];
     
@@ -144,14 +145,14 @@
 
 -(void) cancelAll
 {
-    [self.requestManager cancelAllRequests];
+    [self cancelAllRequests];
 }
 
 
 #pragma mark - time interval 
 -(void) setCurrentRequestTimeoutInterval:(NSTimeInterval)interval
 {
-    self.requestManager.requestSerializer.timeoutInterval=interval;
+    self.requestSerializer.timeoutInterval=interval;
 }
 
 @end

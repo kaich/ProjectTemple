@@ -32,6 +32,12 @@
 -(instancetype)initWithDBPath:(NSString*)filePath;
 -(void)setDBPath:(NSString*)filePath;
 
+/** 
+ *  @brief set and save encryption key.
+ *  refer: FMDatabase.h  - (BOOL)setKey:(NSString*)key;
+ */
+@property(strong,nonatomic)NSString* encryptionKey;
+
 /**
  *	@brief  execute database operations synchronously,not afraid of recursive deadlock  同步执行数据库操作 可递归调用
  */
@@ -52,6 +58,7 @@
 
 ///drop table with entity class
 -(BOOL)dropTableWithClass:(Class)modelClass;
+-(BOOL)dropTableWithTableName:(NSString*)tableName;
 
 @end
 
@@ -64,8 +71,16 @@
  *
  *	@return	rows number
  */
--(int)rowCount:(Class)modelClass where:(id)where;
--(void)rowCount:(Class)modelClass where:(id)where callback:(void(^)(int rowCount))callback;
+-(NSInteger)rowCount:(Class)modelClass where:(id)where;
+-(void)rowCount:(Class)modelClass where:(id)where callback:(void(^)(NSInteger rowCount))callback;
+-(NSInteger)rowCountWithTableName:(NSString*)tableName where:(id)where;
+
+/**
+ *	@brief	query table
+ *  
+ *  @param 	params query condition
+ */
+-(NSMutableArray*)searchWithParams:(LKDBQueryParams*)params;
 
 /**
  *	@brief	query table
@@ -74,14 +89,14 @@
  *	@param 	where           can use NSString or NSDictionary or nil
  
  *	@param 	orderBy         The Sort: Ascending "name asc",Descending "name desc"
-                            For example: @"rowid desc"  or @"rowid asc"
+ For example: @"rowid desc"x  or @"rowid asc"
  
  *	@param 	offset          Skip how many rows
  *	@param 	count           Limit the number
  *
  *	@return	query finished result is an array(model instance collection)
  */
--(NSMutableArray*)search:(Class)modelClass where:(id)where orderBy:(NSString*)orderBy offset:(int)offset count:(int)count;
+-(NSMutableArray*)search:(Class)modelClass where:(id)where orderBy:(NSString*)orderBy offset:(NSInteger)offset count:(NSInteger)count;
 
 /**
  *  query sql, query finished result is an array(model instance collection)
@@ -92,12 +107,12 @@
  */
 -(NSMutableArray*)searchWithSQL:(NSString*)sql toClass:(Class)modelClass;
 
--(void)search:(Class)modelClass where:(id)where orderBy:(NSString*)orderBy offset:(int)offset count:(int)count callback:(void(^)(NSMutableArray* array))block;
+-(void)search:(Class)modelClass where:(id)where orderBy:(NSString*)orderBy offset:(NSInteger)offset count:(NSInteger)count callback:(void(^)(NSMutableArray* array))block;
 /**
     columns may NSArray or NSString   if query column count == 1  return single column string array
     other return models entity array
  */
--(NSMutableArray*)search:(Class)modelClass column:(id)columns where:(id)where orderBy:(NSString*)orderBy offset:(int)offset count:(int)count;
+-(NSMutableArray*)search:(Class)modelClass column:(id)columns where:(id)where orderBy:(NSString*)orderBy offset:(NSInteger)offset count:(NSInteger)count;
 
 ///return first model or nil
 -(id)searchSingle:(Class)modelClass where:(id)where orderBy:(NSString*)orderBy;
@@ -134,6 +149,8 @@
 -(BOOL)updateToDB:(NSObject *)model where:(id)where;
 -(void)updateToDB:(NSObject *)model where:(id)where callback:(void (^)(BOOL result))block;
 -(BOOL)updateToDB:(Class)modelClass set:(NSString*)sets where:(id)where;
+-(BOOL)updateToDBWithTableName:(NSString*)tableName set:(NSString*)sets where:(id)where;
+
 /**
  *	@brief	delete table
  *
@@ -155,6 +172,7 @@
  */
 -(BOOL)deleteWithClass:(Class)modelClass where:(id)where;
 -(void)deleteWithClass:(Class)modelClass where:(id)where callback:(void (^)(BOOL result))block;
+-(BOOL)deleteWithTableName:(NSString*)tableName where:(id)where;
 
 /**
  *	@brief   entity exists?
@@ -166,7 +184,7 @@
  */
 -(BOOL)isExistsModel:(NSObject*)model;
 -(BOOL)isExistsClass:(Class)modelClass where:(id)where;
-
+-(BOOL)isExistsWithTableName:(NSString*)tableName where:(id)where;
 
 /**
  *	@brief	Clear data based on the entity class

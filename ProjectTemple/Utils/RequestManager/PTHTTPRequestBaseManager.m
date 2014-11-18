@@ -18,15 +18,11 @@
     return [PTResponse class];
 }
 
-+(Class) errorModelClass
-{
-    return [PTError class];
-}
 
 + (NSDictionary *)modelClassesByResourcePath {
 #warning 等待实现
     return @{
-             @"lookup":  NSClassFromString(@"CKAppleItemModel")
+              @"lookup":  NSClassFromString(@"CKAppleItemModel")
              };
 }
 

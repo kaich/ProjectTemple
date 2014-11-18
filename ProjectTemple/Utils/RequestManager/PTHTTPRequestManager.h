@@ -5,15 +5,19 @@
 //  Created by mac on 14/11/5.
 //  Copyright (c) 2014年 mac. All rights reserved.
 //
+//  because PTHTTPRequestManager is a wrapper for  overcoat http request .
 
 #import <Foundation/Foundation.h>
 #import <AFNetworking.h>
-#import "PTError.h"
+#import "PTResponse.h"
+#import "PTHTTPRequestBaseManager.h"
+#import <Overcoat/OVCHTTPRequestOperationManager+ReactiveCocoa.h>
 
-typedef void(^PTRequestCompleteBlock)(NSArray * results);
-typedef void(^PTRequestFailedBlock)(PTError * error);
 
-@interface PTHTTPRequestManager : NSObject
+typedef void(^PTRequestCompleteBlock)(PTResponse * response);
+typedef void(^PTRequestFailedBlock)(NSError * error);
+
+@interface PTHTTPRequestManager : PTHTTPRequestBaseManager
 
 
 /**

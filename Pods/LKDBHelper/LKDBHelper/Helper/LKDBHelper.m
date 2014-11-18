@@ -8,14 +8,19 @@
 
 #import "LKDBHelper.h"
 
-#define checkClassIsInvalid(modelClass)\
-if([LKDBUtils checkStringIsEmpty:[modelClass getTableName]])\
+#define LKDBCheck_tableNameIsInvalid(tableName)\
+if ([LKDBUtils checkStringIsEmpty:tableName])\
 {\
-    LKErrorLog(@"model class name %@ table name is invalid!",NSStringFromClass(modelClass));\
+    LKErrorLog(@" \n Fail!Fail!Fail!Fail! \n with TableName is nil");\
     return NO;\
 }
 
-#define checkModelIsInvalid(model)\
+#define LKDBCode_Async_Begin __LKDBWeak LKDBHelper* wself = self;\
+[self asyncBlock:^{__strong LKDBHelper* sself = wself;if(sself){
+
+#define LKDBCode_Async_End }}];
+
+#define LKDBCheck_modelIsInvalid(model)\
 if(model == nil)\
 {\
     LKErrorLog(@"model is nil");\
@@ -27,7 +32,7 @@ if([model.class getModelInfos].count == 0)\
     return NO;\
 }\
 NSString* _model_tableName = model.db_tableName?:[model.class getTableName];\
-if(_model_tableName.length == 0)\
+if([LKDBUtils checkStringIsEmpty:_model_tableName])\
 {\
     LKErrorLog(@"model class name %@ table name is invalid!",NSStringFromClass(model.class));\
     return NO;\
@@ -74,7 +79,7 @@ if(_model_tableName.length == 0)\
     }
     else if(dbFilePath)
     {
-        for (int i=0; i<dbArray.count;)
+        for (NSInteger i = 0; i < dbArray.count;)
         {
             LKDBWeakObject* weakObj = [dbArray objectAtIndex:i];
             if(weakObj.obj == nil)
@@ -172,6 +177,7 @@ if(_model_tableName.length == 0)\
     self.dbPath = filePath;
     [self.bindingQueue close];
     self.bindingQueue = [[FMDatabaseQueue alloc]initWithPath:filePath];
+    _encryptionKey = nil;
     
 #ifdef DEBUG
     //debug 模式下  打印错误日志
@@ -193,7 +199,18 @@ if(_model_tableName.length == 0)\
     {
         if(_bindingQueue == nil)
         {
-            _bindingQueue = [[FMDatabaseQueue alloc]initWithPath:_dbPath];
+            self.bindingQueue = [[FMDatabaseQueue alloc]initWithPath:_dbPath];
+            [_bindingQueue inDatabase:^(FMDatabase *db)
+            {
+#ifdef DEBUG
+                //debug 模式下  打印错误日志
+                db.logsErrors = YES;
+#endif
+                if(_encryptionKey.length > 0)
+                {
+                    [db setKey:_encryptionKey];
+                }
+            }];
         }
         [_bindingQueue inDatabase:^(FMDatabase *db) {
             self.usingdb = db;
@@ -262,7 +279,7 @@ if(_model_tableName.length == 0)\
     if(dic != nil && dic.count >0 )
     {
         NSArray* keys = dic.allKeys;
-        for (int i=0; i< keys.count;i++) {
+        for (NSInteger i=0; i< keys.count;i++) {
             
             NSString* key = [keys objectAtIndex:i];
             id va = [dic objectForKey:key];
@@ -277,7 +294,7 @@ if(_model_tableName.length == 0)\
                 
                 [wherekey appendFormat:@" %@ in(",key];
                 
-                for (int j=0; j<vlist.count; j++) {
+                for (NSInteger j=0; j<vlist.count; j++) {
                     
                     [wherekey appendString:@"?"];
                     if(j== vlist.count-1)
@@ -310,7 +327,7 @@ if(_model_tableName.length == 0)\
     NSMutableString* pwhere = [NSMutableString string];
     if(primaryKeys.count>0)
     {
-        for (int i=0; i<primaryKeys.count; i++) {
+        for (NSInteger i=0; i<primaryKeys.count; i++) {
             NSString* pk = [primaryKeys objectAtIndex:i];
             if([LKDBUtils checkStringIsEmpty:pk] == NO)
             {
@@ -348,6 +365,18 @@ if(_model_tableName.length == 0)\
     return pwhere;
 }
 
+#pragma mark- set key
+-(void)setEncryptionKey:(NSString *)encryptionKey
+{
+    _encryptionKey = encryptionKey;
+    if(_bindingQueue && encryptionKey.length > 0)
+    {
+        [self executeDB:^(FMDatabase *db) {
+            [db setKey:_encryptionKey];
+        }];
+    }
+}
+
 #pragma mark- dealloc
 -(void)dealloc
 {
@@ -383,15 +412,24 @@ if(_model_tableName.length == 0)\
             [db executeUpdate:dropTable];
         }
     }];
+    
+    [_createdTableNames removeAllObjects];
 }
+
 -(BOOL)dropTableWithClass:(Class)modelClass
 {
-    checkClassIsInvalid(modelClass);
+    return [self dropTableWithTableName:[modelClass getTableName]];
+}
+-(BOOL)dropTableWithTableName:(NSString *)tableName
+{
+    LKDBCheck_tableNameIsInvalid(tableName);
     
-    NSString* tableName = [modelClass getTableName];
     NSString* dropTable = [NSString stringWithFormat:@"drop table %@",tableName];
     
     BOOL isDrop = [self executeSQL:dropTable arguments:nil];
+    
+    [_createdTableNames removeObject:tableName];
+    
     return isDrop;
 }
 -(void)fixSqlColumnsWithClass:(Class)clazz tableName:(NSString*)tableName
@@ -406,7 +444,7 @@ if(_model_tableName.length == 0)\
         [set close];
         
         NSMutableArray* alterAddColumns = [NSMutableArray array];
-        for (int i=0; i<infos.count; i++)
+        for (NSInteger i=0; i<infos.count; i++)
         {
             LKDBProperty* property = [infos objectWithIndex:i];
             if([property.sqlColumnName.lowercaseString isEqualToString:@"rowid"])
@@ -421,7 +459,7 @@ if(_model_tableName.length == 0)\
                 [clazz columnAttributeWithProperty:property];
                 
                 if(property.length>0 && [property.sqlColumnType isEqualToString:LKSQL_Type_Text])
-                    [addColumePars appendFormat:@"(%d)",property.length];
+                    [addColumePars appendFormat:@"(%ld)",(long)property.length];
                 
                 if(property.isNotNull)
                     [addColumePars appendFormat:@" %@",LKSQL_Attribute_NotNull];
@@ -452,7 +490,6 @@ if(_model_tableName.length == 0)\
 }
 -(BOOL)_createTableWithModelClass:(Class)modelClass tableName:(NSString*)tableName
 {
-    checkClassIsInvalid(modelClass);
     if([self getTableCreatedWithTableName:tableName])
     {
         //已创建表 就跳过
@@ -475,7 +512,7 @@ if(_model_tableName.length == 0)\
     NSString* rowidAliasName = [modelClass db_rowidAliasName];
     
     NSMutableString* table_pars = [NSMutableString string];
-    for (int i=0; i<infos.count; i++)
+    for (NSInteger i=0; i<infos.count; i++)
     {
         if(i > 0)
         {
@@ -497,7 +534,7 @@ if(_model_tableName.length == 0)\
         {
             if(property.length>0)
             {
-                [table_pars appendFormat:@"(%d)",property.length];
+                [table_pars appendFormat:@"(%ld)",(long)property.length];
             }
         }
         if(property.isNotNull)
@@ -532,7 +569,7 @@ if(_model_tableName.length == 0)\
         if(primaryKeys.count>0)
         {
             pksb = [NSMutableString string];
-            for (int i=0; i<primaryKeys.count; i++) {
+            for (NSInteger i=0; i<primaryKeys.count; i++) {
                 NSString* pk = [primaryKeys objectAtIndex:i];
                 
                 if(pksb.length>0){
@@ -570,7 +607,7 @@ if(_model_tableName.length == 0)\
     [self executeDB:^(FMDatabase *db) {
         FMResultSet* set = [db executeQuery:@"select count(name) from sqlite_master where type='table' and name=?",tableName];
         [set next];
-        if([set intForColumnIndex:0]>0)
+        if([set longForColumnIndex:0]>0)
         {
             isTableCreated = YES;
         }
@@ -603,36 +640,38 @@ if(_model_tableName.length == 0)\
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0),block);
 }
 #pragma mark - row count operation
--(int)rowCount:(Class)modelClass where:(id)where
+-(NSInteger)rowCount:(Class)modelClass where:(id)where
 {
-    return [self rowCountBase:modelClass where:where];
+    return [self rowCountWithTableName:[modelClass getTableName] where:where];
 }
--(void)rowCount:(Class)modelClass where:(id)where callback:(void (^)(int))callback
+-(void)rowCount:(Class)modelClass where:(id)where callback:(void (^)(NSInteger))callback
 {
-    [self asyncBlock:^{
-        int result = [self rowCountBase:modelClass where:where];
-        if(callback != nil)
-        {
-            callback(result);
-        }
-    }];
+    if(callback)
+    {
+        LKDBCode_Async_Begin
+        NSInteger result = [sself rowCountWithTableName:[modelClass getTableName] where:where];
+        callback(result);
+        LKDBCode_Async_End
+    }
 }
--(int)rowCountBase:(Class)modelClass where:(id)where
+-(NSInteger)rowCountWithTableName:(NSString *)tableName where:(id)where
 {
-    NSMutableString* rowCountSql = [NSMutableString stringWithFormat:@"select count(rowid) from %@",[modelClass getTableName]];
+    LKDBCheck_tableNameIsInvalid(tableName);
+    
+    NSMutableString* rowCountSql = [NSMutableString stringWithFormat:@"select count(rowid) from %@",tableName];
     
     NSMutableArray* valuesarray = [self extractQuery:rowCountSql where:where];
-    int result = [[self executeScalarWithSQL:rowCountSql arguments:valuesarray] intValue];
+    NSInteger result = [[self executeScalarWithSQL:rowCountSql arguments:valuesarray] integerValue];
     
     return result;
 }
 
 #pragma mark- search operation
--(NSMutableArray *)search:(Class)modelClass where:(id)where orderBy:(NSString *)orderBy offset:(int)offset count:(int)count
+-(NSMutableArray *)search:(Class)modelClass where:(id)where orderBy:(NSString *)orderBy offset:(NSInteger)offset count:(NSInteger)count
 {
     return [self searchBase:modelClass columns:nil where:where orderBy:orderBy offset:offset count:count];
 }
--(NSMutableArray *)search:(Class)modelClass column:(id)columns where:(id)where orderBy:(NSString *)orderBy offset:(int)offset count:(int)count
+-(NSMutableArray *)search:(Class)modelClass column:(id)columns where:(id)where orderBy:(NSString *)orderBy offset:(NSInteger)offset count:(NSInteger)count
 {
     return [self searchBase:modelClass columns:columns where:where orderBy:orderBy offset:offset count:count];
 }
@@ -647,49 +686,85 @@ if(_model_tableName.length == 0)\
     
     return nil;
 }
--(void)search:(Class)modelClass where:(id)where orderBy:(NSString *)orderBy offset:(int)offset count:(int)count callback:(void (^)(NSMutableArray *))block
+-(void)search:(Class)modelClass where:(id)where orderBy:(NSString *)orderBy offset:(NSInteger)offset count:(NSInteger)count callback:(void (^)(NSMutableArray *))block
 {
-    [self asyncBlock:^{
-        NSMutableArray* array = [self searchBase:modelClass columns:nil where:where orderBy:orderBy offset:offset count:count];
+    if(block)
+    {
+        LKDBCode_Async_Begin
+        LKDBQueryParams* params = [[LKDBQueryParams alloc]init];
+        params.toClass = modelClass;
         
-        if(block != nil)
-            block(array);
-    }];
+        if([where isKindOfClass:[NSDictionary class]])
+        {
+            params.whereDic = where;
+        }
+        else if([where isKindOfClass:[NSString class]])
+        {
+            params.where = where;
+        }
+        
+        params.orderBy = orderBy;
+        params.offset = offset;
+        params.count = count;
+        
+        NSMutableArray* array  = [sself searchBaseWithParams:params];
+        block(array);
+        LKDBCode_Async_End
+    }
 }
 
--(NSMutableArray *)searchBase:(Class)modelClass columns:(id)columns where:(id)where orderBy:(NSString *)orderBy offset:(int)offset count:(int)count
+-(NSMutableArray *)searchBaseWithParams:(LKDBQueryParams *)params
 {
+    if(params.toClass == nil)
+    {
+        LKErrorLog(@"you search pars:%@! \n toClass is nil",params.getAllPropertysString);
+        return nil;
+    }
+    
+    NSString* db_tableName = params.tableName;
+    if([LKDBUtils checkStringIsEmpty:db_tableName])
+    {
+        db_tableName = [params.toClass getTableName];
+    }
+    if([LKDBUtils checkStringIsEmpty:db_tableName])
+    {
+        LKErrorLog(@"you search pars:%@! \n tableName is empty",params.getAllPropertysString);
+        return nil;
+    }
+    
     NSString* columnsString = nil;
     NSUInteger columnCount = 0;
-    if([columns isKindOfClass:[NSArray class]] && [columns count]>0)
+    if(params.columnArray.count > 0)
     {
-        columnCount = [columns count];
-        columnsString = [columns componentsJoinedByString:@","];
+        columnCount = params.columnArray.count;
+        columnsString = [params.columnArray componentsJoinedByString:@","];
     }
-    else if([LKDBUtils checkStringIsEmpty:columns]==NO)
+    else if([LKDBUtils checkStringIsEmpty:params.columns] == NO)
     {
-        columnsString = columns;
-        NSArray* array = [columns componentsSeparatedByString:@","];
-        
+        columnsString = params.columns;
+        NSArray* array = [params.columns componentsSeparatedByString:@","];
         columnCount = array.count;
     }
-    
-    if(columnCount > 1)
+    else
     {
-        columnsString = [NSString stringWithFormat:@"rowid,%@",columnsString];
+        columnsString = @"*";
     }
     
-    if(columnCount==0)
+    NSMutableString* query = [NSMutableString stringWithFormat:@"select %@,rowid from @t",columnsString];
+    NSMutableArray* whereValues = nil;
+    if (params.whereDic.count > 0)
     {
-        columnsString = @"rowid,*";
+        whereValues = [NSMutableArray arrayWithCapacity:params.whereDic.count];
+        NSString* wherekey = [self dictionaryToSqlWhere:params.whereDic andValues:whereValues];
+        [query appendFormat:@" where %@",wherekey];
+    }
+    else if([LKDBUtils checkStringIsEmpty:params.where] == NO)
+    {
+        [query appendFormat:@" where %@",params.where];
     }
     
-    NSMutableString* query = [NSMutableString stringWithFormat:@"select %@ from @t",columnsString];
-    NSMutableArray * values = [self extractQuery:query where:where];
+    [self sqlString:query groupBy:params.groupBy orderBy:params.orderBy offset:params.offset count:params.count];
     
-    [self sqlString:query AddOder:orderBy offset:offset count:count];
-    
-    NSString* db_tableName = [modelClass getTableName];
     //replace @t to model table name
     NSString* replaceTableName = [NSString stringWithFormat:@" %@ ",db_tableName];
     if([query hasSuffix:@" @t"])
@@ -701,13 +776,13 @@ if(_model_tableName.length == 0)\
     __block NSMutableArray* results = nil;
     [self executeDB:^(FMDatabase *db) {
         FMResultSet* set = nil;
-        if(values == nil)
+        if(whereValues.count == 0)
         {
             set = [db executeQuery:query];
         }
         else
         {
-            set = [db executeQuery:query withArgumentsInArray:values];
+            set = [db executeQuery:query withArgumentsInArray:whereValues];
         }
         
         if(columnCount == 1)
@@ -716,12 +791,55 @@ if(_model_tableName.length == 0)\
         }
         else
         {
-            results = [self executeResult:set Class:modelClass tableName:db_tableName];
+            results = [self executeResult:set Class:params.toClass tableName:db_tableName];
         }
         
         [set close];
     }];
     return results;
+}
+-(NSMutableArray *)searchWithParams:(LKDBQueryParams *)params
+{
+    if(params.callback)
+    {
+        LKDBCode_Async_Begin
+        NSMutableArray* array = [sself searchBaseWithParams:params];
+        params.callback(array);
+        LKDBCode_Async_End
+        return nil;
+    }
+    else
+    {
+        return [self searchBaseWithParams:params];
+    }
+}
+-(NSMutableArray *)searchBase:(Class)modelClass columns:(id)columns where:(id)where orderBy:(NSString *)orderBy offset:(NSInteger)offset count:(NSInteger)count
+{
+    LKDBQueryParams* params = [[LKDBQueryParams alloc]init];
+    params.toClass = modelClass;
+    if([columns isKindOfClass:[NSArray class]])
+    {
+        params.columnArray = columns;
+    }
+    else if([columns isKindOfClass:[NSString class]])
+    {
+        params.columns = columns;
+    }
+    
+    if([where isKindOfClass:[NSDictionary class]])
+    {
+        params.whereDic = where;
+    }
+    else if([where isKindOfClass:[NSString class]])
+    {
+        params.where = where;
+    }
+    
+    params.orderBy = orderBy;
+    params.offset = offset;
+    params.count = count;
+    
+    return [self searchBaseWithParams:params];
 }
 -(NSMutableArray *)searchWithSQL:(NSString *)sql toClass:(Class)modelClass
 {
@@ -742,19 +860,23 @@ if(_model_tableName.length == 0)\
     return results;
 }
 
--(void)sqlString:(NSMutableString*)sql AddOder:(NSString*)orderby offset:(int)offset count:(int)count
+-(void)sqlString:(NSMutableString*)sql groupBy:(NSString*)groupBy orderBy:(NSString*)orderby offset:(NSInteger)offset count:(NSInteger)count
 {
+    if([LKDBUtils checkStringIsEmpty:groupBy] == NO)
+    {
+        [sql appendFormat:@" group by %@",groupBy];
+    }
     if([LKDBUtils checkStringIsEmpty:orderby] == NO)
     {
         [sql appendFormat:@" order by %@",orderby];
     }
-    if(count>0)
+    if(count >0)
     {
-        [sql appendFormat:@" limit %d offset %d",count,offset];
+        [sql appendFormat:@" limit %ld offset %ld",(long)count,(long)offset];
     }
     else if(offset > 0)
     {
-        [sql appendFormat:@" limit %d offset %d",INT_MAX,offset];
+        [sql appendFormat:@" limit %d offset %ld",INT_MAX,(long)offset];
     }
 }
 - (NSMutableArray *)executeOneColumnResult:(FMResultSet *)set
@@ -781,7 +903,7 @@ if(_model_tableName.length == 0)\
 {
     NSMutableArray* array = [NSMutableArray arrayWithCapacity:0];
     LKModelInfos* infos = [modelClass getModelInfos];
-    int columnCount = [set columnCount];
+    NSInteger columnCount = [set columnCount];
     
     ///当主键是int类型时 会替换掉rowid
     NSString* rowidAliasName = [modelClass db_rowidAliasName];
@@ -802,7 +924,7 @@ if(_model_tableName.length == 0)\
             
             if (isRowid && (property == nil || [property.sqlColumnType isEqualToString:LKSQL_Type_Int]))
             {
-                bindingModel.rowid = [set intForColumnIndex:i];
+                bindingModel.rowid = [set longForColumnIndex:i];
             }
             else
             {
@@ -814,7 +936,7 @@ if(_model_tableName.length == 0)\
                     
                     if([rowidAliasName isEqualToString:sqlName])
                     {
-                        bindingModel.rowid = [set intForColumnIndex:i];
+                        bindingModel.rowid = [set longForColumnIndex:i];
                     }
                 }
                 else
@@ -838,13 +960,13 @@ if(_model_tableName.length == 0)\
 }
 -(void)insertToDB:(NSObject *)model callback:(void (^)(BOOL))block
 {
-    [self asyncBlock:^{
-        BOOL result = [self insertBase:model];
-        if(block != nil)
-        {
-            block(result);
-        }
-    }];
+    LKDBCode_Async_Begin
+    BOOL result = [sself insertBase:model];
+    if(block)
+    {
+        block(result);
+    }
+    LKDBCode_Async_End
 }
 -(BOOL)insertWhenNotExists:(NSObject *)model
 {
@@ -856,20 +978,17 @@ if(_model_tableName.length == 0)\
 }
 -(void)insertWhenNotExists:(NSObject *)model callback:(void (^)(BOOL))block
 {
-    [self asyncBlock:^{
-        if(block != nil)
-        {
-            block([self insertWhenNotExists:model]);
-        }
-        else
-        {
-            [self insertWhenNotExists:model];
-        }
-    }];
+    LKDBCode_Async_Begin
+    BOOL result = [sself insertWhenNotExists:model];
+    if(block)
+    {
+        block(result);
+    }
+    LKDBCode_Async_End
 }
 -(BOOL)insertBase:(NSObject*)model{
     
-    checkModelIsInvalid(model);
+    LKDBCheck_modelIsInvalid(model);
     
     Class modelClass = model.class;
     
@@ -884,6 +1003,7 @@ if(_model_tableName.length == 0)\
     
     NSString* db_tableName = model.db_tableName?:[modelClass getTableName];
     
+    //检测是否创建过表
     if([_createdTableNames containsObject:db_tableName] == NO)
     {
         [self _createTableWithModelClass:modelClass tableName:db_tableName];
@@ -899,7 +1019,7 @@ if(_model_tableName.length == 0)\
     
     LKDBProperty* primaryProperty = [model singlePrimaryKeyProperty];
     
-    for (int i=0; i<infos.count; i++)
+    for (NSInteger i=0; i<infos.count; i++)
     {
         LKDBProperty* property = [infos objectWithIndex:i];
         if([LKDBUtils checkStringIsEmpty:property.sqlColumnName])
@@ -937,10 +1057,10 @@ if(_model_tableName.length == 0)\
     
     [self executeDB:^(FMDatabase *db) {
         execute = [db executeUpdate:insertSQL withArgumentsInArray:insertValues];
-        lastInsertRowId= db.lastInsertRowId;
+        lastInsertRowId = db.lastInsertRowId;
     }];
     
-    model.rowid = (int)lastInsertRowId;
+    model.rowid = (NSInteger)lastInsertRowId;
     
     [model setDb_inserting:NO];
     
@@ -960,15 +1080,17 @@ if(_model_tableName.length == 0)\
 }
 -(void)updateToDB:(NSObject *)model where:(id)where callback:(void (^)(BOOL))block
 {
-    [self asyncBlock:^{
-        BOOL result = [self updateToDBBase:model where:where];
-        if(block != nil)
-            block(result);
-    }];
+    LKDBCode_Async_Begin
+    BOOL result = [sself updateToDBBase:model where:where];
+    if(block)
+    {
+        block(result);
+    }
+    LKDBCode_Async_End
 }
 -(BOOL)updateToDBBase:(NSObject *)model where:(id)where
 {
-    checkModelIsInvalid(model);
+    LKDBCheck_modelIsInvalid(model);
     
     Class modelClass = model.class;
     
@@ -980,11 +1102,17 @@ if(_model_tableName.length == 0)\
     }
     NSString* db_tableName = model.db_tableName?:[modelClass getTableName];
     
+    //检测是否创建过表
+    if([_createdTableNames containsObject:db_tableName] == NO)
+    {
+        [self _createTableWithModelClass:modelClass tableName:db_tableName];
+    }
+    
     LKModelInfos* infos = [modelClass getModelInfos];
     
     NSMutableString* updateKey = [NSMutableString string];
     NSMutableArray* updateValues = [NSMutableArray arrayWithCapacity:infos.count];
-    for (int i=0; i<infos.count; i++) {
+    for (NSInteger i=0; i<infos.count; i++) {
         
         LKDBProperty* property = [infos objectWithIndex:i];
         
@@ -1015,7 +1143,7 @@ if(_model_tableName.length == 0)\
     }
     else if(model.rowid > 0)
     {
-        [updateSQL appendFormat:@" rowid=%d",model.rowid];
+        [updateSQL appendFormat:@" rowid=%ld",(long)model.rowid];
     }
     else
     {
@@ -1042,15 +1170,21 @@ if(_model_tableName.length == 0)\
 }
 -(BOOL)updateToDB:(Class)modelClass set:(NSString *)sets where:(id)where
 {
-    checkClassIsInvalid(modelClass);
+    return [self updateToDBWithTableName:[modelClass getTableName] set:sets where:where];
+}
+-(BOOL)updateToDBWithTableName:(NSString *)tableName set:(NSString *)sets where:(id)where
+{
+    LKDBCheck_tableNameIsInvalid(tableName);
     
-    NSMutableString* updateSQL = [NSMutableString stringWithFormat:@"update %@ set %@ ",[modelClass getTableName],sets];
+    NSMutableString* updateSQL = [NSMutableString stringWithFormat:@"update %@ set %@ ",tableName,sets];
     NSMutableArray* updateValues = [self extractQuery:updateSQL where:where];
     
     BOOL execute = [self executeSQL:updateSQL arguments:updateValues];
     
     if(execute == NO)
-        LKErrorLog(@"database update fail %@   ----->sql:%@",NSStringFromClass(modelClass),updateSQL);
+    {
+        LKErrorLog(@"database update fail with TableName: %@   ----->sql:%@",tableName,updateSQL);
+    }
     
     return execute;
 }
@@ -1061,16 +1195,18 @@ if(_model_tableName.length == 0)\
 }
 -(void)deleteToDB:(NSObject *)model callback:(void (^)(BOOL))block
 {
-    [self asyncBlock:^{
-        BOOL isDeleted = [self deleteToDBBase:model];
-        if(block != nil)
-            block(isDeleted);
-    }];
+    LKDBCode_Async_Begin
+    BOOL isDeleted = [sself deleteToDBBase:model];
+    if(block)
+    {
+        block(isDeleted);
+    }
+    LKDBCode_Async_End
 }
 
 -(BOOL)deleteToDBBase:(NSObject *)model
 {
-    checkModelIsInvalid(model);
+    LKDBCheck_modelIsInvalid(model);
     
     Class modelClass = model.class;
     
@@ -1086,7 +1222,7 @@ if(_model_tableName.length == 0)\
     NSMutableArray* parsArray = [NSMutableArray array];
     if(model.rowid > 0)
     {
-        [deleteSQL appendFormat:@"rowid = %d",model.rowid];
+        [deleteSQL appendFormat:@"rowid = %ld",(long)model.rowid];
     }
     else
     {
@@ -1114,22 +1250,23 @@ if(_model_tableName.length == 0)\
 
 -(BOOL)deleteWithClass:(Class)modelClass where:(id)where
 {
-    return [self deleteWithClassBase:modelClass where:where];
+    return [self deleteWithTableName:[modelClass getTableName] where:where];
 }
 -(void)deleteWithClass:(Class)modelClass where:(id)where callback:(void (^)(BOOL))block
 {
-    [self asyncBlock:^{
-        BOOL isDeleted = [self deleteWithClassBase:modelClass where:where];
-        if (block != nil) {
-            block(isDeleted);
-        }
-    }];
+    LKDBCode_Async_Begin
+    BOOL isDeleted = [sself deleteWithTableName:[modelClass getTableName] where:where];
+    if (block)
+    {
+        block(isDeleted);
+    }
+    LKDBCode_Async_End
 }
--(BOOL)deleteWithClassBase:(Class)modelClass where:(id)where
+-(BOOL)deleteWithTableName:(NSString *)tableName where:(id)where
 {
-    checkClassIsInvalid(modelClass);
+    LKDBCheck_tableNameIsInvalid(tableName);
     
-    NSMutableString* deleteSQL = [NSMutableString stringWithFormat:@"delete from %@",[modelClass getTableName]];
+    NSMutableString* deleteSQL = [NSMutableString stringWithFormat:@"delete from %@",tableName];
     NSMutableArray* values = [self extractQuery:deleteSQL where:where];
     
     BOOL result = [self executeSQL:deleteSQL arguments:values];
@@ -1139,12 +1276,14 @@ if(_model_tableName.length == 0)\
 #pragma mark - other operation
 -(BOOL)isExistsModel:(NSObject *)model
 {
-    checkModelIsInvalid(model);
+    LKDBCheck_modelIsInvalid(model);
     NSString* pwhere = nil;
-    if(model.rowid>0){
-        pwhere = [NSString stringWithFormat:@"rowid=%d",model.rowid];
+    if(model.rowid>0)
+    {
+        pwhere = [NSString stringWithFormat:@"rowid=%ld",(long)model.rowid];
     }
-    else{
+    else
+    {
         pwhere = [self primaryKeyWhereSQLWithModel:model addPValues:nil];
     }
     if(pwhere.length == 0)
@@ -1156,11 +1295,11 @@ if(_model_tableName.length == 0)\
 }
 -(BOOL)isExistsClass:(Class)modelClass where:(id)where
 {
-    return [self isExistsClassBase:modelClass where:where];
+    return [self isExistsWithTableName:[modelClass getTableName] where:where];
 }
--(BOOL)isExistsClassBase:(Class)modelClass where:(id)where
+-(BOOL)isExistsWithTableName:(NSString *)tableName where:(id)where
 {
-    return [self rowCount:modelClass where:where] > 0;
+    return [self rowCountWithTableName:tableName where:where] > 0;
 }
 
 #pragma mark- clear operation
@@ -1182,7 +1321,7 @@ if(_model_tableName.length == 0)\
     [self clearFileWithTable:modelClass columns:columns type:2];
 }
 #define LKTestDirFilename @"LKTestDirFilename111"
-+(void)clearFileWithTable:(Class)modelClass columns:(NSArray*)columns type:(int)type
++(void)clearFileWithTable:(Class)modelClass columns:(NSArray*)columns type:(NSInteger)type
 {
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
         
@@ -1208,7 +1347,7 @@ if(_model_tableName.length == 0)\
         
         NSString* seleteColumn = [columns componentsJoinedByString:@","];
         NSMutableString* whereStr =[NSMutableString string];
-        for (int i=0; i<count ; i++) {
+        for (NSInteger i=0; i<count ; i++) {
             [whereStr appendFormat:@" %@ != '' ",[columns objectAtIndex:i]];
             if(i< count -1)
             {

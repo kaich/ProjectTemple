@@ -71,12 +71,12 @@
             [SVProgressHUD showWithStatus:@"加载中..."];
             
             
-            [self.requestManager GET:@"/lookup" parameters:@{@"id" : @"444934666", @"country" : @"cn"} completion:^(NSArray *results) {
+            [self.requestManager GET:@"/lookup" parameters:@{@"id" : @"444934666", @"country" : @"cn"} completion:^(PTResponse *response) {
                 [SVProgressHUD dismiss];
-                UIAlertView * alert=[[UIAlertView alloc] initWithTitle:@"ceshi" message:[NSString stringWithFormat:@"%@",results] delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
+                UIAlertView * alert=[[UIAlertView alloc] initWithTitle:@"ceshi" message:[NSString stringWithFormat:@"%@",response.result] delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
                 [alert show];
 
-            } failure:^(PTError *error) {
+            } failure:^(NSError *error) {
                 
             }];
 
