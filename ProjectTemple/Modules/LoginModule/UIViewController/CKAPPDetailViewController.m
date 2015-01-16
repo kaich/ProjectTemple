@@ -22,7 +22,7 @@
 @property(nonatomic,strong) UILabel * lblPrice;
 @property(nonatomic,strong) UITableView * tbScreenShots;
 
-@property(nonatomic,strong) CKDetailViewModel * viewModel;
+@property(nonatomic,strong,readonly) CKDetailViewModel * viewModel;
 @end
 
 @implementation CKAPPDetailViewController
@@ -72,36 +72,28 @@
     // Do any additional setup after loading the view.
 
     //this method use is not very right. To work right way ....
-    [SVProgressHUD showWithStatus:@"加载中..."];
     
-    [[[self.requestManager rac_GET:@"/lookup" parameters:@{@"id" : @"444934666", @"country" : @"cn"}] catch:^RACSignal *(NSError *error) {
-        
+    
+    
+    @weakify(self);
+    [[RACObserve(self.viewModel, screenShots) distinctUntilChanged] subscribeNext:^(id x) {
+        @strongify(self);
         [SVProgressHUD dismiss];
-        [self showNetworkIssuStatusBarNotification];
-        
-        return [RACSignal empty];
-    }] subscribeNext:^(PTResponse * response) {
-        
-        NSArray * models=response.result;
-        self.viewModel=[[CKDetailViewModel alloc] initWithModel:[models firstObject]];
-        self.lblTitle.text=self.viewModel.name;
-        self.lblPrice.text=self.viewModel.price;
-        self.lblSize.text=self.viewModel.size;
-        @weakify(self);
-        [RACObserve(self.viewModel, screenShots) subscribeNext:^(id x) {
-            @strongify(self);
-            [self.tbScreenShots reloadData];
-        }];
-        
-        [RACObserve(self.viewModel, iconUrl) subscribeNext:^(id x) {
-            @strongify(self);
-            
-            [self.ivIcon sd_setImageWithURL:self.viewModel.model.appIcon];
-        }];
-        [SVProgressHUD dismiss];
-
+        [self.tbScreenShots reloadData];
+    }];
+    
+    [[RACObserve(self.viewModel, contentType) distinctUntilChanged] subscribeNext:^(id x) {
+        @strongify(self);
+         [SVProgressHUD dismiss];
+        if([x intValue] == kSNNoNetwork)
+            [self showNetworkIssuStatusBarNotification];
     }];
 
+    [self.viewModel.requestDetail.executionSignals subscribeNext:^(id x) {
+        [SVProgressHUD showWithStatus:@"加载中..."];
+    }];
+    
+    [self.viewModel.requestDetail execute:nil];
 }
 
 - (void)didReceiveMemoryWarning

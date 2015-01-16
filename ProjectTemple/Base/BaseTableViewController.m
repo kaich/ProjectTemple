@@ -9,11 +9,6 @@
 #import "BaseTableViewController.h"
 
 
-
-@interface BaseTableViewController ()
-
-@end
-
 @implementation BaseTableViewController
 
 
@@ -28,11 +23,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
-    
-    //initialize property
-    self.pageIndex =0;
-    self.countPerPage=COUNT_PER_PAGE;
+
     
     [self configData];
     
@@ -62,13 +53,13 @@
     __weak typeof (self) weakSelf  = self;
     
     [self.tableView addPullToRefreshWithActionHandler:^{
-        weakSelf.pageIndex =PAGE_START_INDEX;
-        [weakSelf requestDataSource];
+        [weakSelf.viewModel.refreshDataSource execute:nil];
     }];
     
+    
+    
     [self.tableView addInfiniteScrollingWithActionHandler:^{
-        weakSelf.pageIndex ++;
-       [weakSelf requestDataSource];
+        [weakSelf.viewModel.inflineRequestDataSource execute:nil];
     }];
     
 }
@@ -83,77 +74,44 @@
     self.tableAction=[[NITableViewActions alloc] initWithTarget:self];
     self.tableView.delegate=self.tableAction;
     
-    [self.tableView triggerPullToRefresh];
-}
+    @weakify(self);
+    [RACObserve(self.viewModel, dataSource) aggregateWithStart:self.tableModel reduce:^id(NIMutableTableViewModel * runningModel, id next) {
+        @strongify(self);
+        [runningModel addObject:next];
+        [runningModel updateSectionIndex];
 
--(void) requestDataSource
-{
-    NSString * urlPath=[self requestURLPath];
-    NSDictionary * parameters =[self requestParameters];
-    
-    if(urlPath)
-    {
-        [self.requestManager GET:urlPath parameters:parameters completion:^(PTResponse *response) {
-            [self configResponseDataSource:response.result];
-            
-        } failure:^(NSError *error) {
-            if([self.tableView numberOfRowsInSection:0])
-            {
-                [self.tableView showStatusViewWithType:kSNNoNetwork];
-            }
-          
-            [self showNetworkIssuStatusBarNotification];
-            
-            
-        }];
-    }
-    else
-    {
-        THROW_EXCEPTION(@"url error", @"request url path is nil!");
-    }
-}
-
-
--(void) configResponseDataSource:(NSArray *) results
-{
-    if(self.pageIndex==PAGE_START_INDEX)
-    {
-        if(results.count==0)
-        {
-            [self.tableView showStatusViewWithType:kSNNoData];
-        }
+        dispatch_async(dispatch_get_main_queue(), ^(void) {
+            [self.tableView insertRowAtBottom:1];
+        });
         
-        [self clearTableModelData];
-    }
-    else
-    {
-        if(results.count==0)
+        return [RACSignal return:nil];
+    }];
+    
+    [RACObserve(self.viewModel, contentType) subscribeNext:^(NSNumber * typeValue) {
+        @strongify(self);
+        StatusNotificationViewType  type = [typeValue  integerValue];
+        [self.tableView showStatusViewWithType:type];
+        
+        if(type == kSNNoNetwork)
         {
+            [self showNetworkIssuStatusBarNotification];
+        }
+        else if(type ==kSNNoMoreData)
+        {
+ 
             InfiniteView * infiniteView=[UIFactory createInfiniteViewWithState:kIVSNoData];
             [self.tableView.infiniteScrollingView setCustomView:infiniteView forState:SVInfiniteScrollingStateAll];
             self.tableView.showsInfiniteScrolling=NO;
         }
-        
-    }
+    }];
     
-    [self.tableModel addObjectsFromArray:results];
-    [self.tableModel updateSectionIndex];
     
-    [self.tableView insertRowAtBottom:results.count];
+    [self.tableView triggerPullToRefresh];
 }
 
 
-#pragma mark - Overide Method 
 
--(NSString*) requestURLPath
-{
-    THROW_EXCEPTION(@"invoke error", @"you must overide requestURLPath method");
-}
-
--(NSDictionary*) requestParameters
-{
-    THROW_EXCEPTION(@"invoke error", @"you must overide requestParameters method");
-}
+#pragma mark - Overide Method
 
 -(void) clearTableModelData
 {

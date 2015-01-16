@@ -26,6 +26,7 @@
 #import "ViewUtils.h"
 #import <Nimbus/NimbusCore.h>
 #import <ReactiveCocoa.h>
+#import <ReactiveCocoa/RACEXTScope.h>
 #import "Base.h"
 
 

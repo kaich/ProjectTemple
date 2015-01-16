@@ -10,8 +10,10 @@
 #import "StatusNotificationView.h"
 
 typedef NS_ENUM(NSUInteger, StatusNotificationViewType) {
-    kSNNoNetwork,
+    kSNNoNetwork=1,
     kSNNoData,
+    kSNNoLoading,
+    kSNNoMoreData
 };
 
 @interface UIFactory (StatusNotificationView)

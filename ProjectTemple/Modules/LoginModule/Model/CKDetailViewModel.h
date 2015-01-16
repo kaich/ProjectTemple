@@ -9,7 +9,7 @@
 #import "RVMViewModel.h"
 #import "CKAppleItemModel.h"
 
-@interface CKDetailViewModel : RVMViewModel
+@interface CKDetailViewModel : BaseViewModel
 @property(nonatomic,strong) CKAppleItemModel * model;
 
 @property(nonatomic,strong) NSString * name;
@@ -19,5 +19,5 @@
 @property(nonatomic,strong) NSArray * screenShots;
 
 
--(id) initWithModel:(CKAppleItemModel * ) theModel;
+@property(nonatomic,strong) RACCommand * requestDetail;
 @end

@@ -15,16 +15,11 @@
 
 @optional
 
-//请求
-@property(nonatomic,strong,readonly) PTHTTPRequestManager * requestManager;
 //状态栏
 @property(nonatomic,strong,readonly) CWStatusBarNotification * statusbarNotification;
 
 
 //--------------重载一下方法获得正确的配置(@overide)------------------
-
-//判断是否要创建Request manager
--(BOOL) isNeedHTTPRequestManager;
 
 
 
@@ -45,9 +40,5 @@
  */
 -(void) configData;
 
-/**
- *  send request to get data(请求数据)
- */
--(void) requestDataSource;
 
 @end

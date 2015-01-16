@@ -8,21 +8,21 @@
 
 #import <UIKit/UIKit.h>
 #import <SVPullToRefresh.h>
+#import "BaseTableViewModel.h"
 
 @interface BaseTableViewController : BaseViewController
+@property(nonatomic,strong) NSString * requestURLPath;
+@property(nonatomic,strong) NSDictionary * parameters;
+
 @property(nonatomic,strong) UITableView * tableView;
 @property(nonatomic,strong) NIMutableTableViewModel * tableModel;
 @property(nonatomic,strong) NITableViewActions * tableAction;
 
-@property(nonatomic,assign) NSInteger  pageIndex;
-@property(nonatomic,assign) NSInteger  countPerPage;
+// The view model for the receiver.
+@property (nonatomic, strong, readonly) BaseTableViewModel *viewModel;
 
 
 //-------------Overide Method-------------
-
--(NSString*) requestURLPath;
-
--(NSDictionary*) requestParameters;
 
 -(void) clearTableModelData;
 @end

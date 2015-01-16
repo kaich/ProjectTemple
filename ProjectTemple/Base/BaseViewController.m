@@ -11,13 +11,11 @@
 
 @interface BaseViewController ()
 {
-    PTHTTPRequestManager * _requestManager;
     CWStatusBarNotification * _statusbarNotification;
 }
 @end
 
 @implementation BaseViewController
-@dynamic requestManager;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -28,20 +26,68 @@
     return self;
 }
 
+
+- (id)initWithViewModel:(BaseViewModel *)viewModel {
+    return [self initWithViewModel:viewModel nibName:nil bundle:nil];
+}
+
+- (id)initWithViewModel:(BaseViewModel *)viewModel nibName:(NSString *)nibName bundle:(NSBundle *)bundle {
+    self = [super initWithNibName:nibName bundle:bundle];
+    if (self == nil) return nil;
+    
+    _viewModel = viewModel;
+    
+    RACSignal *presented = [[RACSignal
+                             merge:@[
+                                     [[self rac_signalForSelector:@selector(viewDidAppear:)] mapReplace:@YES],
+                                     [[self rac_signalForSelector:@selector(viewWillDisappear:)] mapReplace:@NO]
+                                     ]]
+                            setNameWithFormat:@"%@ presented", self];
+    
+    RACSignal *appActive = [[[RACSignal
+                              merge:@[
+                                      [[NSNotificationCenter.defaultCenter rac_addObserverForName:UIApplicationDidBecomeActiveNotification object:nil] mapReplace:@YES],
+                                      [[NSNotificationCenter.defaultCenter rac_addObserverForName:UIApplicationWillResignActiveNotification object:nil] mapReplace:@NO]
+                                      ]]
+                             startWith:@YES]
+                            setNameWithFormat:@"%@ appActive", self];
+    
+    RAC(self, viewModel.active) = [[[RACSignal
+                                     combineLatest:@[ presented, appActive ]]
+                                    and]
+                                   setNameWithFormat:@"%@ active", self];
+    
+    return self;
+}
+
 -(void) loadView
 {
     [super loadView];
     
     self.view.backgroundColor=[UIColor whiteColor];
-
-}
-
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
-    // Do any additional setup after loading the view.
     
 }
+
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    
+    @weakify(self);
+    [[RACObserve(_viewModel, contentType) distinctUntilChanged] subscribeNext:^(NSNumber *  typeValue) {
+        @strongify(self);
+        StatusNotificationViewType  type = [typeValue integerValue];
+        [self.contentStatusView removeFromSuperview];
+        [self.view showStatusViewWithType:type];
+        self.contentStatusView =(StatusNotificationView *)self.view.networkView;
+        
+        if(type==kSNNoNetwork)
+        {
+            [self showNetworkIssuStatusBarNotification];
+        }
+    }];
+    
+}
+
 
 - (void)didReceiveMemoryWarning
 {
@@ -51,18 +97,6 @@
 
 
 #pragma mark - Custom Method
-
-//HTTP request
--(PTHTTPRequestManager*) requestManager
-{
-    if(!_requestManager)
-    {
-        _requestManager=[[PTHTTPRequestManager alloc] init];
-    }
-    
-    return  _requestManager;
-}
-
 
 
 //Show Status bar notification

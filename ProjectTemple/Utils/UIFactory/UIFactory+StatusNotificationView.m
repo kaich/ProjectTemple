@@ -27,6 +27,12 @@
             return statusView;
         }
             break;
+        case kSNNoLoading:
+        {
+            statusView.lblContent.text=@"数据加载中...";
+            return statusView;
+        }
+            break;
         default:
             break;
     }

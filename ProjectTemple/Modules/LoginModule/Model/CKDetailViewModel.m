@@ -8,9 +8,10 @@
 
 #import "CKDetailViewModel.h"
 
+
 @implementation CKDetailViewModel
 
--(id) initWithModel:(CKAppleItemModel *)theModel
+-(id) init
 {
     
     self = [super init];
@@ -18,14 +19,35 @@
         return nil;
     }
     
+
     
-    self.model=theModel;
-    RAC(self,name)=RACObserve(self.model, appName);
-    RAC(self,size)=RACObserve(self.model, appSize);
-    RAC(self,price)=RACObserve(self.model, appPrice);
-    RAC(self,iconUrl)=RACObserve(self.model, appIcon);
-    RAC(self,screenShots)=RACObserve(self.model, appScreenShots);
+    @weakify(self);
     
+    self.requestDetail =[[RACCommand alloc] initWithSignalBlock:^RACSignal *(id input) {
+        [[[self.requestManager rac_GET:@"/lookup" parameters:@{@"id" : @"444934666", @"country" : @"cn"}]  catch:^RACSignal *(NSError *error) {
+            @strongify(self);
+            
+            if(error)
+                self.contentType= kSNNoNetwork;
+            
+            return [RACSignal empty];
+        }] subscribeNext:^(PTResponse * response) {
+            @strongify(self);
+            
+            NSArray * models=response.result;
+            CKAppleItemModel * model = [models firstObject];
+            self.model = model;
+            self.name=model.appName;
+            self.price=model.appPrice;
+            self.size=model.appSize;
+            self.screenShots =model.appScreenShots;
+            
+        }] ;
+        
+        return [RACSignal empty];
+    }];
+    
+
     
     return self;
 
