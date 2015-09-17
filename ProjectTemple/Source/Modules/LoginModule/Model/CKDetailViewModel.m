@@ -33,7 +33,7 @@
             return [RACSignal empty];
         }] subscribeNext:^(PTResponse * response) {
             @strongify(self);
-            
+     
             NSArray * models=response.result;
             CKAppleItemModel * model = [models firstObject];
             self.model = model;

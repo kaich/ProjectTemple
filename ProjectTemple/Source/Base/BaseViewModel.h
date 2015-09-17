@@ -7,9 +7,10 @@
 //
 
 #import "RVMViewModel.h"
+#import "BaseViewModelProtocol.h"
 #import "UIFactory+StatusNotificationView.h"
 
-@interface BaseViewModel : RVMViewModel
+@interface BaseViewModel : RVMViewModel<BaseViewModelProtocol>
 //请求
 @property(nonatomic,strong,readonly) PTHTTPRequestManager * requestManager;
 

@@ -33,7 +33,8 @@
 
 
 //-----------------------------------SERVER_URL-----------------------------------------
-#define   BASE_HOME_URL                      @"https://itunes.apple.com"
+#define   BASE_HOME_URL                      @"https://pay.i4.cn"
+//#define   BASE_HOME_URL                      @"https://itunes.apple.com"
 
 
 //-----------------------------------NOTIFICATION---------------------------------------

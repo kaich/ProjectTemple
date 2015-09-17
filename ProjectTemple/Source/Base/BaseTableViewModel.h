@@ -7,6 +7,7 @@
 //
 
 #import "BaseViewModel.h"
+#import "DZNEmptyEntity.h"
 
 @interface BaseTableViewModel : BaseViewModel
 
@@ -14,9 +15,10 @@
 @property(nonatomic,assign,readonly) NSInteger  countPerPage;
 
 @property(nonatomic,strong,readonly) NSArray * dataSource;
+@property(nonatomic,strong,readonly) DZNEmptyEntity * emptyDataSetEntity;
 
 @property(nonatomic,strong) NSString * requestURLPath;
-@property(nonatomic,strong) NSDictionary * parameters;
+@property(nonatomic,strong) NSDictionary * requestParameters;
 
 @property(nonatomic,strong) RACCommand * refreshDataSource;
 @property(nonatomic,strong) RACCommand * inflineRequestDataSource;

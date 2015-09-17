@@ -35,13 +35,12 @@
 
 -(void) configRequestDataSource
 {
-    self.requestURLPath=[self requestURLPath];
-    self.parameters =[self requestParameters];
     
     if(self.requestURLPath)
     {
         
-        RACSignal * requestDataSource = [self.requestManager rac_GET:self.requestURLPath parameters:self.parameters];
+        RACSignal * requestDataSource = [self.requestManager rac_GET:self.requestURLPath parameters:self.requestParameters];
+        
         
         @weakify(self);
         void (^sendRequest)() =^(){
@@ -62,9 +61,8 @@
                         self.dataSource = [results mutableCopy];
                     else
                     {
-                        NSMutableArray * newDatasource =[self.dataSource mutableCopy];
-                        [newDatasource addObjectsFromArray:results];
-                        self.dataSource = newDatasource;
+                        NSMutableArray *dataSource = [self mutableArrayValueForKey:@keypath(self, dataSource)];
+                        [dataSource addObjectsFromArray:results];
                     }
                     if(self.dataSource.count ==0)
                         self.contentType=kSNNoData;
@@ -75,7 +73,7 @@
             }];
         };
         
-       
+               
         self.refreshDataSource = [[RACCommand alloc] initWithSignalBlock:^RACSignal *(id input) {
             self.pageIndex = PAGE_START_INDEX;
             sendRequest();

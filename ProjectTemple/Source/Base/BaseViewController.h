@@ -37,7 +37,6 @@ static const int ddLogLevel = LOG_LEVEL_VERBOSE;
 - (id)initWithViewModel:(BaseViewModel *)viewModel nibName:(NSString *)nibName bundle:(NSBundle *)bundle;
 
 
-
 -(void) showNetworkIssuStatusBarNotification;
 
 @end

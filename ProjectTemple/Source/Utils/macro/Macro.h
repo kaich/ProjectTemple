@@ -56,7 +56,7 @@
 
 
 #define USER_DEFAULT [NSUserDefaults standardUserDefaults]
-#define ImageNamed(_pointer) [UIImage imageNamed:[UIUtil imageName:_pointer]]
+#define ImageNamed(_pointer) [UIImage imageNamed:_pointer]
 
 
 #pragma mark - common functions

@@ -12,7 +12,7 @@
 
 + (NSString *)resultKeyPathForJSONDictionary:(NSDictionary *)JSONDictionary
 {
-    return @"results";
+    return @"data";
 }
 
 @end

@@ -60,17 +60,11 @@
     return self;
 }
 
--(void) loadView
-{
-    [super loadView];
-    
-    self.view.backgroundColor=[UIColor whiteColor];
-    
-}
-
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    self.view.backgroundColor=[UIColor whiteColor];
     
     @weakify(self);
     [[RACObserve(_viewModel, contentType) distinctUntilChanged] subscribeNext:^(NSNumber *  typeValue) {

@@ -9,8 +9,9 @@
 #import <UIKit/UIKit.h>
 #import <SVPullToRefresh.h>
 #import "BaseTableViewModel.h"
+#import <UIScrollView+EmptyDataSet.h>
 
-@interface BaseTableViewController : BaseViewController
+@interface BaseTableViewController : BaseViewController<DZNEmptyDataSetSource,DZNEmptyDataSetDelegate>
 @property(nonatomic,strong) NSString * requestURLPath;
 @property(nonatomic,strong) NSDictionary * parameters;
 

@@ -1,0 +1,30 @@
+{
+  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "C47DAA4D1A9825AC73F0376616733FA7CF28FC97",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey" : {
+
+  },
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
+    "AF4C833F-40A9-4731-AC49-9A91387F43F6" : 0,
+    "C47DAA4D1A9825AC73F0376616733FA7CF28FC97" : 0
+  },
+  "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "89AA8C28-36B3-46CC-99F8-D86D57FDE577",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
+    "AF4C833F-40A9-4731-AC49-9A91387F43F6" : "ProjectTemple",
+    "C47DAA4D1A9825AC73F0376616733FA7CF28FC97" : "project-temple-demo"
+  },
+  "DVTSourceControlWorkspaceBlueprintNameKey" : "ProjectTemple",
+  "DVTSourceControlWorkspaceBlueprintVersion" : 204,
+  "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey" : "ProjectTemple.xcworkspace",
+  "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey" : [
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/bitbucket.org\/chengkai1853\/project-temple-demo.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "AF4C833F-40A9-4731-AC49-9A91387F43F6"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/bitbucket.org\/chengkai1853\/project-temple-demo.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "C47DAA4D1A9825AC73F0376616733FA7CF28FC97"
+    }
+  ]
+}

@@ -22,7 +22,8 @@
 + (NSDictionary *)modelClassesByResourcePath {
 #warning 等待实现
     return @{
-              @"lookup":  NSClassFromString(@"CKAppleItemModel")
+              @"lookup":  NSClassFromString(@"CKAppleItemModel"),
+              @"gift_msgs.action" : NSClassFromString(@"NotificationEntity"),
              };
 }
 
