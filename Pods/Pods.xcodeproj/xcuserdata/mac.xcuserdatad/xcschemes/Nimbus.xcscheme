@@ -14,7 +14,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "B9361B3BB69BD9DA0AFF9EC9"
+               BlueprintIdentifier = "C7D15A3763E23E5783A70F17"
                BuildableName = "libNimbus.a"
                BlueprintName = "Nimbus"
                ReferencedContainer = "container:Pods.xcodeproj">

@@ -17,4 +17,6 @@
 - (DZNEmptyEntity *) emptyDataSetEntityWhenNoNetwork;
 
 - (DZNEmptyEntity *) emptyDataSetEntityWhenNoData;
+
+- (DZNEmptyEntity *) emptyDataSetEntityWhenLoading;
 @end

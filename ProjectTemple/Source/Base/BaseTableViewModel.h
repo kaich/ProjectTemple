@@ -8,14 +8,15 @@
 
 #import "BaseViewModel.h"
 #import "DZNEmptyEntity.h"
+#import <NIMutableTableViewModel.h>
 
 @interface BaseTableViewModel : BaseViewModel
 
 @property(nonatomic,assign,readonly) NSInteger  pageIndex;
 @property(nonatomic,assign,readonly) NSInteger  countPerPage;
 
-@property(nonatomic,strong,readonly) NSArray * dataSource;
-@property(nonatomic,strong,readonly) DZNEmptyEntity * emptyDataSetEntity;
+@property(nonatomic,assign) BOOL dataSourceChanged;
+@property(nonatomic,strong) NIMutableTableViewModel  * tableViewModel;
 
 @property(nonatomic,strong) NSString * requestURLPath;
 @property(nonatomic,strong) NSDictionary * requestParameters;

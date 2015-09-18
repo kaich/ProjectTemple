@@ -12,8 +12,8 @@
 typedef NS_ENUM(NSUInteger, StatusNotificationViewType) {
     kSNNoNetwork=1,
     kSNNoData,
-    kSNNoLoading,
-    kSNNoMoreData
+    kSNNoDataLoading,
+    kSNNoMoreData,
 };
 
 @interface UIFactory (StatusNotificationView)

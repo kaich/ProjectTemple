@@ -35,15 +35,18 @@
 {
     BOOL isVertical= [self isVerticalTableView];
     
-    if(isVertical)
+    if(!self.tableView)
     {
-        self.tableView=[UIFactory createTableViewWithFrame:self.view.bounds style:UITableViewStylePlain delegate:nil];
+        if(isVertical)
+        {
+            self.tableView=[UIFactory createTableViewWithFrame:self.view.bounds style:UITableViewStylePlain delegate:nil];
+        }
+        else
+        {
+            self.tableView=[UIFactory createHorizontalTableViewWithFrame:self.view.bounds style:UITableViewStylePlain delegate:nil];
+        }
+        [self.view addSubview:self.tableView];
     }
-    else
-    {
-        self.tableView=[UIFactory createHorizontalTableViewWithFrame:self.view.bounds style:UITableViewStylePlain delegate:nil];
-    }
-    [self.view addSubview:self.tableView];
     
     //上拉、下拉 功能
     __weak typeof (self) weakSelf  = self;
@@ -67,31 +70,30 @@
 #pragma mark - Config DataSource
 -(void) configData
 {
-    self.tableModel=[[NIMutableTableViewModel alloc] initWithDelegate:(id)[NICellFactory class]];
-    self.tableView.dataSource=self.tableModel;
+    RAC(self.tableView , dataSource) = RACObserve(self.viewModel, tableViewModel);
     
     self.tableAction=[[NITableViewActions alloc] initWithTarget:self];
     self.tableView.delegate=self.tableAction;
     
     @weakify(self);
-    [RACObserve(self.viewModel, dataSource) subscribeNext:^(id x) {
+    [RACObserve(self.viewModel, dataSourceChanged) subscribeNext:^(id x) {
         @strongify(self);
         if(x)
         {
-            [self.tableModel addObjectsFromArray:x];
-            
             [self.tableView reloadData];
         }
         
         [self.tableView.infiniteScrollingView stopAnimating];
         [self.tableView.pullToRefreshView stopAnimating];
+        
     }];
      
     
-    [RACObserve(self.viewModel, contentType) subscribeNext:^(NSNumber * typeValue) {
+    [[[RACObserve(self.viewModel, contentType) distinctUntilChanged] combineLatestWith:RACObserve(self.viewModel, emptyDataSetEntity)] subscribeNext:^(id x) {
         @strongify(self);
-        StatusNotificationViewType  type = [typeValue  integerValue];
-        [self.tableView showStatusViewWithType:type];
+        //statusView is instead by DZNEmptyDataSet
+        //[self.tableView showStatusViewWithType:type];
+        StatusNotificationViewType  type = [x[0]  integerValue];
         
         if(type == kSNNoNetwork)
         {
@@ -112,6 +114,8 @@
             self.tableView.showsInfiniteScrolling=NO;
         }
 
+        [self.tableView.infiniteScrollingView stopAnimating];
+        [self.tableView.pullToRefreshView stopAnimating];
         [self.tableView reloadEmptyDataSet];
     }];
     
@@ -123,7 +127,7 @@
 {
     if(self.tableView == scrollView)
     {
-        BOOL isEmptyVisible = self.viewModel.dataSource.count ==0  || self.viewModel.contentType == kSNNoNetwork;
+        BOOL isEmptyVisible = self.viewModel.contentType == kSNNoData || self.viewModel.contentType == kSNNoNetwork || self.viewModel.contentType == kSNNoDataLoading;
         return isEmptyVisible;
     }
     else
@@ -154,17 +158,17 @@
 
 - (NSAttributedString *)buttonTitleForEmptyDataSet:(UIScrollView *)scrollView forState:(UIControlState)state
 {
-    return [self.viewModel.emptyDataSetEntity.buttonTitle objectForKey:@(state)];
+    return [self.viewModel.emptyDataSetEntity.buttonTitle objectForKey:@(state)]?:[self.viewModel.emptyDataSetEntity.buttonTitle objectForKey:@(UIControlStateNormal)];
 }
 
 - (UIImage *)buttonImageForEmptyDataSet:(UIScrollView *)scrollView forState:(UIControlState)state
 {
-    return [self.viewModel.emptyDataSetEntity.buttonImage objectForKey:@(state)];
+    return [self.viewModel.emptyDataSetEntity.buttonImage objectForKey:@(state)]?:[self.viewModel.emptyDataSetEntity.buttonImage objectForKey:@(UIControlStateNormal)];
 }
 
 - (UIImage *)buttonBackgroundImageForEmptyDataSet:(UIScrollView *)scrollView forState:(UIControlState)state
 {
-    return [self.viewModel.emptyDataSetEntity.buttonBackgroundImage objectForKey:@(state)];
+    return [self.viewModel.emptyDataSetEntity.buttonBackgroundImage objectForKey:@(state)]?:[self.viewModel.emptyDataSetEntity.buttonBackgroundImage objectForKey:@(UIControlStateNormal)];
 }
 
 - (UIColor *)backgroundColorForEmptyDataSet:(UIScrollView *)scrollView
@@ -172,11 +176,17 @@
     return self.viewModel.emptyDataSetEntity.backgroundColor;
 }
 
+- (void)emptyDataSetDidTapView:(UIScrollView *)scrollView
+{
+    self.viewModel.contentType = kSNNoDataLoading;
+    [self.tableView triggerPullToRefresh];
+}
+
 #pragma mark - Overide Method
 
 -(void) clearTableModelData
 {
-     [self.tableModel removeSectionAtIndex:0];
+     [self.viewModel.tableViewModel removeSectionAtIndex:0];
 }
 
 -(BOOL) isVerticalTableView

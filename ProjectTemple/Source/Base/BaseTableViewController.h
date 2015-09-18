@@ -15,8 +15,7 @@
 @property(nonatomic,strong) NSString * requestURLPath;
 @property(nonatomic,strong) NSDictionary * parameters;
 
-@property(nonatomic,strong) UITableView * tableView;
-@property(nonatomic,strong) NIMutableTableViewModel * tableModel;
+@property(nonatomic,strong) IBOutlet UITableView * tableView;
 @property(nonatomic,strong) NITableViewActions * tableAction;
 
 // The view model for the receiver.

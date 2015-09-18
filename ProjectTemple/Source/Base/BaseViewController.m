@@ -66,19 +66,6 @@
     
     self.view.backgroundColor=[UIColor whiteColor];
     
-    @weakify(self);
-    [[RACObserve(_viewModel, contentType) distinctUntilChanged] subscribeNext:^(NSNumber *  typeValue) {
-        @strongify(self);
-        StatusNotificationViewType  type = [typeValue integerValue];
-        [self.contentStatusView removeFromSuperview];
-        [self.view showStatusViewWithType:type];
-        self.contentStatusView =(StatusNotificationView *)self.view.networkView;
-        
-        if(type==kSNNoNetwork)
-        {
-            [self showNetworkIssuStatusBarNotification];
-        }
-    }];
     
 }
 

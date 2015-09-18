@@ -9,7 +9,6 @@
 #import "BaseTableViewModel.h"
 
 @interface BaseTableViewModel ()
-@property(nonatomic,strong) NSArray * dataSource;
 @property(nonatomic,assign) NSInteger  pageIndex;
 @end
 
@@ -24,8 +23,7 @@
         //initialize property
         _pageIndex =0;
         _countPerPage=COUNT_PER_PAGE;
-        self.contentType =kSNNoLoading;
-        
+        self.contentType =kSNNoDataLoading;
         [self configRequestDataSource];
     }
     
@@ -40,15 +38,26 @@
     {
         
         RACSignal * requestDataSource = [self.requestManager rac_GET:self.requestURLPath parameters:self.requestParameters];
-        
+        [self configRequestManagerBeforeSend];
         
         @weakify(self);
         void (^sendRequest)() =^(){
             [[requestDataSource  catch:^RACSignal *(NSError *error) {
                 
                 @strongify(self);
-                if(error)
+                if(error.code == NSURLErrorNotConnectedToInternet)
+                {
+                    self.contentType=kSNNoNetwork;
+                }
+                else if(self.pageIndex == PAGE_START_INDEX)
+                {
                     self.contentType=kSNNoData;
+                }
+                else
+                {
+                    self.contentType=kSNNoMoreData;
+                }
+                
                 return [RACSignal empty];
                 
             }] subscribeNext:^(PTResponse * response) {
@@ -58,21 +67,25 @@
                 {
                     NSArray * results=response.result;
                     if(self.pageIndex == PAGE_START_INDEX)
-                        self.dataSource = [results mutableCopy];
-                    else
                     {
-                        NSMutableArray *dataSource = [self mutableArrayValueForKey:@keypath(self, dataSource)];
-                        [dataSource addObjectsFromArray:results];
+                        self.tableViewModel = [[NIMutableTableViewModel alloc] initWithDelegate:(id)[NICellFactory class]];
                     }
-                    if(self.dataSource.count ==0)
+                    
+                    [self.tableViewModel addObjectsFromArray:results];
+                    
+                    if(self.pageIndex == PAGE_START_INDEX && results.count == 0)
                         self.contentType=kSNNoData;
                     if(results.count==0)
                         self.contentType=kSNNoMoreData;
+                    
+                    self.dataSourceChanged = !_dataSourceChanged;
                 }
                 
             }];
         };
         
+
+                                        
                
         self.refreshDataSource = [[RACCommand alloc] initWithSignalBlock:^RACSignal *(id input) {
             self.pageIndex = PAGE_START_INDEX;
@@ -105,5 +118,7 @@
 {
     THROW_EXCEPTION(@"invoke error", @"you must overide requestParameters method");
 }
+
+
 
 @end
