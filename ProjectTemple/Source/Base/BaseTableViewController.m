@@ -89,11 +89,11 @@
     }];
      
     
-    [[[RACObserve(self.viewModel, contentType) distinctUntilChanged] combineLatestWith:RACObserve(self.viewModel, emptyDataSetEntity)] subscribeNext:^(id x) {
+    [[RACObserve(self.viewModel, contentType) distinctUntilChanged] subscribeNext:^(id x) {
         @strongify(self);
         //statusView is instead by DZNEmptyDataSet
         //[self.tableView showStatusViewWithType:type];
-        StatusNotificationViewType  type = [x[0]  integerValue];
+        StatusNotificationViewType  type = [x  integerValue];
         
         if(type == kSNNoNetwork)
         {
