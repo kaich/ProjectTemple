@@ -22,7 +22,7 @@
     if(self)
     {
         @weakify(self);
-        [RACObserve(self, contentType)  doNext:^(id x) {
+        self.contentTypeSignal = [RACObserve(self, contentType)  doNext:^(id x) {
             @strongify(self);
             StatusNotificationViewType type = [x integerValue];
             if(type == kSNNoNetwork)

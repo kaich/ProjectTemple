@@ -16,6 +16,7 @@
 
 //状态 (网络异常、无数据)
 @property(nonatomic,assign) StatusNotificationViewType contentType;
+@property(nonatomic,strong) RACSignal * contentTypeSignal;
 
 @property(nonatomic,strong) DZNEmptyEntity * emptyDataSetEntity;
 

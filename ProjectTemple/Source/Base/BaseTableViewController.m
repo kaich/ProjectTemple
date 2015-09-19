@@ -89,7 +89,7 @@
     }];
      
     
-    [[RACObserve(self.viewModel, contentType) distinctUntilChanged] subscribeNext:^(id x) {
+    [[self.viewModel.contentTypeSignal distinctUntilChanged] subscribeNext:^(id x) {
         @strongify(self);
         //statusView is instead by DZNEmptyDataSet
         //[self.tableView showStatusViewWithType:type];
