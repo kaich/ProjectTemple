@@ -14,5 +14,4 @@
 #import "UIFactory+Line.h"
 #import "UIFactory+ImageView.h"
 #import "UIFactory+StatusNotificationView.h"
-#import "UIFactory+InfiniteView.h"
 #import "UIFactory+StatusbarNotification.h"

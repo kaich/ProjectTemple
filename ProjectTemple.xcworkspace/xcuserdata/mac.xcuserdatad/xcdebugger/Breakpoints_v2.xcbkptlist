@@ -27,38 +27,6 @@
             endingLineNumber = "119"
             landmarkName = "-saveResult:"
             landmarkType = "5">
-            <Locations>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "-[OVCModelResponseSerializer saveResult:]"
-                  moduleName = "ProjectTemple"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/mac/Desktop/Project_Temple/project-temple-demo/Pods/Overcoat/Overcoat/OVCModelResponseSerializer.m"
-                  timestampString = "464335491.051092"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "119"
-                  endingLineNumber = "119"
-                  offsetFromSymbolStart = "56">
-               </Location>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "-[OVCModelResponseSerializer saveResult:]"
-                  moduleName = "ProjectTemple"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/mac/Desktop/Project_Temple/project-temple-demo/Pods/Overcoat/Overcoat/OVCModelResponseSerializer.m"
-                  timestampString = "464335491.051399"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "119"
-                  endingLineNumber = "119"
-                  offsetFromSymbolStart = "106">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy

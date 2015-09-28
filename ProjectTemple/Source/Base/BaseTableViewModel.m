@@ -13,6 +13,7 @@
 @end
 
 @implementation BaseTableViewModel
+@dynamic refreshDataSource;
 
 -(instancetype) init
 {
@@ -38,11 +39,12 @@
     {
         
         RACSignal * requestDataSource = [self.requestManager rac_GET:self.requestURLPath parameters:self.requestParameters];
-        [self configRequestManagerBeforeSend];
+        self.requestDataSource = requestDataSource;
         
         @weakify(self);
         void (^sendRequest)() =^(){
-            [[requestDataSource  catch:^RACSignal *(NSError *error) {
+            [self configRequestManagerBeforeSend];
+            self.requestDataSource = [requestDataSource  catch:^RACSignal *(NSError *error) {
                 
                 @strongify(self);
                 if(error.code == NSURLErrorNotConnectedToInternet)
@@ -60,7 +62,9 @@
                 
                 return [RACSignal empty];
                 
-            }] subscribeNext:^(PTResponse * response) {
+            }];
+                                      
+            [self.requestDataSource subscribeNext:^(PTResponse * response) {
                 
                 @strongify(self);
                 if([response.result isKindOfClass:[NSArray class]])
@@ -118,7 +122,6 @@
 {
     THROW_EXCEPTION(@"invoke error", @"you must overide requestParameters method");
 }
-
 
 
 @end

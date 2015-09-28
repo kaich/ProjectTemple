@@ -39,6 +39,24 @@
             }
             
         }];
+        
+        
+        RACSignal * requestDataSource = [self.requestManager rac_GET:self.requestURLPath parameters:self.requestParameters];
+        self.requestDataSource = [requestDataSource  catch:^RACSignal *(NSError *error) {
+            
+            @strongify(self);
+            if(error.code == NSURLErrorNotConnectedToInternet)
+            {
+                self.contentType=kSNNoNetwork;
+            }
+            else
+            {
+                self.contentType=kSNNoData;
+            }
+            
+            return [RACSignal empty];
+            
+        }];
     }
     
     return self;

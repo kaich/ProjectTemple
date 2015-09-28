@@ -29,4 +29,12 @@
     }];
     self.requestManager.responseSerializer.acceptableContentTypes = [self.requestManager.responseSerializer.acceptableContentTypes setByAddingObject:@"text/html"];
 }
+
+
+- (DZNEmptyEntity *) emptyDataSetEntityWhenLoading
+{
+    DZNEmptyEntity * emptyNoData = [super emptyDataSetEntityWhenLoading];
+    emptyNoData.imageName = @"loading_imgBlue_78x78";
+    return emptyNoData;
+}
 @end

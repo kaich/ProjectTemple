@@ -18,9 +18,6 @@
 @property(nonatomic,assign) BOOL dataSourceChanged;
 @property(nonatomic,strong) NIMutableTableViewModel  * tableViewModel;
 
-@property(nonatomic,strong) NSString * requestURLPath;
-@property(nonatomic,strong) NSDictionary * requestParameters;
-
 @property(nonatomic,strong) RACCommand * refreshDataSource;
 @property(nonatomic,strong) RACCommand * inflineRequestDataSource;
 

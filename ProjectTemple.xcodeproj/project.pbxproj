@@ -42,7 +42,6 @@
 		04253DC81BA948200052E972 /* PTResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 04253D8F1BA948200052E972 /* PTResponse.m */; };
 		04253DC91BA948200052E972 /* UIFactory+Button.m in Sources */ = {isa = PBXBuildFile; fileRef = 04253D931BA948200052E972 /* UIFactory+Button.m */; };
 		04253DCA1BA948200052E972 /* UIFactory+ImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 04253D951BA948200052E972 /* UIFactory+ImageView.m */; };
-		04253DCB1BA948200052E972 /* UIFactory+InfiniteView.m in Sources */ = {isa = PBXBuildFile; fileRef = 04253D971BA948200052E972 /* UIFactory+InfiniteView.m */; };
 		04253DCC1BA948200052E972 /* UIFactory+Label.m in Sources */ = {isa = PBXBuildFile; fileRef = 04253D991BA948200052E972 /* UIFactory+Label.m */; };
 		04253DCD1BA948200052E972 /* UIFactory+Line.m in Sources */ = {isa = PBXBuildFile; fileRef = 04253D9B1BA948200052E972 /* UIFactory+Line.m */; };
 		04253DCE1BA948200052E972 /* UIFactory+StatusbarNotification.m in Sources */ = {isa = PBXBuildFile; fileRef = 04253D9D1BA948200052E972 /* UIFactory+StatusbarNotification.m */; };
@@ -68,7 +67,10 @@
 		049FA4E61925AEB200A1CE5F /* ProjectTempleTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 049FA4E51925AEB200A1CE5F /* ProjectTempleTests.m */; };
 		049FA4F11925B9D000A1CE5F /* CKViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 049FA4F01925B9D000A1CE5F /* CKViewController.m */; };
 		049FA5021925BEEC00A1CE5F /* Localization.strings in Resources */ = {isa = PBXBuildFile; fileRef = 049FA5041925BEEC00A1CE5F /* Localization.strings */; };
-		04A531C01BAAEA9B00C54033 /* DZNEmptyEntity.m in Sources */ = {isa = PBXBuildFile; fileRef = 04A531BF1BAAEA9B00C54033 /* DZNEmptyEntity.m */; settings = {ASSET_TAGS = (); }; };
+		04A531C01BAAEA9B00C54033 /* DZNEmptyEntity.m in Sources */ = {isa = PBXBuildFile; fileRef = 04A531BF1BAAEA9B00C54033 /* DZNEmptyEntity.m */; };
+		04B3A3A41BB936D3004D3D6B /* loading_imgBlue_78x78@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 04B3A3A21BB936D3004D3D6B /* loading_imgBlue_78x78@2x.png */; };
+		04B3A3A51BB936D3004D3D6B /* loading_imgBlue_78x78@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 04B3A3A31BB936D3004D3D6B /* loading_imgBlue_78x78@3x.png */; };
+		04B878511BB945B0003B218D /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 04B878501BB945B0003B218D /* Launch Screen.storyboard */; settings = {ASSET_TAGS = (); }; };
 		F3B6CF1BC9A84705A71DBE4F /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0EA1BBAD392E4D00AE104A83 /* libPods.a */; };
 /* End PBXBuildFile section */
 
@@ -158,8 +160,6 @@
 		04253D931BA948200052E972 /* UIFactory+Button.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIFactory+Button.m"; sourceTree = "<group>"; };
 		04253D941BA948200052E972 /* UIFactory+ImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIFactory+ImageView.h"; sourceTree = "<group>"; };
 		04253D951BA948200052E972 /* UIFactory+ImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIFactory+ImageView.m"; sourceTree = "<group>"; };
-		04253D961BA948200052E972 /* UIFactory+InfiniteView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIFactory+InfiniteView.h"; sourceTree = "<group>"; };
-		04253D971BA948200052E972 /* UIFactory+InfiniteView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIFactory+InfiniteView.m"; sourceTree = "<group>"; };
 		04253D981BA948200052E972 /* UIFactory+Label.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIFactory+Label.h"; sourceTree = "<group>"; };
 		04253D991BA948200052E972 /* UIFactory+Label.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIFactory+Label.m"; sourceTree = "<group>"; };
 		04253D9A1BA948200052E972 /* UIFactory+Line.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIFactory+Line.h"; sourceTree = "<group>"; };
@@ -207,6 +207,9 @@
 		04A531BA1BAAAEC900C54033 /* BaseViewModelProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BaseViewModelProtocol.h; sourceTree = "<group>"; };
 		04A531BE1BAAEA9B00C54033 /* DZNEmptyEntity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DZNEmptyEntity.h; sourceTree = "<group>"; };
 		04A531BF1BAAEA9B00C54033 /* DZNEmptyEntity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DZNEmptyEntity.m; sourceTree = "<group>"; };
+		04B3A3A21BB936D3004D3D6B /* loading_imgBlue_78x78@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "loading_imgBlue_78x78@2x.png"; sourceTree = "<group>"; };
+		04B3A3A31BB936D3004D3D6B /* loading_imgBlue_78x78@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "loading_imgBlue_78x78@3x.png"; sourceTree = "<group>"; };
+		04B878501BB945B0003B218D /* Launch Screen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
 		0EA1BBAD392E4D00AE104A83 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		31D8AFB2D9B9C10F020BF81F /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 		605736A8BEFAA35A3C9DE287 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
@@ -390,6 +393,8 @@
 		04253D641BA948200052E972 /* Image */ = {
 			isa = PBXGroup;
 			children = (
+				04B3A3A21BB936D3004D3D6B /* loading_imgBlue_78x78@2x.png */,
+				04B3A3A31BB936D3004D3D6B /* loading_imgBlue_78x78@3x.png */,
 			);
 			path = Image;
 			sourceTree = "<group>";
@@ -534,8 +539,6 @@
 				04253D931BA948200052E972 /* UIFactory+Button.m */,
 				04253D941BA948200052E972 /* UIFactory+ImageView.h */,
 				04253D951BA948200052E972 /* UIFactory+ImageView.m */,
-				04253D961BA948200052E972 /* UIFactory+InfiniteView.h */,
-				04253D971BA948200052E972 /* UIFactory+InfiniteView.m */,
 				04253D981BA948200052E972 /* UIFactory+Label.h */,
 				04253D991BA948200052E972 /* UIFactory+Label.m */,
 				04253D9A1BA948200052E972 /* UIFactory+Line.h */,
@@ -596,6 +599,7 @@
 				049FA4C71925AEB200A1CE5F /* CKAppDelegate.m */,
 				049FA4EF1925B9D000A1CE5F /* CKViewController.h */,
 				049FA4F01925B9D000A1CE5F /* CKViewController.m */,
+				04B878501BB945B0003B218D /* Launch Screen.storyboard */,
 				049FA4D21925AEB200A1CE5F /* Images.xcassets */,
 				049FA4BE1925AEB200A1CE5F /* Supporting Files */,
 			);
@@ -720,9 +724,12 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				04B878511BB945B0003B218D /* Launch Screen.storyboard in Resources */,
+				04B3A3A41BB936D3004D3D6B /* loading_imgBlue_78x78@2x.png in Resources */,
 				049FA4D31925AEB200A1CE5F /* Images.xcassets in Resources */,
 				04253DBA1BA948200052E972 /* Settings.bundle in Resources */,
 				049FA5021925BEEC00A1CE5F /* Localization.strings in Resources */,
+				04B3A3A51BB936D3004D3D6B /* loading_imgBlue_78x78@3x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -818,7 +825,6 @@
 				04253DE21BA951E10052E972 /* CKNotificationViewController.m in Sources */,
 				04253DB11BA948200052E972 /* Common.m in Sources */,
 				04253DB41BA948200052E972 /* CKAppleItemModel.m in Sources */,
-				04253DCB1BA948200052E972 /* UIFactory+InfiniteView.m in Sources */,
 				04253DD31BA948200052E972 /* UIFactory.m in Sources */,
 				04253DB81BA948200052E972 /* CKLoginViewController.m in Sources */,
 				04253DCD1BA948200052E972 /* UIFactory+Line.m in Sources */,

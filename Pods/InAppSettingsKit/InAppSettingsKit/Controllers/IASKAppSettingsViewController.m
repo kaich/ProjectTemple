@@ -25,6 +25,7 @@
 #import "IASKSpecifier.h"
 #import "IASKSpecifierValuesViewController.h"
 #import "IASKTextField.h"
+#import "IASKMultipleValueSelection.h"
 
 #if !__has_feature(objc_arc)
 #error "IASK needs ARC"
@@ -46,6 +47,8 @@ CGRect IASKCGRectSwap(CGRect rect);
     id                      _currentFirstResponder;
     __weak UIViewController *_currentChildViewController;
     BOOL _reloadDisabled;
+	/// The selected index for every group (in case it's a radio group).
+	NSArray *_selections;
 }
 
 @property (nonatomic, strong) id currentFirstResponder;
@@ -82,17 +85,37 @@ CGRect IASKCGRectSwap(CGRect rect);
 
 - (NSString*)file {
 	if (!_file) {
-		return @"Root";
+		self.file = @"Root";
 	}
 	return _file;
 }
 
 - (void)setFile:(NSString *)file {
     _file = [file copy];
-    self.tableView.contentOffset = CGPointMake(0, 0);
+    self.tableView.contentOffset = CGPointMake(0, -self.tableView.contentInset.top);
     self.settingsReader = nil; // automatically initializes itself
-    _hiddenKeys = nil;
-    if (!_reloadDisabled) [self.tableView reloadData];
+    if (!_reloadDisabled) {
+		[self.tableView reloadData];
+		[self createSelections];
+	}
+}
+
+- (void)createSelections {
+	NSMutableArray *sectionSelection = [NSMutableArray new];
+	for (int i = 0; i < _settingsReader.numberOfSections; i++) {
+		IASKSpecifier *specifier = [self.settingsReader headerSpecifierForSection:i];
+		if ([specifier.type isEqualToString:kIASKPSRadioGroupSpecifier]) {
+			IASKMultipleValueSelection *selection = [IASKMultipleValueSelection new];
+			selection.tableView = self.tableView;
+			selection.specifier = specifier;
+			selection.section = i;
+			selection.settingsStore = self.settingsStore;
+			[sectionSelection addObject:selection];
+		} else {
+			[sectionSelection addObject:[NSNull null]];
+		}
+	}
+	_selections = sectionSelection;
 }
 
 - (BOOL)isPad {
@@ -108,28 +131,41 @@ CGRect IASKCGRectSwap(CGRect rect);
     return [self initWithStyle:UITableViewStyleGrouped];
 }
 
-- (id)initWithStyle:(UITableViewStyle)style
-{
+- (id)initWithStyle:(UITableViewStyle)style {
     if (style != UITableViewStyleGrouped) {
-        NSLog(@"only UITableViewStyleGrouped style is supported, forcing it.");
+        NSLog(@"WARNING: only UITableViewStyleGrouped style is supported by InAppSettingsKit.");
     }
-    self = [super initWithStyle:UITableViewStyleGrouped];
-    if (self) {
-        _reloadDisabled = NO;
-        _showDoneButton = YES;
-        // If set to YES, will display credits for InAppSettingsKit creators
-        _showCreditsFooter = YES;
+    if ((self = [super initWithStyle:style])) {
+		[self configure];
     }
     return self;
 }
 
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
-{
-    if (!nibNameOrNil) {
-        return [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-    }
-    NSLog (@"%@ is now deprecated, we are moving away from nibs.", NSStringFromSelector(_cmd));
-    return [self initWithStyle:UITableViewStyleGrouped];
+- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
+    if (nibNameOrNil) {
+		NSLog (@"%@ is now deprecated, we are moving away from nibs.", NSStringFromSelector(_cmd));
+		self = [super initWithStyle:UITableViewStyleGrouped];
+	} else {
+		self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+	}
+	if (self) {
+		[self configure];
+	}
+	return self;
+}
+
+- (id)initWithCoder:(NSCoder *)aDecoder {
+	if ((self = [super initWithCoder:aDecoder])) {
+		[self configure];
+		_showDoneButton = NO;
+	}
+	return self;
+}
+
+- (void)configure {
+	_reloadDisabled = NO;
+	_showDoneButton = YES;
+	_showCreditsFooter = YES; // display credits for InAppSettingsKit creators
 }
 
 - (void)viewDidLoad {
@@ -168,8 +204,9 @@ CGRect IASKCGRectSwap(CGRect rect);
 	
 	if ([self.settingsStore isKindOfClass:[IASKSettingsStoreUserDefaults class]]) {
 		NSNotificationCenter *dc = NSNotificationCenter.defaultCenter;
-		[dc addObserver:self selector:@selector(userDefaultsDidChange) name:NSUserDefaultsDidChangeNotification object:[NSUserDefaults standardUserDefaults]];
-		[dc addObserver:self selector:@selector(didChangeSettingViaIASK:) name:kIASKAppSettingChanged object:self];
+		IASKSettingsStoreUserDefaults *udSettingsStore = (id)self.settingsStore;
+		[dc addObserver:self selector:@selector(userDefaultsDidChange) name:NSUserDefaultsDidChangeNotification object:udSettingsStore.defaults];
+		[dc addObserver:self selector:@selector(didChangeSettingViaIASK:) name:kIASKAppSettingChanged object:nil];
 		[self userDefaultsDidChange]; // force update in case of changes while we were hidden
 	}
 	[super viewWillAppear:animated];
@@ -202,8 +239,11 @@ CGRect IASKCGRectSwap(CGRect rect);
 
 - (void)viewDidDisappear:(BOOL)animated {
 	NSNotificationCenter *dc = [NSNotificationCenter defaultCenter];
-	[dc removeObserver:self name:NSUserDefaultsDidChangeNotification object:[NSUserDefaults standardUserDefaults]];
-	[dc removeObserver:self name:kIASKAppSettingChanged object:self];
+	if ([self.settingsStore isKindOfClass:[IASKSettingsStoreUserDefaults class]]) {
+		IASKSettingsStoreUserDefaults *udSettingsStore = (id)self.settingsStore;
+		[dc removeObserver:self name:NSUserDefaultsDidChangeNotification object:udSettingsStore.defaults];
+		[dc removeObserver:self name:kIASKAppSettingChanged object:self];
+	}
 	[dc removeObserver:self name:UIApplicationDidEnterBackgroundNotification object:[UIApplication sharedApplication]];
 	[dc removeObserver:self name:UIApplicationWillEnterForegroundNotification object:[UIApplication sharedApplication]];
 	[dc removeObserver:self name:UIApplicationWillTerminateNotification object:[UIApplication sharedApplication]];
@@ -436,32 +476,38 @@ CGRect IASKCGRectSwap(CGRect rect);
 }
 
 
-- (UITableViewCell*)newCellForIdentifier:(NSString*)identifier {
-	UITableViewCell *cell = nil;
-	if ([identifier isEqualToString:kIASKPSToggleSwitchSpecifier]) {
+- (UITableViewCell*)tableView:(UITableView *)tableView newCellForSpecifier:(IASKSpecifier*)specifier {
+
+	NSString *identifier = [NSString stringWithFormat:@"%@-%ld-%d", specifier.type, (long)specifier.textAlignment, !!specifier.subtitle.length];
+	UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:identifier];
+	if (cell) {
+		return cell;
+	}
+	UITableViewCellStyle style = (specifier.textAlignment == NSTextAlignmentLeft || specifier.subtitle.length) ? UITableViewCellStyleSubtitle : UITableViewCellStyleDefault;
+	if ([identifier hasPrefix:kIASKPSToggleSwitchSpecifier]) {
 		cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:kIASKPSToggleSwitchSpecifier];
 		cell.accessoryView = [[IASKSwitch alloc] initWithFrame:CGRectMake(0, 0, 79, 27)];
 		[((IASKSwitch*)cell.accessoryView) addTarget:self action:@selector(toggledValue:) forControlEvents:UIControlEventValueChanged];
 		cell.selectionStyle = UITableViewCellSelectionStyleNone;
 	}
-	else if ([identifier isEqualToString:kIASKPSMultiValueSpecifier] || [identifier isEqualToString:kIASKPSTitleValueSpecifier]) {
+	else if ([identifier hasPrefix:kIASKPSMultiValueSpecifier] || [identifier hasPrefix:kIASKPSTitleValueSpecifier]) {
 		cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:identifier];
-		cell.accessoryType = [identifier isEqualToString:kIASKPSMultiValueSpecifier] ? UITableViewCellAccessoryDisclosureIndicator : UITableViewCellAccessoryNone;
+		cell.accessoryType = [identifier hasPrefix:kIASKPSMultiValueSpecifier] ? UITableViewCellAccessoryDisclosureIndicator : UITableViewCellAccessoryNone;
 	}
-	else if ([identifier isEqualToString:kIASKPSTextFieldSpecifier]) {
+	else if ([identifier hasPrefix:kIASKPSTextFieldSpecifier]) {
 		cell = [[IASKPSTextFieldSpecifierViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:kIASKPSTextFieldSpecifier];
 		[((IASKPSTextFieldSpecifierViewCell*)cell).textField addTarget:self action:@selector(_textChanged:) forControlEvents:UIControlEventEditingChanged];
 	}
-	else if ([identifier isEqualToString:kIASKPSSliderSpecifier]) {
+	else if ([identifier hasPrefix:kIASKPSSliderSpecifier]) {
         cell = [[IASKPSSliderSpecifierViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:kIASKPSSliderSpecifier];
-	} else if ([identifier isEqualToString:kIASKPSChildPaneSpecifier]) {
-		cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:identifier];
+	} else if ([identifier hasPrefix:kIASKPSChildPaneSpecifier]) {
+		cell = [[UITableViewCell alloc] initWithStyle:style reuseIdentifier:identifier];
 		cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
 	} else if ([identifier isEqualToString:kIASKMailComposeSpecifier]) {
-		cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:identifier];
+		cell = [[UITableViewCell alloc] initWithStyle:style reuseIdentifier:identifier];
 		[cell setAccessoryType:UITableViewCellAccessoryDisclosureIndicator];
 	} else {
-		cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:identifier];
+		cell = [[UITableViewCell alloc] initWithStyle:style reuseIdentifier:identifier];
 
 		if ([identifier isEqualToString:kIASKOpenURLSpecifier]) {
 			cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
@@ -482,11 +528,8 @@ CGRect IASKCGRectSwap(CGRect rect);
 		return cell;
 	}
 	
-	UITableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:specifier.type];
-	if(nil == cell) {
-      cell = [self newCellForIdentifier:specifier.type];
-	}
-	
+	UITableViewCell* cell = [self tableView:tableView newCellForSpecifier:specifier];
+
 	if ([specifier.type isEqualToString:kIASKPSToggleSwitchSpecifier]) {
 		cell.textLabel.text = specifier.title;
 		cell.detailTextLabel.text = specifier.subtitle;
@@ -572,13 +615,21 @@ CGRect IASKCGRectSwap(CGRect rect);
 	} else if ([specifier.type isEqualToString:kIASKOpenURLSpecifier] || [specifier.type isEqualToString:kIASKMailComposeSpecifier]) {
 		cell.textLabel.text = specifier.title;
 		cell.detailTextLabel.text = specifier.subtitle ? : [specifier.defaultValue description];
+		cell.accessoryType = (specifier.textAlignment == NSTextAlignmentLeft) ? UITableViewCellAccessoryDisclosureIndicator : UITableViewCellAccessoryNone;
 	} else if ([specifier.type isEqualToString:kIASKButtonSpecifier]) {
 		NSString *value = [self.settingsStore objectForKey:specifier.key];
 		cell.textLabel.text = [value isKindOfClass:[NSString class]] ? [self.settingsReader titleForStringId:value] : specifier.title;
-		if (specifier.textAlignment != NSTextAlignmentLeft) {
+		cell.detailTextLabel.text = specifier.subtitle;
+		IASK_IF_IOS7_OR_GREATER
+		(if (specifier.textAlignment != NSTextAlignmentLeft) {
 			cell.textLabel.textColor = tableView.tintColor;
-		}
+		});
+		cell.textLabel.textAlignment = specifier.textAlignment;
 		cell.accessoryType = (specifier.textAlignment == NSTextAlignmentLeft) ? UITableViewCellAccessoryDisclosureIndicator : UITableViewCellAccessoryNone;
+	} else if ([specifier.type isEqualToString:kIASKPSRadioGroupSpecifier]) {
+		NSInteger index = [specifier.multipleValues indexOfObject:specifier.radioGroupValue];
+		cell.textLabel.text = [self.settingsReader titleForStringId:specifier.multipleTitles[index]];
+		[_selections[indexPath.section] updateSelectionInCell:cell indexPath:indexPath];
 	} else {
 		cell.textLabel.text = specifier.title;
 	}
@@ -633,7 +684,7 @@ CGRect IASKCGRectSwap(CGRect rect);
     } else if ([[specifier type] isEqualToString:kIASKPSChildPaneSpecifier]) {
         if ([specifier viewControllerStoryBoardID]){
             NSString *storyBoardFileFromSpecifier = [specifier viewControllerStoryBoardFile];
-            storyBoardFileFromSpecifier = storyBoardFileFromSpecifier && storyBoardFileFromSpecifier.length > 0 ? storyBoardFileFromSpecifier : @"MainStoryboard";
+            storyBoardFileFromSpecifier = storyBoardFileFromSpecifier && storyBoardFileFromSpecifier.length > 0 ? storyBoardFileFromSpecifier : [[NSBundle mainBundle].infoDictionary objectForKey:@"UIMainStoryboardFile"];
 			UIStoryboard *storyBoard = [UIStoryboard storyboardWithName:storyBoardFileFromSpecifier bundle:nil];
 			UIViewController * vc = [storyBoard instantiateViewControllerWithIdentifier:[specifier viewControllerStoryBoardID]];
 			IASK_IF_IOS7_OR_GREATER(vc.view.tintColor = self.view.tintColor;)
@@ -687,7 +738,7 @@ CGRect IASKCGRectSwap(CGRect rect);
         
     } else if ([[specifier type] isEqualToString:kIASKOpenURLSpecifier]) {
         [tableView deselectRowAtIndexPath:indexPath animated:YES];
-        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:specifier.file]];
+		[[UIApplication sharedApplication] openURL:[NSURL URLWithString:[specifier localizedObjectForKey:kIASKFile]]];
     } else if ([[specifier type] isEqualToString:kIASKButtonSpecifier]) {
         [tableView deselectRowAtIndexPath:indexPath animated:YES];
         if ([self.delegate respondsToSelector:@selector(settingsViewController:buttonTappedForSpecifier:)]) {
@@ -714,7 +765,7 @@ CGRect IASKCGRectSwap(CGRect rect);
         if ([MFMailComposeViewController canSendMail]) {
             MFMailComposeViewController *mailViewController = [[MFMailComposeViewController alloc] init];
             mailViewController.navigationBar.barStyle = self.navigationController.navigationBar.barStyle;
-            mailViewController.navigationBar.tintColor = self.navigationController.navigationBar.tintColor;
+			IASK_IF_IOS7_OR_GREATER(mailViewController.navigationBar.tintColor = self.navigationController.navigationBar.tintColor;);
             mailViewController.navigationBar.titleTextAttributes =  self.navigationController.navigationBar.titleTextAttributes;
             
             if ([specifier localizedObjectForKey:kIASKMailComposeSubject]) {
@@ -773,6 +824,8 @@ CGRect IASKCGRectSwap(CGRect rect);
         
     } else if ([[specifier type] isEqualToString:kIASKCustomViewSpecifier] && [self.delegate respondsToSelector:@selector(settingsViewController:tableView:didSelectCustomViewSpecifier:)]) {
         [self.delegate settingsViewController:self tableView:tableView didSelectCustomViewSpecifier:specifier];
+	} else if ([[specifier type] isEqualToString:kIASKPSRadioGroupSpecifier]) {
+		[_selections[indexPath.section] selectRowAtIndexPath:indexPath];
     } else {
         [tableView deselectRowAtIndexPath:indexPath animated:NO];
     }
@@ -832,12 +885,13 @@ CGRect IASKCGRectSwap(CGRect rect);
 static NSDictionary *oldUserDefaults = nil;
 - (void)userDefaultsDidChange {
 	dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-		NSDictionary *currentDict = [NSUserDefaults standardUserDefaults].dictionaryRepresentation;
+		IASKSettingsStoreUserDefaults *udSettingsStore = (id)self.settingsStore;
+		NSDictionary *currentDict = udSettingsStore.defaults.dictionaryRepresentation;
 		NSMutableArray *indexPathsToUpdate = [NSMutableArray array];
 		for (NSString *key in currentDict.allKeys) {
 			if (oldUserDefaults && ![[oldUserDefaults valueForKey:key] isEqual:[currentDict valueForKey:key]]) {
 				NSIndexPath *path = [self.settingsReader indexPathForKey:key];
-				if (path && ![[self.settingsReader specifierForKey:key].type isEqualToString:kIASKCustomViewSpecifier]) {
+				if (path && ![[self.settingsReader specifierForKey:key].type isEqualToString:kIASKCustomViewSpecifier] && [self.tableView.indexPathsForVisibleRows containsObject:path]) {
 					[indexPathsToUpdate addObject:path];
 				}
 			}
@@ -850,9 +904,7 @@ static NSDictionary *oldUserDefaults = nil;
 			}
 		}
 		if (indexPathsToUpdate.count) {
-			dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-				[self.tableView reloadRowsAtIndexPaths:indexPathsToUpdate withRowAnimation:UITableViewRowAnimationNone];
-			});
+			[self.tableView reloadRowsAtIndexPaths:indexPathsToUpdate withRowAnimation:UITableViewRowAnimationAutomatic];
 		}
 	});
 }

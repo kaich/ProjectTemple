@@ -77,6 +77,30 @@
 #pragma clang diagnostic pop
 + (NSDictionary *)modelClassesByResourcePath;
 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wcomment"
+/**
+ Specifies how to map responses to different response classes. Not mandatory.
+ It's intended to address the following case: https://github.com/gonzalezreal/Overcoat/issues/50
+ 
+ Subclasses can override this method and return a dictionary mapping resource paths to response
+ classes. Consider the following example for a GitHub client:
+ 
+    + (NSDictionary *)responseClassesByResourcePath {
+        return @{
+            @"/users/*": [GTHUserResponse class],
+            @"/orgs/*": [GTHOrganizationResponse class]
+        }
+    }
+ 
+ Note that you can use `*` to match any text or `#` to match only digits.
+ If a subclass override this method, the responseClass method will be ignored
+ 
+ @return A dictionary mapping resource paths to response classes.
+ */
+#pragma clang diagnostic pop
++ (NSDictionary *)responseClassesByResourcePath;
+
 /**
  Initializes the receiver with the specified base URL and managed object context.
  
@@ -141,7 +165,7 @@
  @param completion A block to be executed when the request finishes.
  */
 - (NSURLSessionDataTask *)POST:(NSString *)URLString
-                    parameters:(NSDictionary *)parameters
+                    parameters:(id)parameters
                     completion:(void (^)(id response, NSError *error))completion;
 
 /**
@@ -158,7 +182,7 @@
  @param completion A block to be executed when the request finishes.
  */
 - (NSURLSessionDataTask *)POST:(NSString *)URLString
-                    parameters:(NSDictionary *)parameters
+                    parameters:(id)parameters
      constructingBodyWithBlock:(void (^)(id <AFMultipartFormData> formData))block
                     completion:(void (^)(id response, NSError *error))completion;
 
@@ -174,7 +198,7 @@
  @param completion A block to be executed when the request finishes.
  */
 - (NSURLSessionDataTask *)PUT:(NSString *)URLString
-                   parameters:(NSDictionary *)parameters
+                   parameters:(id)parameters
                    completion:(void (^)(id response, NSError *error))completion;
 
 /**
@@ -189,7 +213,7 @@
  @param completion A block to be executed when the request finishes.
  */
 - (NSURLSessionDataTask *)PATCH:(NSString *)URLString
-                     parameters:(NSDictionary *)parameters
+                     parameters:(id)parameters
                      completion:(void (^)(id response, NSError *error))completion;
 
 /**
@@ -204,7 +228,7 @@
  @param completion A block to be executed when the request finishes.
  */
 - (NSURLSessionDataTask *)DELETE:(NSString *)URLString
-                      parameters:(NSDictionary *)parameters
+                      parameters:(id)parameters
                       completion:(void (^)(id response, NSError *error))completion;
 
 @end

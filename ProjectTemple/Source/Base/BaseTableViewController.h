@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import <SVPullToRefresh.h>
+#import <MJRefresh.h>
 #import "BaseTableViewModel.h"
 #import <UIScrollView+EmptyDataSet.h>
 
@@ -19,7 +19,7 @@
 @property(nonatomic,strong) NITableViewActions * tableAction;
 
 // The view model for the receiver.
-@property (nonatomic, strong, readonly) BaseTableViewModel *viewModel;
+@property (nonatomic, strong) BaseTableViewModel *viewModel;
 
 
 //-------------Overide Method-------------

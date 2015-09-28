@@ -10,7 +10,7 @@
 
 
 @implementation BaseTableViewController
-
+@dynamic viewModel;
 
 #pragma mark - System method
 
@@ -45,19 +45,18 @@
         {
             self.tableView=[UIFactory createHorizontalTableViewWithFrame:self.view.bounds style:UITableViewStylePlain delegate:nil];
         }
+        self.scrollView = self.tableView;
         [self.view addSubview:self.tableView];
     }
     
     //上拉、下拉 功能
     __weak typeof (self) weakSelf  = self;
     
-    [self.tableView addPullToRefreshWithActionHandler:^{
+    self.tableView.header = [MJRefreshHeader headerWithRefreshingBlock:^{
         [weakSelf.viewModel.refreshDataSource execute:nil];
     }];
     
-    
-    
-    [self.tableView addInfiniteScrollingWithActionHandler:^{
+    self.tableView.footer = [MJRefreshFooter footerWithRefreshingBlock:^{
         [weakSelf.viewModel.inflineRequestDataSource execute:nil];
     }];
     
@@ -83,8 +82,14 @@
             [self.tableView reloadData];
         }
         
-        [self.tableView.infiniteScrollingView stopAnimating];
-        [self.tableView.pullToRefreshView stopAnimating];
+        if(self.tableView.header.isRefreshing)
+        {
+            [self.tableView.header endRefreshing];
+        }
+        if(self.tableView.footer.isRefreshing)
+        {
+            [self.tableView.footer endRefreshing];
+        }
         
     }];
      
@@ -99,23 +104,15 @@
         {
             [self showNetworkIssuStatusBarNotification];
         }
-        else if(type ==kSNNoMoreData)
-        {
- 
-            InfiniteView * infiniteView=[UIFactory createInfiniteViewWithState:kIVSNoData];
-            [self.tableView.infiniteScrollingView setCustomView:infiniteView forState:SVInfiniteScrollingStateAll];
-            self.tableView.showsInfiniteScrolling=NO;
-        }
-        else if(type == kSNNoData)
-        {
-            
-            [self.tableView.infiniteScrollingView stopAnimating];
-            [self.tableView.pullToRefreshView stopAnimating];
-            self.tableView.showsInfiniteScrolling=NO;
-        }
 
-        [self.tableView.infiniteScrollingView stopAnimating];
-        [self.tableView.pullToRefreshView stopAnimating];
+        if(self.tableView.header.isRefreshing)
+        {
+            [self.tableView.header endRefreshing];
+        }
+        if(self.tableView.footer.isRefreshing)
+        {
+            [self.tableView.footer endRefreshing];
+        }
         [self.tableView reloadEmptyDataSet];
     }];
     
@@ -123,63 +120,10 @@
 
 
 #pragma mark - DZNEmptyDataSetSource and DZNEmptyDataSetDelegate
--(BOOL) emptyDataSetShouldDisplay:(UIScrollView *)scrollView
-{
-    if(self.tableView == scrollView)
-    {
-        BOOL isEmptyVisible = self.viewModel.contentType == kSNNoData || self.viewModel.contentType == kSNNoNetwork || self.viewModel.contentType == kSNNoDataLoading;
-        return isEmptyVisible;
-    }
-    else
-    {
-        return NO;
-    }
-}
-
--(NSAttributedString *)titleForEmptyDataSet:(UIScrollView *)scrollView
-{
-   return  self.viewModel.emptyDataSetEntity.title;
-}
-
-- (NSAttributedString *)descriptionForEmptyDataSet:(UIScrollView *)scrollView
-{
-    return self.viewModel.emptyDataSetEntity.emptyDescription;
-}
-
-- (UIImage *)imageForEmptyDataSet:(UIScrollView *)scrollView
-{
-    return ImageNamed(self.viewModel.emptyDataSetEntity.imageName);
-}
-
-- (UIColor *)imageTintColorForEmptyDataSet:(UIScrollView *)scrollView
-{
-    return self.viewModel.emptyDataSetEntity.imageTintColor;
-}
-
-- (NSAttributedString *)buttonTitleForEmptyDataSet:(UIScrollView *)scrollView forState:(UIControlState)state
-{
-    return [self.viewModel.emptyDataSetEntity.buttonTitle objectForKey:@(state)]?:[self.viewModel.emptyDataSetEntity.buttonTitle objectForKey:@(UIControlStateNormal)];
-}
-
-- (UIImage *)buttonImageForEmptyDataSet:(UIScrollView *)scrollView forState:(UIControlState)state
-{
-    return [self.viewModel.emptyDataSetEntity.buttonImage objectForKey:@(state)]?:[self.viewModel.emptyDataSetEntity.buttonImage objectForKey:@(UIControlStateNormal)];
-}
-
-- (UIImage *)buttonBackgroundImageForEmptyDataSet:(UIScrollView *)scrollView forState:(UIControlState)state
-{
-    return [self.viewModel.emptyDataSetEntity.buttonBackgroundImage objectForKey:@(state)]?:[self.viewModel.emptyDataSetEntity.buttonBackgroundImage objectForKey:@(UIControlStateNormal)];
-}
-
-- (UIColor *)backgroundColorForEmptyDataSet:(UIScrollView *)scrollView
-{
-    return self.viewModel.emptyDataSetEntity.backgroundColor;
-}
-
 - (void)emptyDataSetDidTapView:(UIScrollView *)scrollView
 {
     self.viewModel.contentType = kSNNoDataLoading;
-    [self.tableView triggerPullToRefresh];
+    [self.viewModel.refreshDataSource execute:nil];
 }
 
 #pragma mark - Overide Method

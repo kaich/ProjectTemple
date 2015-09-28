@@ -2,7 +2,7 @@
 //  NSObject+LKDBHelper.m
 //  LKDBHelper
 //
-//  Created by upin on 13-6-8.
+//  Created by LJH on 13-6-8.
 //  Copyright (c) 2013年 ljh. All rights reserved.
 //
 
@@ -66,8 +66,17 @@
 {
     return [[self getUsingLKDBHelper] search:self column:columns where:where orderBy:orderBy offset:offset count:count];
 }
-+(NSMutableArray*)searchWithWhere:(id)where orderBy:(NSString*)orderBy offset:(NSInteger)offset count:(NSInteger)count{
++(NSMutableArray*)searchWithWhere:(id)where orderBy:(NSString*)orderBy offset:(NSInteger)offset count:(NSInteger)count
+{
     return [[self getUsingLKDBHelper] search:self where:where orderBy:orderBy offset:offset count:count];
+}
++(NSMutableArray *)searchWithWhere:(id)where
+{
+    return [[self getUsingLKDBHelper] search:self where:where orderBy:nil offset:0 count:0];
+}
++(NSMutableArray *)searchWithSQL:(NSString *)sql
+{
+    return [[self getUsingLKDBHelper] searchWithSQL:sql toClass:self];
 }
 +(id)searchSingleWithWhere:(id)where orderBy:(NSString *)orderBy
 {
@@ -167,4 +176,37 @@
 {
     return [self.class isExistsWithModel:self];
 }
+
++(void)insertArrayByAsyncToDB:(NSArray *)models
+{
+    if(models.count > 0)
+    {
+        dispatch_async(dispatch_get_global_queue(0, 0), ^{
+            [self insertToDBWithArray:models filter:nil];
+        });
+    }
+}
+
++(void)insertToDBWithArray:(NSArray *)models filter:(void (^)(id model, BOOL inseted, BOOL * rollback))filter
+{
+    [[self getUsingLKDBHelper] executeForTransaction:^BOOL(LKDBHelper *helper) {
+        
+        BOOL isRollback = NO;
+        for (int i=0; i<models.count; i++)
+        {
+            id obj = [models objectAtIndex:i];
+            BOOL inseted = [helper insertToDB:obj];
+            if(filter)
+            {
+                filter(obj,inseted,&isRollback);
+            }
+            if(isRollback)
+            {
+                break;
+            }
+        }
+        return (isRollback == NO);
+    }];
+}
+
 @end

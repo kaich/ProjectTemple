@@ -48,6 +48,10 @@
     return nil; // Not reached
 }
 
++ (NSDictionary *)responseClassesByResourcePath {
+    return nil;
+}
+
 - (void)dealloc {
     if (self.contextObserver) {
         [[NSNotificationCenter defaultCenter] removeObserver:self.contextObserver];
@@ -78,7 +82,7 @@
 #pragma mark - Making requests
 
 - (AFHTTPRequestOperation *)GET:(NSString *)URLString
-                     parameters:(NSDictionary *)parameters
+                     parameters:(id)parameters
                      completion:(void (^)(id, NSError *))completion
 {
     return [self GET:URLString parameters:parameters
@@ -104,7 +108,7 @@
 }
 
 - (AFHTTPRequestOperation *)POST:(NSString *)URLString
-                      parameters:(NSDictionary *)parameters
+                      parameters:(id)parameters
                       completion:(void (^)(id, NSError *))completion
 {
     return [self POST:URLString parameters:parameters
@@ -117,7 +121,7 @@
 }
 
 - (AFHTTPRequestOperation *)POST:(NSString *)URLString
-                      parameters:(NSDictionary *)parameters
+                      parameters:(id)parameters
        constructingBodyWithBlock:(void (^)(id<AFMultipartFormData>))block
                       completion:(void (^)(id, NSError *))completion
 {
@@ -131,7 +135,7 @@
 }
 
 - (AFHTTPRequestOperation *)PUT:(NSString *)URLString
-                     parameters:(NSDictionary *)parameters
+                     parameters:(id)parameters
                      completion:(void (^)(id, NSError *))completion
 {
     return [self PUT:URLString parameters:parameters
@@ -144,7 +148,7 @@
 }
 
 - (AFHTTPRequestOperation *)PATCH:(NSString *)URLString
-                       parameters:(NSDictionary *)parameters
+                       parameters:(id)parameters
                        completion:(void (^)(id, NSError *))completion
 {
     return [self PATCH:URLString parameters:parameters
@@ -157,7 +161,7 @@
 }
 
 - (AFHTTPRequestOperation *)DELETE:(NSString *)URLString
-                        parameters:(NSDictionary *)parameters
+                        parameters:(id)parameters
                         completion:(void (^)(id, NSError *))completion
 {
     return [self DELETE:URLString parameters:parameters
@@ -174,7 +178,22 @@
 - (void)setupResponseSerializer {
     OVCURLMatcher *matcher = [[OVCURLMatcher alloc] initWithBasePath:[self.baseURL path]
                                                   modelClassesByPath:[[self class] modelClassesByResourcePath]];
+    
+    OVCURLMatcher *responseClassMatcher = nil;
+    if ([[self class] responseClassesByResourcePath]) {
+        // Check if all the classes used in responseClassesByResourcePath are
+        // subclasses of OVCResponse
+        [[[self class] responseClassesByResourcePath] enumerateKeysAndObjectsUsingBlock:^(NSString *path,
+                                                                                          Class responseClass,
+                                                                                          BOOL *stop) {
+            NSParameterAssert([responseClass isSubclassOfClass:[OVCResponse class]]);
+        }];
+        
+        responseClassMatcher = [[OVCURLMatcher alloc] initWithBasePath:[self.baseURL path]
+                                                    modelClassesByPath:[[self class] responseClassesByResourcePath]];
+    }
     self.responseSerializer = [OVCModelResponseSerializer serializerWithURLMatcher:matcher
+                                                           responseClassURLMatcher:responseClassMatcher
                                                               managedObjectContext:self.backgroundContext
                                                                      responseClass:[[self class] responseClass]
                                                                    errorModelClass:[[self class] errorModelClass]];

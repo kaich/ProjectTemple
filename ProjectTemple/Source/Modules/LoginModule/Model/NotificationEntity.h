@@ -7,11 +7,12 @@
 
 #import <MTLModel.h>
 #import <MTLJSONAdapter.h>
+#import "BaseEntity.h"
 
 
 
 
-@interface NotificationEntity: MTLModel<MTLJSONSerializing,NICellObject>
+@interface NotificationEntity: BaseEntity<MTLJSONSerializing,NICellObject>
 @property(nonatomic,assign) NSInteger entityId;
 @property(nonatomic,strong) NSString * createTime;
 @property(nonatomic,strong) NSString * author;

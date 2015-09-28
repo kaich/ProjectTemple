@@ -11,12 +11,15 @@
 #import "BaseViewControllerProtocol.h"
 #import "UIViewController+Base.h"
 #import <Nimbus/NimbusModels.h>
+#import <UIScrollView+EmptyDataSet.h>
 #import "BaseViewModel.h"
 
 
 static const int ddLogLevel = LOG_LEVEL_VERBOSE;
 
-@interface BaseViewController : UIViewController<BaseViewControllerProtocol>
+@interface BaseViewController : UIViewController<BaseViewControllerProtocol,DZNEmptyDataSetSource,DZNEmptyDataSetDelegate>
+
+@property(nonatomic,strong) UIScrollView * scrollView;
 
 //状态栏通知
 @property(nonatomic,strong,readonly) CWStatusBarNotification * statusbarNotification;
@@ -25,7 +28,7 @@ static const int ddLogLevel = LOG_LEVEL_VERBOSE;
 @property(nonatomic,strong) StatusNotificationView  * contentStatusView;
 
 // The view model for the receiver.
-@property (nonatomic, strong, readonly) BaseViewModel *viewModel;
+@property (nonatomic, strong) BaseViewModel *viewModel;
 
 
 // Initializes the receiver with a view model, and without a nib.

@@ -2,7 +2,7 @@
 //  NSObject+LKDBHelper.h
 //  LKDBHelper
 //
-//  Created by upin on 13-6-8.
+//  Created by LJH on 13-6-8.
 //  Copyright (c) 2013年 ljh. All rights reserved.
 //
 
@@ -57,6 +57,9 @@
  */
 +(NSMutableArray*)searchColumn:(id)columns where:(id)where orderBy:(NSString*)orderBy offset:(NSInteger)offset count:(NSInteger)count;
 +(NSMutableArray*)searchWithWhere:(id)where orderBy:(NSString*)orderBy offset:(NSInteger)offset count:(NSInteger)count;
++(NSMutableArray*)searchWithWhere:(id)where;
++(NSMutableArray*)searchWithSQL:(NSString*)sql;
+
 +(id)searchSingleWithWhere:(id)where orderBy:(NSString*)orderBy;
 
 +(BOOL)insertToDB:(NSObject*)model;
@@ -71,5 +74,11 @@
 - (BOOL)saveToDB;
 - (BOOL)deleteToDB;
 - (BOOL)isExistsFromDB;
+
+///异步插入数据 async insert array
++(void)insertArrayByAsyncToDB:(NSArray*)models;
+
+///begin translate for insert models  开始事务插入数组
++(void)insertToDBWithArray:(NSArray*)models filter:(void(^)(id model,BOOL inserted,BOOL*rollback))filter;
 
 @end

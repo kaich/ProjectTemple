@@ -9,6 +9,7 @@
 #import "RVMViewModel.h"
 #import "BaseViewModelProtocol.h"
 #import "UIFactory+StatusNotificationView.h"
+#import <RACCommand.h>
 
 @interface BaseViewModel : RVMViewModel<BaseViewModelProtocol>
 //请求
@@ -19,5 +20,15 @@
 @property(nonatomic,strong) RACSignal * contentTypeSignal;
 
 @property(nonatomic,strong) DZNEmptyEntity * emptyDataSetEntity;
+
+
+@property(nonatomic,strong) RACSignal * requestDataSource;
+/**
+ *  must implete refreshDataSource in sub class
+ */
+@property(nonatomic,strong) RACCommand * refreshDataSource;
+
+@property(nonatomic,strong) NSString * requestURLPath;
+@property(nonatomic,strong) NSDictionary * requestParameters;
 
 @end

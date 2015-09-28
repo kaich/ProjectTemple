@@ -50,6 +50,10 @@
     return nil; // Not reached
 }
 
++ (NSDictionary *)responseClassesByResourcePath {
+    return nil;
+}
+
 - (void)dealloc {
     if (self.contextObserver) {
         [[NSNotificationCenter defaultCenter] removeObserver:self.contextObserver];
@@ -119,7 +123,7 @@
 }
 
 - (NSURLSessionDataTask *)POST:(NSString *)URLString
-                    parameters:(NSDictionary *)parameters
+                    parameters:(id)parameters
                     completion:(void (^)(id, NSError *))completion
 {
     NSMutableURLRequest *request = [self.requestSerializer requestWithMethod:@"POST" URLString:[[NSURL URLWithString:URLString relativeToURL:self.baseURL] absoluteString] parameters:parameters error:nil];
@@ -134,7 +138,7 @@
 }
 
 - (NSURLSessionDataTask *)POST:(NSString *)URLString
-                    parameters:(NSDictionary *)parameters
+                    parameters:(id)parameters
      constructingBodyWithBlock:(void (^)(id<AFMultipartFormData>))block
                     completion:(void (^)(id, NSError *))completion
 {
@@ -150,7 +154,7 @@
 }
 
 - (NSURLSessionDataTask *)PUT:(NSString *)URLString
-                   parameters:(NSDictionary *)parameters
+                   parameters:(id)parameters
                    completion:(void (^)(id, NSError *))completion
 {
     NSMutableURLRequest *request = [self.requestSerializer requestWithMethod:@"PUT" URLString:[[NSURL URLWithString:URLString relativeToURL:self.baseURL] absoluteString] parameters:parameters error:nil];
@@ -165,7 +169,7 @@
 }
 
 - (NSURLSessionDataTask *)PATCH:(NSString *)URLString
-                     parameters:(NSDictionary *)parameters
+                     parameters:(id)parameters
                      completion:(void (^)(id, NSError *))completion
 {
     NSMutableURLRequest *request = [self.requestSerializer requestWithMethod:@"PATCH" URLString:[[NSURL URLWithString:URLString relativeToURL:self.baseURL] absoluteString] parameters:parameters error:nil];
@@ -180,7 +184,7 @@
 }
 
 - (NSURLSessionDataTask *)DELETE:(NSString *)URLString
-                      parameters:(NSDictionary *)parameters
+                      parameters:(id)parameters
                       completion:(void (^)(id, NSError *))completion
 {
     NSMutableURLRequest *request = [self.requestSerializer requestWithMethod:@"DELETE" URLString:[[NSURL URLWithString:URLString relativeToURL:self.baseURL] absoluteString] parameters:parameters error:nil];
@@ -199,7 +203,22 @@
 - (void)setupResponseSerializer {
     OVCURLMatcher *matcher = [[OVCURLMatcher alloc] initWithBasePath:[self.baseURL path]
                                                   modelClassesByPath:[[self class] modelClassesByResourcePath]];
+    
+    OVCURLMatcher *responseClassMatcher = nil;
+    if ([[self class] responseClassesByResourcePath]) {
+        // Check if all the classes used in responseClassesByResourcePath are
+        // subclasses of OVCResponse
+        [[[self class] responseClassesByResourcePath] enumerateKeysAndObjectsUsingBlock:^(NSString *path,
+                                                                                          Class responseClass,
+                                                                                          BOOL *stop) {
+            NSParameterAssert([responseClass isSubclassOfClass:[OVCResponse class]]);
+        }];
+        
+        responseClassMatcher = [[OVCURLMatcher alloc] initWithBasePath:[self.baseURL path]
+                                                    modelClassesByPath:[[self class] responseClassesByResourcePath]];
+    }
     self.responseSerializer = [OVCModelResponseSerializer serializerWithURLMatcher:matcher
+                                                           responseClassURLMatcher:responseClassMatcher
                                                               managedObjectContext:self.backgroundContext
                                                                      responseClass:[[self class] responseClass]
                                                                    errorModelClass:[[self class] errorModelClass]];
