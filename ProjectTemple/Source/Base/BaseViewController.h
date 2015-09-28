@@ -39,6 +39,13 @@ static const int ddLogLevel = LOG_LEVEL_VERBOSE;
 // This is the designated initializer for this class.
 - (id)initWithViewModel:(BaseViewModel *)viewModel nibName:(NSString *)nibName bundle:(NSBundle *)bundle;
 
+/**
+ *  conform to Routable
+ *  @param params
+ *  @return instance
+ */
++ (id) allocWithRouterParams:(NSDictionary *)params;
+
 
 -(void) showNetworkIssuStatusBarNotification;
 

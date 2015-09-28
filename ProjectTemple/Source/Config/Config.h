@@ -63,3 +63,8 @@
 
 //-----------------------------------UI------------------------------------------------
 #define DEFUALT_VIEW_BACKGROUND_COLOR    [UIColor whiteColor]
+
+
+
+#define ROUTABLE_VIEWMODEL_KEY   @"routable_viewmodel_key"
+#define ROUTABLE_NIB_NAME_KEY    @"routable_nib_name_key"

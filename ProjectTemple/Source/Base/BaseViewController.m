@@ -61,6 +61,26 @@
 }
 
 
++ (id) allocWithRouterParams:(NSDictionary *)params
+{
+    BaseViewModel * viewModel = [params objectForKey:ROUTABLE_VIEWMODEL_KEY];
+    NSString * nibName = [params objectForKey:ROUTABLE_NIB_NAME_KEY];
+    
+    id viewController = nil;
+    if(viewModel)
+    {
+        viewController = [[[self class] alloc] initWithViewModel:viewModel nibName:nibName bundle:nil];
+    }
+    
+    if(viewController == nil)
+    {
+        NSString * content = [NSString stringWithFormat:@"create %@ instance failed",NSStringFromClass([self class])];
+        THROW_EXCEPTION(@"instance is nil", content);
+    }
+    return viewController;
+}
+
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     
